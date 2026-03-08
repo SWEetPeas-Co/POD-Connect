@@ -6,6 +6,7 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
+// This creates the bottom navigation bar.
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
