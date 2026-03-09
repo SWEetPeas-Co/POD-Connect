@@ -118,6 +118,10 @@ export const Colors = {
 
 export const Fonts = Platform.select({
   ios: {
+    regular: 'Inter_400Regular',
+    semibold: 'Inter_600SemiBold',
+    bold: 'Inter_700Bold',
+
     /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: 'system-ui',
     /** iOS `UIFontDescriptorSystemDesignSerif` */
@@ -128,12 +132,20 @@ export const Fonts = Platform.select({
     mono: 'ui-monospace',
   },
   default: {
+    regular: 'Inter_400Regular',
+    semibold: 'Inter_600SemiBold',
+    bold: 'Inter_700Bold',
+
     sans: 'normal',
     serif: 'serif',
     rounded: 'normal',
     mono: 'monospace',
   },
   web: {
+    regular: 'Inter_400Regular',
+    semibold: 'Inter_600SemiBold',
+    bold: 'Inter_700Bold',
+    
     sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
     serif: "Georgia, 'Times New Roman', serif",
     rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
