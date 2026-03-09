@@ -75,6 +75,9 @@ export const Colors = {
   },
 
   dark: {
+    // Page
+    background: lightGreen,
+    
     // Header
     headerText: white,
     headerBackground: mediumGreen,
