@@ -1,4 +1,4 @@
-// This document styles the views/containers
+// This document styles the views/containers that need themed backgrounds
 
 import { View, type ViewProps } from 'react-native';
 
@@ -7,8 +7,6 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 export type ThemedViewProps = ViewProps & {
   lightColor?: string;
   darkColor?: string;
-  colorName?: keyof typeof Colors.light;
-  variant?: 'default' | 'card' | 'header' | 'footer';
 };
 
 export function ThemedView({ style, lightColor, darkColor, ...otherProps }: ThemedViewProps) {
@@ -16,4 +14,3 @@ export function ThemedView({ style, lightColor, darkColor, ...otherProps }: Them
 
   return <View style={[{ backgroundColor }, style]} {...otherProps} />;
 }
-
