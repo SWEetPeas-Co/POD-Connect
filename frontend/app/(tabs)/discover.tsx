@@ -8,10 +8,13 @@ export default function HomeScreen() {
     <ThemedView style={styles.mainContainer}>
 
       <ThemedView style={styles.headerContainer}>
-        <ThemedText type="header">MY EVENTS</ThemedText>
+        <ThemedText type="header">DISCOVER</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.searchContainer}>
+        <ThemedView style={styles.sliderContainer}>
+            <ThemedText type="sliderDefault">Here is the Slider.</ThemedText>
+        </ThemedView>
         <ThemedView style={styles.searchBarContainer}>
             <ThemedText type="searchBar">Here is the Search Bar.</ThemedText>
         </ThemedView>
@@ -24,17 +27,42 @@ export default function HomeScreen() {
                 </ThemedView>
                 <ThemedView style={styles.eventCardText}>
                     <ThemedText type="eventTitle">Event title.</ThemedText>
-                    <ThemedText type="eventSubtitle">Event subtiitle.</ThemedText>
+                    <ThemedView style={styles.eventCardTagsGroup}>
+                        <ThemedView style={styles.eventCardTags}>
+                            <ThemedText type="eventTag">Another Tag</ThemedText>
+                        </ThemedView>
+                        <ThemedView style={styles.eventCardTags}>
+                            <ThemedText type="eventTag">Another Tag</ThemedText>
+                        </ThemedView>
+                    </ThemedView>
                 </ThemedView>
                 <ThemedView style={styles.eventCardRSVP}>
-                    <ThemedView style={styles.eventCardRSVPButton}>
-                        <ThemedText type="eventSubtitle">RSVP</ThemedText>
-                    </ThemedView>
                     <ThemedText type="eventSubtitle">Head</ThemedText>
+                    <ThemedView style={styles.eventCardRSVPButton}>
+                    </ThemedView>
                 </ThemedView>
             </ThemedView>
-            <ThemedView style={styles.eventCardContainerMiddle}>
-                <ThemedText type="eventSubtitle">Event Info like location here.</ThemedText>
+        </ThemedView>
+        <ThemedView style={styles.eventCardContainer}>
+            <ThemedView style={styles.eventCardContainerTop}>
+                <ThemedView style={styles.eventCardImage}>
+                </ThemedView>
+                <ThemedView style={styles.eventCardText}>
+                    <ThemedText type="eventTitle">Event title.</ThemedText>
+                    <ThemedView style={styles.eventCardTagsGroup}>
+                        <ThemedView style={styles.eventCardTags}>
+                            <ThemedText type="eventTag">Another Tag</ThemedText>
+                        </ThemedView>
+                        <ThemedView style={styles.eventCardTags}>
+                            <ThemedText type="eventTag">Another Tag</ThemedText>
+                        </ThemedView>
+                    </ThemedView>
+                </ThemedView>
+                <ThemedView style={styles.eventCardRSVP}>
+                    <ThemedText type="eventSubtitle">Head</ThemedText>
+                    <ThemedView style={styles.eventCardRSVPButton}>
+                    </ThemedView>
+                </ThemedView>
             </ThemedView>
             <ThemedView style={styles.eventCardContainerBottom}>
                 <ThemedText type="eventDescription">Here is the event description.</ThemedText>
@@ -46,17 +74,20 @@ export default function HomeScreen() {
                 </ThemedView>
                 <ThemedView style={styles.eventCardText}>
                     <ThemedText type="eventTitle">Event title.</ThemedText>
-                    <ThemedText type="eventSubtitle">Event subtiitle.</ThemedText>
+                    <ThemedView style={styles.eventCardTagsGroup}>
+                        <ThemedView style={styles.eventCardTags}>
+                            <ThemedText type="eventTag">Another Tag</ThemedText>
+                        </ThemedView>
+                        <ThemedView style={styles.eventCardTags}>
+                            <ThemedText type="eventTag">Another Tag</ThemedText>
+                        </ThemedView>
+                    </ThemedView>
                 </ThemedView>
                 <ThemedView style={styles.eventCardRSVP}>
-                    <ThemedView style={styles.eventCardRSVPButton}>
-                        <ThemedText type="eventSubtitle">RSVP</ThemedText>
-                    </ThemedView>
                     <ThemedText type="eventSubtitle">Head</ThemedText>
+                    <ThemedView style={styles.eventCardRSVPButton}>
+                    </ThemedView>
                 </ThemedView>
-            </ThemedView>
-            <ThemedView style={styles.eventCardContainerMiddle}>
-                <ThemedText type="eventSubtitle">Event Info like location here.</ThemedText>
             </ThemedView>
             <ThemedView style={styles.eventCardContainerBottom}>
                 <ThemedText type="eventDescription">Here is the event description.</ThemedText>
@@ -68,61 +99,20 @@ export default function HomeScreen() {
                 </ThemedView>
                 <ThemedView style={styles.eventCardText}>
                     <ThemedText type="eventTitle">Event title.</ThemedText>
-                    <ThemedText type="eventSubtitle">Event subtiitle.</ThemedText>
+                    <ThemedView style={styles.eventCardTagsGroup}>
+                        <ThemedView style={styles.eventCardTags}>
+                            <ThemedText type="eventTag">Another Tag</ThemedText>
+                        </ThemedView>
+                        <ThemedView style={styles.eventCardTags}>
+                            <ThemedText type="eventTag">Another Tag</ThemedText>
+                        </ThemedView>
+                    </ThemedView>
                 </ThemedView>
                 <ThemedView style={styles.eventCardRSVP}>
-                    <ThemedView style={styles.eventCardRSVPButton}>
-                        <ThemedText type="eventSubtitle">RSVP</ThemedText>
-                    </ThemedView>
                     <ThemedText type="eventSubtitle">Head</ThemedText>
-                </ThemedView>
-            </ThemedView>
-            <ThemedView style={styles.eventCardContainerMiddle}>
-                <ThemedText type="eventSubtitle">Event Info like location here.</ThemedText>
-            </ThemedView>
-            <ThemedView style={styles.eventCardContainerBottom}>
-                <ThemedText type="eventDescription">Here is the event description.</ThemedText>
-            </ThemedView>
-        </ThemedView>
-        <ThemedView style={styles.eventCardContainer}>
-            <ThemedView style={styles.eventCardContainerTop}>
-                <ThemedView style={styles.eventCardImage}>
-                </ThemedView>
-                <ThemedView style={styles.eventCardText}>
-                    <ThemedText type="eventTitle">Event title.</ThemedText>
-                    <ThemedText type="eventSubtitle">Event subtiitle.</ThemedText>
-                </ThemedView>
-                <ThemedView style={styles.eventCardRSVP}>
                     <ThemedView style={styles.eventCardRSVPButton}>
-                        <ThemedText type="eventSubtitle">RSVP</ThemedText>
                     </ThemedView>
-                    <ThemedText type="eventSubtitle">Head</ThemedText>
                 </ThemedView>
-            </ThemedView>
-            <ThemedView style={styles.eventCardContainerMiddle}>
-                <ThemedText type="eventSubtitle">Event Info like location here.</ThemedText>
-            </ThemedView>
-            <ThemedView style={styles.eventCardContainerBottom}>
-                <ThemedText type="eventDescription">Here is the event description.</ThemedText>
-            </ThemedView>
-        </ThemedView>
-        <ThemedView style={styles.eventCardContainer}>
-            <ThemedView style={styles.eventCardContainerTop}>
-                <ThemedView style={styles.eventCardImage}>
-                </ThemedView>
-                <ThemedView style={styles.eventCardText}>
-                    <ThemedText type="eventTitle">Event title.</ThemedText>
-                    <ThemedText type="eventSubtitle">Event subtiitle.</ThemedText>
-                </ThemedView>
-                <ThemedView style={styles.eventCardRSVP}>
-                    <ThemedView style={styles.eventCardRSVPButton}>
-                        <ThemedText type="eventSubtitle">RSVP</ThemedText>
-                    </ThemedView>
-                    <ThemedText type="eventSubtitle">Head</ThemedText>
-                </ThemedView>
-            </ThemedView>
-            <ThemedView style={styles.eventCardContainerMiddle}>
-                <ThemedText type="eventSubtitle">Event Info like location here.</ThemedText>
             </ThemedView>
             <ThemedView style={styles.eventCardContainerBottom}>
                 <ThemedText type="eventDescription">Here is the event description.</ThemedText>
@@ -159,6 +149,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 25,
   },
   searchContainer: {
+    height: 85,
     width: '100%',
     //backgroundColor: '#FFFFFF',
 
@@ -226,20 +217,22 @@ const styles = StyleSheet.create({
     height: 60,
     flex: 1,
     alignItems: 'flex-start',
-    justifyContent: 'center',
+    justifyContent: 'space-between', // changed for discover
     paddingLeft: 10,
     backgroundColor: '#E6E1C3',
   },
   eventCardRSVP: {
+    flexDirection: 'row', // added for discover
     height: 60,
     width: 90,
     backgroundColor: '#E6E1C3',
-    alignItems: 'flex-end',
-    gap: 4,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-end',
+    gap: 10, // changed for discover
   },
   eventCardRSVPButton: {
     height: 25,
-    width: 90,
+    width: 25, // changed for discover, will be star later
     backgroundColor: '#98BA7B',
     borderRadius: 10,
     alignItems: 'center',
@@ -260,7 +253,23 @@ const styles = StyleSheet.create({
 
     alignItems: 'flex-start',
     justifyContent: 'center',
-    paddingHorizontal: 10,
-    paddingBottom: 10,
+    padding: 10, // changed for discover
+  },
+  eventCardTagsGroup: { // added for discover
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    gap: 10,
+    backgroundColor: '#E6E1C3',
+  },
+  eventCardTags: { // added for discover
+    maxHeight: 25,
+    backgroundColor: '#98BA7B',
+    borderRadius: 40,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
   },
 });

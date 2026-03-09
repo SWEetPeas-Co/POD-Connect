@@ -10,6 +10,8 @@ import { StyleSheet, Text, type TextProps } from 'react-native';
 // Imports the hook that picks the correct color from your theme.
 import { useThemeColor } from '@/hooks/use-theme-color';
 
+import { Fonts } from '@/constants/theme';
+
 // Defining the component's props
 // This defines what inputs the component can receive.
 // TextProps & means: All normal Text properties + our custom ones
@@ -89,11 +91,13 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 32,
     //fontWeight: '700',
+    fontFamily: Fonts.regular,
   },
 
   sliderDefault: {
     fontSize: 20,
     //fontWeight: '500',
+    fontFamily: Fonts.regular,
   },
 
   sliderSelected: {
@@ -108,27 +112,32 @@ const styles = StyleSheet.create({
 
   searchBar: {
     fontSize: 16,
+    fontFamily: Fonts.regular,
   },
 
   eventTitle: {
     fontSize: 20,
     //fontWeight: '700',
     //lineHeight: 28,
+    fontFamily: Fonts.regular,
   },
 
   eventSubtitle: {
     fontSize: 16,
     //fontWeight: '600',
     //lineHeight: 24,
+    fontFamily: Fonts.regular,
   },
 
   eventDescription: {
     fontSize: 15,
     //lineHeight: 22,
+    fontFamily: Fonts.regular,
   },
 
   eventTag: {
     fontSize: 15,
     //fontWeight: '600',
+    fontFamily: Fonts.regular,
   },
 });
