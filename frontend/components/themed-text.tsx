@@ -68,7 +68,7 @@ export function ThemedText({
     <Text
       style={[
         { color },
-        type === 'header' && styles.header,
+        type === 'header' && styles.header, // type === 'link' ? styles.link : undefined,
         type === 'sliderDefault' && styles.sliderDefault,
         type === 'sliderSelected' && styles.sliderSelected,
         type === 'sortButton' && styles.sortButton,
