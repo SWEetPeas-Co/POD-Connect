@@ -32,14 +32,14 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="events"
+        name="my-events"
         options={{
           title: 'Events',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="chevron.right" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="discover"
+        name="discover-events"
         options={{
           title: 'Discover',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="chevron.right" color={color} />,

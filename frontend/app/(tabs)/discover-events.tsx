@@ -1,14 +1,19 @@
 import { StyleSheet, ScrollView } from "react-native";
 import { events } from "@/data/events";
+import { useState } from "react";
 
-import DiscoverEventCard from "@/components/events/event-card-discover";
+//import DiscoverEventCard from "@/components/events/event-card-discover";
 import Header from "@/components/header";
 import Slider from "@/components/ui/slider";
 import SearchBar from "@/components/ui/search-bar";
 import { ThemedView } from "@/components/themed-view";
-import { ThemedText } from "@/components/themed-text";
+import EventCard from "@/components/events/event-card";
 
-export default function Discover() {
+export default function DiscoverEvents() {
+  const [search, setSearch] = useState("");
+  const filteredEvents = events.filter((event) =>
+    event.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <ThemedView style={styles.mainContainer}>
@@ -17,16 +22,21 @@ export default function Discover() {
 
       <ThemedView style={styles.searchContainer}>
         <Slider />
-        <SearchBar />
+        <ThemedView style={styles.searchRow}>
+          <SearchBar value={search} onChangeText={setSearch} />
+        </ThemedView>
       </ThemedView>
 
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
 
-        {events.map((event) => (
-          <DiscoverEventCard
+        {filteredEvents.map((event) => (
+          <EventCard
             key={event.id}
             title={event.title}
-            tags={event.tags}
+            club={event.club}
+            location={event.location}
+            time={event.time}
+            description={event.description}
             headcount={event.headcount}
           />
         ))}
@@ -51,6 +61,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 15,
     paddingHorizontal: 30,
+  },
+  searchRow: {
+    flexDirection: "row",
+    gap: 10,
+    width: '100%',
   },
   eventContainer: {
     flex: 1,
