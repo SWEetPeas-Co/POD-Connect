@@ -1,31 +1,40 @@
 import { StyleSheet, ScrollView } from "react-native";
 import { events } from "@/data/events";
+import { useState } from "react";
 
-import DiscoverEventCard from "@/components/events/event-card-discover";
+import EventCard from "@/components/events/event-card";
 import Header from "@/components/header";
-import Slider from "@/components/ui/slider";
 import SearchBar from "@/components/ui/search-bar";
 import { ThemedView } from "@/components/themed-view";
 
-export default function Discover() {
+export default function MyEvents() {
+  const [search, setSearch] = useState("");
+  const filteredEvents = events.filter((event) =>
+    event.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <ThemedView style={styles.mainContainer}>
 
-      <Header title="DISCOVER" />
+      <Header title="MY EVENTS" />
 
       <ThemedView style={styles.searchContainer}>
-        <Slider />
-        <SearchBar />
+        
+        <ThemedView style={styles.searchRow}>
+          <SearchBar value={search} onChangeText={setSearch} />
+        </ThemedView>
       </ThemedView>
 
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
 
-        {events.map((event) => (
-          <DiscoverEventCard
+        {filteredEvents.map((event) => (
+          <EventCard
             key={event.id}
             title={event.title}
-            tags={event.tags}
+            club={event.club}
+            location={event.location}
+            time={event.time}
+            description={event.description}
             headcount={event.headcount}
           />
         ))}
@@ -44,12 +53,16 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   searchContainer: {
-    height: 85,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 15,
     paddingHorizontal: 30,
+  },
+  searchRow: {
+    flexDirection: "row",
+    gap: 10,
+    width: '100%',
   },
   eventContainer: {
     flex: 1,
@@ -73,13 +86,10 @@ const styles = StyleSheet.create({
 //     <ThemedView style={styles.mainContainer}>
 
 //       <ThemedView style={styles.headerContainer}>
-//         <ThemedText type="header">DISCOVER</ThemedText>
+//         <ThemedText type="header">MY EVENTS</ThemedText>
 //       </ThemedView>
 
 //       <ThemedView style={styles.searchContainer}>
-//         <ThemedView style={styles.sliderContainer}>
-//             <ThemedText type="sliderDefault">Here is the Slider.</ThemedText>
-//         </ThemedView>
 //         <ThemedView style={styles.searchBarContainer}>
 //             <ThemedText type="searchBar">Here is the Search Bar.</ThemedText>
 //         </ThemedView>
@@ -92,42 +102,17 @@ const styles = StyleSheet.create({
 //                 </ThemedView>
 //                 <ThemedView style={styles.eventCardText}>
 //                     <ThemedText type="eventTitle">Event title.</ThemedText>
-//                     <ThemedView style={styles.eventCardTagsGroup}>
-//                         <ThemedView style={styles.eventCardTags}>
-//                             <ThemedText type="eventTag">Another Tag</ThemedText>
-//                         </ThemedView>
-//                         <ThemedView style={styles.eventCardTags}>
-//                             <ThemedText type="eventTag">Another Tag</ThemedText>
-//                         </ThemedView>
-//                     </ThemedView>
+//                     <ThemedText type="eventSubtitle">Event subtiitle.</ThemedText>
 //                 </ThemedView>
 //                 <ThemedView style={styles.eventCardRSVP}>
-//                     <ThemedText type="eventSubtitle">Head</ThemedText>
 //                     <ThemedView style={styles.eventCardRSVPButton}>
+//                         <ThemedText type="eventSubtitle">RSVP</ThemedText>
 //                     </ThemedView>
+//                     <ThemedText type="eventSubtitle">Head</ThemedText>
 //                 </ThemedView>
 //             </ThemedView>
-//         </ThemedView>
-//         <ThemedView style={styles.eventCardContainer}>
-//             <ThemedView style={styles.eventCardContainerTop}>
-//                 <ThemedView style={styles.eventCardImage}>
-//                 </ThemedView>
-//                 <ThemedView style={styles.eventCardText}>
-//                     <ThemedText type="eventTitle">Event title.</ThemedText>
-//                     <ThemedView style={styles.eventCardTagsGroup}>
-//                         <ThemedView style={styles.eventCardTags}>
-//                             <ThemedText type="eventTag">Another Tag</ThemedText>
-//                         </ThemedView>
-//                         <ThemedView style={styles.eventCardTags}>
-//                             <ThemedText type="eventTag">Another Tag</ThemedText>
-//                         </ThemedView>
-//                     </ThemedView>
-//                 </ThemedView>
-//                 <ThemedView style={styles.eventCardRSVP}>
-//                     <ThemedText type="eventSubtitle">Head</ThemedText>
-//                     <ThemedView style={styles.eventCardRSVPButton}>
-//                     </ThemedView>
-//                 </ThemedView>
+//             <ThemedView style={styles.eventCardContainerMiddle}>
+//                 <ThemedText type="eventSubtitle">Event Info like location here.</ThemedText>
 //             </ThemedView>
 //             <ThemedView style={styles.eventCardContainerBottom}>
 //                 <ThemedText type="eventDescription">Here is the event description.</ThemedText>
@@ -139,20 +124,17 @@ const styles = StyleSheet.create({
 //                 </ThemedView>
 //                 <ThemedView style={styles.eventCardText}>
 //                     <ThemedText type="eventTitle">Event title.</ThemedText>
-//                     <ThemedView style={styles.eventCardTagsGroup}>
-//                         <ThemedView style={styles.eventCardTags}>
-//                             <ThemedText type="eventTag">Another Tag</ThemedText>
-//                         </ThemedView>
-//                         <ThemedView style={styles.eventCardTags}>
-//                             <ThemedText type="eventTag">Another Tag</ThemedText>
-//                         </ThemedView>
-//                     </ThemedView>
+//                     <ThemedText type="eventSubtitle">Event subtiitle.</ThemedText>
 //                 </ThemedView>
 //                 <ThemedView style={styles.eventCardRSVP}>
-//                     <ThemedText type="eventSubtitle">Head</ThemedText>
 //                     <ThemedView style={styles.eventCardRSVPButton}>
+//                         <ThemedText type="eventSubtitle">RSVP</ThemedText>
 //                     </ThemedView>
+//                     <ThemedText type="eventSubtitle">Head</ThemedText>
 //                 </ThemedView>
+//             </ThemedView>
+//             <ThemedView style={styles.eventCardContainerMiddle}>
+//                 <ThemedText type="eventSubtitle">Event Info like location here.</ThemedText>
 //             </ThemedView>
 //             <ThemedView style={styles.eventCardContainerBottom}>
 //                 <ThemedText type="eventDescription">Here is the event description.</ThemedText>
@@ -164,20 +146,61 @@ const styles = StyleSheet.create({
 //                 </ThemedView>
 //                 <ThemedView style={styles.eventCardText}>
 //                     <ThemedText type="eventTitle">Event title.</ThemedText>
-//                     <ThemedView style={styles.eventCardTagsGroup}>
-//                         <ThemedView style={styles.eventCardTags}>
-//                             <ThemedText type="eventTag">Another Tag</ThemedText>
-//                         </ThemedView>
-//                         <ThemedView style={styles.eventCardTags}>
-//                             <ThemedText type="eventTag">Another Tag</ThemedText>
-//                         </ThemedView>
-//                     </ThemedView>
+//                     <ThemedText type="eventSubtitle">Event subtiitle.</ThemedText>
 //                 </ThemedView>
 //                 <ThemedView style={styles.eventCardRSVP}>
-//                     <ThemedText type="eventSubtitle">Head</ThemedText>
 //                     <ThemedView style={styles.eventCardRSVPButton}>
+//                         <ThemedText type="eventSubtitle">RSVP</ThemedText>
 //                     </ThemedView>
+//                     <ThemedText type="eventSubtitle">Head</ThemedText>
 //                 </ThemedView>
+//             </ThemedView>
+//             <ThemedView style={styles.eventCardContainerMiddle}>
+//                 <ThemedText type="eventSubtitle">Event Info like location here.</ThemedText>
+//             </ThemedView>
+//             <ThemedView style={styles.eventCardContainerBottom}>
+//                 <ThemedText type="eventDescription">Here is the event description.</ThemedText>
+//             </ThemedView>
+//         </ThemedView>
+//         <ThemedView style={styles.eventCardContainer}>
+//             <ThemedView style={styles.eventCardContainerTop}>
+//                 <ThemedView style={styles.eventCardImage}>
+//                 </ThemedView>
+//                 <ThemedView style={styles.eventCardText}>
+//                     <ThemedText type="eventTitle">Event title.</ThemedText>
+//                     <ThemedText type="eventSubtitle">Event subtiitle.</ThemedText>
+//                 </ThemedView>
+//                 <ThemedView style={styles.eventCardRSVP}>
+//                     <ThemedView style={styles.eventCardRSVPButton}>
+//                         <ThemedText type="eventSubtitle">RSVP</ThemedText>
+//                     </ThemedView>
+//                     <ThemedText type="eventSubtitle">Head</ThemedText>
+//                 </ThemedView>
+//             </ThemedView>
+//             <ThemedView style={styles.eventCardContainerMiddle}>
+//                 <ThemedText type="eventSubtitle">Event Info like location here.</ThemedText>
+//             </ThemedView>
+//             <ThemedView style={styles.eventCardContainerBottom}>
+//                 <ThemedText type="eventDescription">Here is the event description.</ThemedText>
+//             </ThemedView>
+//         </ThemedView>
+//         <ThemedView style={styles.eventCardContainer}>
+//             <ThemedView style={styles.eventCardContainerTop}>
+//                 <ThemedView style={styles.eventCardImage}>
+//                 </ThemedView>
+//                 <ThemedView style={styles.eventCardText}>
+//                     <ThemedText type="eventTitle">Event title.</ThemedText>
+//                     <ThemedText type="eventSubtitle">Event subtiitle.</ThemedText>
+//                 </ThemedView>
+//                 <ThemedView style={styles.eventCardRSVP}>
+//                     <ThemedView style={styles.eventCardRSVPButton}>
+//                         <ThemedText type="eventSubtitle">RSVP</ThemedText>
+//                     </ThemedView>
+//                     <ThemedText type="eventSubtitle">Head</ThemedText>
+//                 </ThemedView>
+//             </ThemedView>
+//             <ThemedView style={styles.eventCardContainerMiddle}>
+//                 <ThemedText type="eventSubtitle">Event Info like location here.</ThemedText>
 //             </ThemedView>
 //             <ThemedView style={styles.eventCardContainerBottom}>
 //                 <ThemedText type="eventDescription">Here is the event description.</ThemedText>
@@ -214,7 +237,6 @@ const styles = StyleSheet.create({
 //     borderBottomRightRadius: 25,
 //   },
 //   searchContainer: {
-//     height: 85,
 //     width: '100%',
 //     //backgroundColor: '#FFFFFF',
 
@@ -282,22 +304,20 @@ const styles = StyleSheet.create({
 //     height: 60,
 //     flex: 1,
 //     alignItems: 'flex-start',
-//     justifyContent: 'space-between', // changed for discover
+//     justifyContent: 'center',
 //     paddingLeft: 10,
 //     backgroundColor: '#E6E1C3',
 //   },
 //   eventCardRSVP: {
-//     flexDirection: 'row', // added for discover
 //     height: 60,
 //     width: 90,
 //     backgroundColor: '#E6E1C3',
-//     alignItems: 'flex-start',
-//     justifyContent: 'flex-end',
-//     gap: 10, // changed for discover
+//     alignItems: 'flex-end',
+//     gap: 4,
 //   },
 //   eventCardRSVPButton: {
 //     height: 25,
-//     width: 25, // changed for discover, will be star later
+//     width: 90,
 //     backgroundColor: '#98BA7B',
 //     borderRadius: 10,
 //     alignItems: 'center',
@@ -318,23 +338,7 @@ const styles = StyleSheet.create({
 
 //     alignItems: 'flex-start',
 //     justifyContent: 'center',
-//     padding: 10, // changed for discover
-//   },
-//   eventCardTagsGroup: { // added for discover
-//     flexDirection: 'row',
-//     width: '100%',
-//     alignItems: 'center',
-//     justifyContent: 'flex-start',
-//     gap: 10,
-//     backgroundColor: '#E6E1C3',
-//   },
-//   eventCardTags: { // added for discover
-//     maxHeight: 25,
-//     backgroundColor: '#98BA7B',
-//     borderRadius: 40,
-
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     padding: 10,
+//     paddingHorizontal: 10,
+//     paddingBottom: 10,
 //   },
 // });

@@ -1,12 +1,34 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Pressable } from 'react-native';
+import { useRouter, usePathname } from "expo-router";
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 
 export default function Slider() {
 
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const eventsActive = pathname.includes("discover-events");
+
   return (
     <ThemedView style={styles.sliderContainer}>
-      <ThemedText type='sliderDefault'>Slider</ThemedText>
+      <Pressable
+        style={[styles.side, eventsActive && styles.active]}
+        onPress={() => router.push("/discover-clubs")}
+      >
+        <ThemedText type="sliderDefault">
+          Clubs
+        </ThemedText>
+      </Pressable>
+
+      <Pressable
+        style={[styles.side, !eventsActive && styles.active]}
+        onPress={() => router.push("/discover-events")}
+      >
+        <ThemedText type="sliderDefault">
+          Events
+        </ThemedText>
+      </Pressable>
     </ThemedView>
   );
 }
@@ -14,12 +36,21 @@ export default function Slider() {
 const styles = StyleSheet.create({
 
   sliderContainer: {
+    flexDirection: "row",
     height: 35,
     width: '100%',
-    backgroundColor: '#E6E1C3',
+    backgroundColor: '#D4CEAB',
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    overflow: "hidden",
+  },
+  side: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  active: {
+    backgroundColor: "#E6E1C3",
   },
 
 });

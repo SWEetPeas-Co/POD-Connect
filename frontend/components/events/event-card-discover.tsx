@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import Tag from '../ui/tag';
+import { Users } from "lucide-react-native";
 
 type DiscoverCardProps = {
   title: string
@@ -33,8 +34,11 @@ export default function DiscoverEventCard({
         </ThemedView>
 
         <ThemedView style={styles.rsvp}>
-          <ThemedText type='eventSubtitle'>{headcount}</ThemedText>
-          <ThemedView style={styles.star}/>
+          <ThemedView style={styles.iconRow}>
+            <Users size={14} color="#4A7E61" />
+            <ThemedText type='eventSubtitle'> {headcount}  </ThemedText>
+            <ThemedView style={styles.star}/>
+          </ThemedView>
         </ThemedView>
 
       </ThemedView>
@@ -78,6 +82,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    backgroundColor: '#E6E1C3',
+  },
+
+  iconRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#E6E1C3',
   },
 

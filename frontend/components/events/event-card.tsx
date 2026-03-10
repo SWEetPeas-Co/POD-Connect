@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
+import RSVPButton from '../ui/rsvp-button';
 
 import { Clock, Users, MapPin } from "lucide-react-native";
 
@@ -35,20 +36,26 @@ export default function EventCard({
         </ThemedView>
 
         <ThemedView style={styles.rsvp}>
-          <ThemedView style={styles.rsvpButton}>
-            <ThemedText type='eventSubtitle'>RSVP</ThemedText>
-          </ThemedView>
+          <RSVPButton />
 
-          <ThemedText type='eventSubtitle'><Users size={14} color="#4A7E61" /> {headcount}</ThemedText>
+          <ThemedView style={styles.iconRow}>
+            <Users size={14} color="#4A7E61" />
+            <ThemedText type='eventSubtitle'> {headcount}</ThemedText>
+          </ThemedView>
         </ThemedView>
 
       </ThemedView>
 
       <ThemedView style={styles.middle}>
 
-        <ThemedText type="eventSubtitle"><MapPin size={14} color="#4A7E61" /> {location}</ThemedText>
-
-        <ThemedText type="eventSubtitle"><Clock size={14} color="#4A7E61" /> {time}</ThemedText>
+        <ThemedView style={styles.iconRow}>
+            <MapPin size={14} color="#4A7E61" />
+            <ThemedText type='eventSubtitle'> {location}</ThemedText>
+        </ThemedView>
+        <ThemedView style={styles.iconRow}>
+            <Clock size={14} color="#4A7E61" />
+            <ThemedText type='eventSubtitle'> {time}</ThemedText>
+        </ThemedView>
       </ThemedView>
 
       <ThemedView style={styles.bottom}>
@@ -112,6 +119,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  iconRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#E6E1C3',
   },
 
   middle: {

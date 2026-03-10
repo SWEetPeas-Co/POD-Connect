@@ -1,22 +1,21 @@
 import { StyleSheet, Pressable } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
+import { useState } from "react";
 
-type RSVPButtonProps = {
-  onPress?: () => void
-}
+export default function RSVPButton() {
+  const [rsvped, setRsvped] = useState(false);
 
-export default function RSVPButton({ onPress }: RSVPButtonProps) {
+  function toggleRSVP() {
+    setRsvped(!rsvped);
+  }
 
   return (
     <Pressable
-      style={({ pressed }) => [
-        styles.button,
-        pressed && styles.pressed
-      ]}
-      onPress={onPress}
+      style={[styles.button, rsvped && styles.buttonActive]}
+      onPress={toggleRSVP}
     >
       <ThemedText type='eventSubtitle'>
-        RSVP
+        {rsvped ? "unRSVP" : "RSVP"}
       </ThemedText>
     </Pressable>
   );
@@ -33,8 +32,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  pressed: {
-    opacity: 0.7,
+  buttonActive: {
+    backgroundColor: "#3F6F4F",
   },
 
 });

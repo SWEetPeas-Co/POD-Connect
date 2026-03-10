@@ -28,6 +28,7 @@ export default function SearchBar({
 const styles = StyleSheet.create({
 
   searchBarContainer: {
+    flex: 1,
     height: 35,
     width: '100%',
     backgroundColor: '#ffffff',
