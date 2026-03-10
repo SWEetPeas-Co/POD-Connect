@@ -3,6 +3,7 @@ import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import Tag from '../ui/tag';
 import { Users } from "lucide-react-native";
+import StarButton from '../ui/star-button';
 
 type DiscoverCardProps = {
   title: string
@@ -37,7 +38,7 @@ export default function DiscoverEventCard({
           <ThemedView style={styles.iconRow}>
             <Users size={14} color="#4A7E61" />
             <ThemedText type='eventSubtitle'> {headcount}  </ThemedText>
-            <ThemedView style={styles.star}/>
+            <StarButton active={false} onPress={() => {}} />
           </ThemedView>
         </ThemedView>
 
