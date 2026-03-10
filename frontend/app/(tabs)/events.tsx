@@ -26,6 +26,7 @@ export default function MyEvents() {
             title={event.title}
             club={event.club}
             location={event.location}
+            time={event.time}
             description={event.description}
             headcount={event.headcount}
           />

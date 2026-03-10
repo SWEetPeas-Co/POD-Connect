@@ -2,10 +2,13 @@ import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 
+import { Clock, Users, MapPin } from "lucide-react-native";
+
 type EventCardProps = {
   title: string
   club: string
   location: string
+  time: string
   description: string
   headcount: number
 }
@@ -14,6 +17,7 @@ export default function EventCard({
   title,
   club,
   location,
+  time,
   description,
   headcount,
 }: EventCardProps) {
@@ -35,13 +39,16 @@ export default function EventCard({
             <ThemedText type='eventSubtitle'>RSVP</ThemedText>
           </ThemedView>
 
-          <ThemedText type='eventSubtitle'>{headcount}</ThemedText>
+          <ThemedText type='eventSubtitle'><Users size={14} color="#4A7E61" /> {headcount}</ThemedText>
         </ThemedView>
 
       </ThemedView>
 
       <ThemedView style={styles.middle}>
-        <ThemedText type='eventSubtitle'>{location}</ThemedText>
+
+        <ThemedText type="eventSubtitle"><MapPin size={14} color="#4A7E61" /> {location}</ThemedText>
+
+        <ThemedText type="eventSubtitle"><Clock size={14} color="#4A7E61" /> {time}</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.bottom}>
@@ -108,12 +115,15 @@ const styles = StyleSheet.create({
   },
 
   middle: {
+    flexDirection: 'row',
     height: 30,
     width: '100%',
     backgroundColor: '#E6E1C3',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     paddingHorizontal: 10,
+    gap: 20,
+    paddingTop: 5,
   },
 
   bottom: {
@@ -122,7 +132,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'center',
     paddingHorizontal: 10,
-    paddingBottom: 10,
   },
 
 });

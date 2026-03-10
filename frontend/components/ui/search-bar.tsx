@@ -33,11 +33,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 10,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
 
   input: {
+    width: '100%',
+    height: '100%',
+    paddingHorizontal: 20,
     fontSize: 14,
+    borderRadius: 10,
   },
 
 });
