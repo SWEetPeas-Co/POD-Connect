@@ -1,10 +1,10 @@
-import { StyleSheet } from "react-native";
-import { ThemedView } from "@/components/themed-view";
-import { ThemedText } from "@/components/themed-text";
+import { StyleSheet } from 'react-native';
+import { ThemedView } from '@/components/themed-view';
+import { ThemedText } from '@/components/themed-text';
 
 type EventCardProps = {
   title: string
-  subtitle: string
+  club: string
   location: string
   description: string
   headcount: number
@@ -12,7 +12,7 @@ type EventCardProps = {
 
 export default function EventCard({
   title,
-  subtitle,
+  club,
   location,
   description,
   headcount,
@@ -26,26 +26,26 @@ export default function EventCard({
         <ThemedView style={styles.image} />
 
         <ThemedView style={styles.text}>
-          <ThemedText type="eventTitle">{title}</ThemedText>
-          <ThemedText type="eventSubtitle">{subtitle}</ThemedText>
+          <ThemedText type='eventTitle'>{title}</ThemedText>
+          <ThemedText type='eventSubtitle'>{club}</ThemedText>
         </ThemedView>
 
         <ThemedView style={styles.rsvp}>
           <ThemedView style={styles.rsvpButton}>
-            <ThemedText type="eventSubtitle">RSVP</ThemedText>
+            <ThemedText type='eventSubtitle'>RSVP</ThemedText>
           </ThemedView>
 
-          <ThemedText type="eventSubtitle">{headcount}</ThemedText>
+          <ThemedText type='eventSubtitle'>{headcount}</ThemedText>
         </ThemedView>
 
       </ThemedView>
 
       <ThemedView style={styles.middle}>
-        <ThemedText type="eventSubtitle">{location}</ThemedText>
+        <ThemedText type='eventSubtitle'>{location}</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.bottom}>
-        <ThemedText type="eventDescription">{description}</ThemedText>
+        <ThemedText type='eventDescription'>{description}</ThemedText>
       </ThemedView>
 
     </ThemedView>
@@ -55,53 +55,74 @@ export default function EventCard({
 const styles = StyleSheet.create({
 
   card: {
-    width: "100%",
-    backgroundColor: "#E6E1C3",
+    width: '100%',
+    backgroundColor: '#E6E1C3',
     borderRadius: 15,
     padding: 12,
+    shadowColor: '#569170',
+    shadowRadius: 1,
+    shadowOffset: { width: 3, height: 4 },
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   top: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     height: 60,
+    width: '100%',
+    backgroundColor: '#E6E1C3',
   },
 
   image: {
     height: 60,
     width: 60,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 10,
   },
 
   text: {
     flex: 1,
     paddingLeft: 10,
-    justifyContent: "center",
+    justifyContent: 'center',
+    height: 60,
+    alignItems: 'flex-start',
+    backgroundColor: '#E6E1C3',
   },
 
   rsvp: {
+    height: 60,
     width: 90,
-    alignItems: "flex-end",
+    alignItems: 'flex-end',
     gap: 4,
+    backgroundColor: '#E6E1C3',
   },
 
   rsvpButton: {
     height: 25,
     width: 90,
-    backgroundColor: "#98BA7B",
+    backgroundColor: '#98BA7B',
     borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   middle: {
     height: 30,
-    justifyContent: "center",
+    width: '100%',
+    backgroundColor: '#E6E1C3',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
   },
 
   bottom: {
-    paddingTop: 5,
+    width: '100%',
+    backgroundColor: '#E6E1C3',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    paddingBottom: 10,
   },
 
 });

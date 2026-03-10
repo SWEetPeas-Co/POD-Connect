@@ -1,5 +1,5 @@
-import { StyleSheet, TextInput } from "react-native";
-import { ThemedView } from "@/components/themed-view";
+import { StyleSheet, TextInput } from 'react-native';
+import { ThemedView } from '@/components/themed-view';
 
 type SearchBarProps = {
   placeholder?: string
@@ -8,13 +8,13 @@ type SearchBarProps = {
 }
 
 export default function SearchBar({
-  placeholder = "Search events...",
+  placeholder = 'Search events...',
   value,
   onChangeText,
 }: SearchBarProps) {
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={styles.searchBarContainer}>
       <TextInput
         style={styles.input}
         placeholder={placeholder}
@@ -27,13 +27,13 @@ export default function SearchBar({
 
 const styles = StyleSheet.create({
 
-  container: {
+  searchBarContainer: {
     height: 35,
-    width: "100%",
-    backgroundColor: "#fff",
+    width: '100%',
+    backgroundColor: '#ffffff',
     borderRadius: 10,
-    justifyContent: "center",
-    paddingHorizontal: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   input: {

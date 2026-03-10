@@ -2,6 +2,8 @@ import { StyleSheet, ScrollView } from "react-native";
 import { events } from "@/data/events";
 
 import EventCard from "@/components/events/event-card";
+import Header from "@/components/header";
+import SearchBar from "@/components/ui/search-bar";
 import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
 
@@ -10,17 +12,19 @@ export default function MyEvents() {
   return (
     <ThemedView style={styles.mainContainer}>
 
-      <ThemedView style={styles.headerContainer}>
-        <ThemedText type="header">MY EVENTS</ThemedText>
+      <Header title="MY EVENTS" />
+
+      <ThemedView style={styles.searchContainer}>
+        <SearchBar />
       </ThemedView>
 
-      <ScrollView contentContainerStyle={styles.eventContent}>
+      <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
 
         {events.map((event) => (
           <EventCard
             key={event.id}
             title={event.title}
-            subtitle={event.subtitle}
+            club={event.club}
             location={event.location}
             description={event.description}
             headcount={event.headcount}
@@ -36,23 +40,26 @@ export default function MyEvents() {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: "#98BA7B",
+    backgroundColor: '#98BA7B',
     paddingTop: 85,
-  },
-
-  headerContainer: {
-    position: "absolute",
-    top: 0,
-    width: "100%",
-    height: 65,
-    backgroundColor: "#569170",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  eventContent: {
-    padding: 16,
     gap: 15,
+  },
+  searchContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 15,
+    paddingHorizontal: 30,
+  },
+  eventContainer: {
+    flex: 1,
+    width: '100%',
+  },
+  eventContent: {
+    alignItems: 'center',
+    gap: 15,
+    paddingHorizontal: 16,
+    paddingBottom: 100,
   },
 });
 
