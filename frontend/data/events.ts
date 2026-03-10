@@ -1,0 +1,32 @@
+export const events = [
+  {
+    id: 1,
+    title: 'Campus Picnic',
+    club: 'SASE',
+    location: 'Reitz Union Lawn',
+    time: 'Fri, 6:00 pm',
+    description: 'Join us for food and games with students.',
+    tags: ['Social', 'Outdoor'],
+    headcount: 25,
+  },
+  {
+    id: 2,
+    title: 'Hackathon',
+    club: 'WICSE',
+    location: 'CSE Lab',
+    time: '9:00 pm',
+    description: 'Build something cool in 24 hours.',
+    tags: ['Tech', 'Coding'],
+    headcount: 60,
+  },
+  {
+    id: 3,
+    title: 'Hackathon',
+    club: 'WICSE',
+    location: 'CSE Lab',
+    time: '9:00 pm',
+    tags: ['Tech', 'Coding'],
+    description: '',
+    headcount: 60,
+  },
+];

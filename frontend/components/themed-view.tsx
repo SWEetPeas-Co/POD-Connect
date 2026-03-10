@@ -1,3 +1,5 @@
+// This document styles the views/containers that need themed backgrounds
+
 import { View, type ViewProps } from 'react-native';
 
 import { useThemeColor } from '@/hooks/use-theme-color';
