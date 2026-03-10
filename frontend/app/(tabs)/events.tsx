@@ -5,7 +5,6 @@ import EventCard from "@/components/events/event-card";
 import Header from "@/components/header";
 import SearchBar from "@/components/ui/search-bar";
 import { ThemedView } from "@/components/themed-view";
-import { ThemedText } from "@/components/themed-text";
 
 export default function MyEvents() {
 

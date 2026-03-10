@@ -6,7 +6,6 @@ import Header from "@/components/header";
 import Slider from "@/components/ui/slider";
 import SearchBar from "@/components/ui/search-bar";
 import { ThemedView } from "@/components/themed-view";
-import { ThemedText } from "@/components/themed-text";
 
 export default function Discover() {
 
