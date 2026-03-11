@@ -23,7 +23,7 @@ export default function Slider() {
 
       <Pressable
         style={[styles.side, !eventsActive && styles.active]}
-        onPress={() => router.push("/discover-events")}
+        onPress={() => router.push("/discover/discover-events")}
       >
         <ThemedText type="sliderDefault">
           Events
