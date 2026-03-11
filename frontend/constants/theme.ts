@@ -19,16 +19,16 @@ const white = '#FFFFFF';
 const black = '#000000';
 const yellow = '#CCB423';
 
-// dark mode
-const mediumGreenDM = '#249556';
-const lightGreenDM = '#98BA7B';
-const darkGreenDM = '#4A7E61';
-const beigeDM = '#35342B';
-const darkBeigeDM = '#D4CEAB';
-const lightPinkDM = '#EFD7DD';
-const whiteDM = '#FFFFFF';
-const blackDM = '#000000';
-const yellowDM = '#CCB423';
+// dark mode (go to @/hooks/use-color-scheme.web.ts to switch it)
+const mediumGreenDM = '#3F7D5C';
+const lightGreenDM = '#6FAF8C';
+const darkGreenDM = '#2E5A44';
+const beigeDM = '#2B2A23';
+const darkBeigeDM = '#3A382F';
+const lightPinkDM = '#D7A8B2';
+const whiteDM = '#F2F2F2';
+const blackDM = '#0F0F0F';
+const yellowDM = '#E3C85A';
 
 // Defines the colors in light and dark mode
 /**
