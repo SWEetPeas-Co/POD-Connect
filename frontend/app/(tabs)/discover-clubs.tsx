@@ -96,7 +96,7 @@ export default function DiscoverClubs() {
                 id={club.id}
                 title={club.club}
                 tags={club.tags}
-                headcount={club.headcount}
+                headcount={club.headcount + (favoriteIds.includes(club.id) ? 1 : 0)}
                 active={favoriteIds.includes(club.id)}
                 onToggle={() => toggleFavorite(club.id)}
             />

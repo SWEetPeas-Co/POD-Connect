@@ -53,11 +53,11 @@ export default function MyEvents() {
             rsvped={rsvpIds.includes(event.id)}
             onToggleRSVP={toggleRSVP}
             title={event.title}
-            club={club?.club ?? "Unknown Club"} // <-- use the club name here
+            club={club?.club ?? "Unknown Club"}
             location={event.location}
             time={event.time}
             description={event.description}
-            headcount={event.headcount}
+            headcount={event.headcount + (rsvpIds.includes(event.id) ? 1 : 0)}
           />
         );
       })}

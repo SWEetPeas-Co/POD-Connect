@@ -57,7 +57,7 @@ export default function DiscoverEvents() {
             location={event.location}
             time={event.time}
             description={event.description}
-            headcount={event.headcount}
+            headcount={event.headcount + (rsvpIds.includes(event.id) ? 1 : 0)}
           />
         ))}
 
