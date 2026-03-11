@@ -7,10 +7,15 @@ import Header from "@/components/header";
 import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
 
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+
 export default function MyEvents() {
+  const colorScheme = useColorScheme();
+  const theme = Colors[colorScheme ?? 'light'];
 
   return (
-    <ThemedView style={styles.mainContainer}>
+    <ThemedView style={[styles.mainContainer, { backgroundColor: theme.background } ]}>
 
       <Header title="PROFILE" />
 
@@ -39,6 +44,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 15,
     paddingHorizontal: 30,
+    backgroundColor: 'transparent',
   },
   searchRow: {
     flexDirection: "row",

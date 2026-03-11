@@ -14,8 +14,14 @@ import FilterButton from "@/components/ui/filter-button";
 import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
 
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+
 // Defines a React component called DiscoverClubs, other files can import it
 export default function DiscoverClubs() {
+    const colorScheme = useColorScheme();
+    const theme = Colors[colorScheme ?? 'light'];
+
     const [search, setSearch] = useState(""); // creates a state variable called search, search = what user types, setSearch = func that updates it, "" = initial value
     const [showFilters, setShowFilters] = useState(false); // controls whether to show tag filter, showFilters = bool, setShowFilters = func that changes state, false = default
     const [selectedTags, setSelectedTags] = useState<string[]>([]); // stores tags selected by user in an array, [] = defualt no filter
@@ -51,7 +57,7 @@ export default function DiscoverClubs() {
         );
 
   return (
-    <ThemedView style={styles.mainContainer}>
+    <ThemedView style={[styles.mainContainer, { backgroundColor: theme.background } ]}>
 
       <Header title="DISCOVER CLUBS" />
 
@@ -71,7 +77,7 @@ export default function DiscoverClubs() {
               return (
                 <Pressable
                   key={tag}
-                  style={[styles.tag, active && styles.tagActive]}
+                  style={[styles.tag, { backgroundColor: theme.filterTagBackgroundDefault }, active && { backgroundColor: theme.filterTagBackgroundSelected }]}
                   onPress={() => toggleTag(tag)}
                 > {/* if active, apply tagActive style */}
                   <ThemedText type="eventTag">{tag}</ThemedText> {/* creates a button */}
@@ -105,7 +111,7 @@ export default function DiscoverClubs() {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#98BA7B',
+    //backgroundColor: '#98BA7B',
     paddingTop: 85,
     gap: 15,
   },
@@ -115,27 +121,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 15,
     paddingHorizontal: 30,
+    backgroundColor: 'transparent',
   },
   searchRow: {
     flexDirection: "row",
     gap: 10,
     width: '100%',
+    backgroundColor: 'transparent',
   },
   filterContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 10,
     width: "100%",
+    backgroundColor: 'transparent',
   },
   tag: {
-    backgroundColor: "#D4CEAB",
+    //backgroundColor: "#D4CEAB",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
   },
-
   tagActive: {
-    backgroundColor: "#EFD7DD",
+    //backgroundColor: "#EFD7DD",
   },
   eventContainer: {
     flex: 1,

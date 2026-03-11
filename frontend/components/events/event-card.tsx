@@ -8,6 +8,9 @@ import RSVPButton from '../ui/rsvp-button';
 
 import { Clock, Users, MapPin, ChevronDown } from "lucide-react-native";
 
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+
 type EventCardProps = {
   id: number
   rsvped: boolean
@@ -36,6 +39,9 @@ export default function EventCard({
   description,
   headcount,
 }: EventCardProps) {
+  const colorScheme = useColorScheme();
+  const theme = Colors[colorScheme ?? 'light'];
+  
   const [expanded, setExpanded] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
 
@@ -53,11 +59,11 @@ export default function EventCard({
   };
 
   return (
-    <ThemedView style={styles.card}>
+    <ThemedView style={[styles.card, {shadowColor: theme.eventCardDropShadow, shadowRadius: 1,shadowOffset: { width: 3, height: 4 },}]}>
 
       <ThemedView style={styles.top}>
 
-        <ThemedView style={styles.image} />
+        <ThemedView style={[styles.image, {backgroundColor: theme.searchBarBackground}]} />
 
         <ThemedView style={styles.text}>
           <ThemedText type='eventTitle'>{title}</ThemedText>
@@ -68,7 +74,7 @@ export default function EventCard({
           <RSVPButton rsvped={rsvped} onPress={() => onToggleRSVP(id)} />
 
           <ThemedView style={styles.iconRow}>
-            <Users size={14} color="#4A7E61" />
+            <Users size={14} color={theme.eventCardIcon}  />
             <ThemedText type='eventSubtitle'> {headcount}</ThemedText>
           </ThemedView>
         </ThemedView>
@@ -78,11 +84,11 @@ export default function EventCard({
       <ThemedView style={styles.middle}>
 
         <ThemedView style={styles.iconRow}>
-            <MapPin size={14} color="#4A7E61" />
+            <MapPin size={14} color={theme.eventCardIcon}  />
             <ThemedText type='eventSubtitle'> {location}</ThemedText>
         </ThemedView>
         <ThemedView style={styles.iconRow}>
-            <Clock size={14} color="#4A7E61" />
+            <Clock size={14} color={theme.eventCardIcon}  />
             <ThemedText type='eventSubtitle'> {time}</ThemedText>
         </ThemedView>
       </ThemedView>
@@ -96,7 +102,7 @@ export default function EventCard({
       <ThemedView style={styles.expand}>
         <TouchableOpacity onPress={toggleExpand} hitSlop={10}>
           <Animated.View style={{ transform: [{rotate: rotation.interpolate({inputRange: [0, 1], outputRange: ['0deg', '180deg'], }),},],}}> {/*rotates half turn*/}
-            <ChevronDown size={24} color="#4A7E61" />
+            <ChevronDown size={24} color={theme.eventCardIcon}  />
           </Animated.View>
         </TouchableOpacity>
       </ThemedView>
@@ -109,10 +115,10 @@ const styles = StyleSheet.create({
 
   card: {
     width: '100%',
-    backgroundColor: '#E6E1C3',
+    //backgroundColor: '#E6E1C3',
     borderRadius: 15,
     padding: 12,
-    shadowColor: '#569170',
+    //shadowColor: '#569170',
     shadowRadius: 1,
     shadowOffset: { width: 3, height: 4 },
     justifyContent: 'center',
@@ -124,13 +130,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: 60,
     width: '100%',
-    backgroundColor: '#E6E1C3',
+    //backgroundColor: '#E6E1C3',
   },
 
   image: {
     height: 60,
     width: 60,
-    backgroundColor: '#fff',
+    //backgroundColor: '#fff',
     borderRadius: 10,
   },
 
@@ -140,7 +146,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 60,
     alignItems: 'flex-start',
-    backgroundColor: '#E6E1C3',
+    //backgroundColor: '#E6E1C3',
   },
 
   rsvp: {
@@ -148,13 +154,13 @@ const styles = StyleSheet.create({
     width: 90,
     alignItems: 'flex-end',
     gap: 4,
-    backgroundColor: '#E6E1C3',
+    //backgroundColor: '#E6E1C3',
   },
 
   rsvpButton: {
     height: 25,
     width: 90,
-    backgroundColor: '#98BA7B',
+    //backgroundColor: '#98BA7B',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -163,14 +169,14 @@ const styles = StyleSheet.create({
   iconRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E6E1C3',
+    //backgroundColor: '#E6E1C3',
   },
 
   middle: {
     flexDirection: 'row',
     height: 30,
     width: '100%',
-    backgroundColor: '#E6E1C3',
+    //backgroundColor: '#E6E1C3',
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingHorizontal: 10,
@@ -180,7 +186,7 @@ const styles = StyleSheet.create({
 
   bottom: {
     width: '100%',
-    backgroundColor: '#E6E1C3',
+    //backgroundColor: '#E6E1C3',
     alignItems: 'flex-start',
     justifyContent: 'center',
     paddingHorizontal: 10,
@@ -191,7 +197,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 5,
     right: 10,
-    backgroundColor: "#E6E1C3",
+    //backgroundColor: "#E6E1C3",
   },
 
 });

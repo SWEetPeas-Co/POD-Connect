@@ -3,6 +3,9 @@
 import { StyleSheet, TextInput } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+
 type SearchBarProps = {
   placeholder?: string
   value?: string
@@ -14,9 +17,11 @@ export default function SearchBar({
   value,
   onChangeText,
 }: SearchBarProps) {
+  const colorScheme = useColorScheme();
+  const theme = Colors[colorScheme ?? 'light'];
 
   return (
-    <ThemedView style={styles.searchBarContainer}>
+    <ThemedView style={[styles.searchBarContainer, {backgroundColor: theme.searchBarBackground }]}>
       <TextInput
         style={[styles.input, { color: '#569170' }]}
         placeholder={placeholder}
@@ -34,7 +39,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 35,
     width: '100%',
-    backgroundColor: '#ffffff',
+    //backgroundColor: '#ffffff',
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'flex-start',

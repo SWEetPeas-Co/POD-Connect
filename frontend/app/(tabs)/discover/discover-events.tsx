@@ -13,7 +13,13 @@ import Slider from "@/components/ui/slider";
 import SearchBar from "@/components/ui/search-bar";
 import { ThemedView } from "@/components/themed-view";
 
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+
 export default function DiscoverEvents() {
+  const colorScheme = useColorScheme();
+  const theme = Colors[colorScheme ?? 'light'];
+
   const [search, setSearch] = useState("");
   const { rsvpIds, toggleRSVP } = useContext(RsvpContext);
   const { favoriteIds, toggleFavorite } = useFavorites();
@@ -25,7 +31,7 @@ export default function DiscoverEvents() {
     .sort((a: Event, b: Event) => parseEventTime(a.time).getTime() - parseEventTime(b.time).getTime());
 
   return (
-    <ThemedView style={styles.mainContainer}>
+    <ThemedView style={[styles.mainContainer, { backgroundColor: theme.background } ]}>
 
       <Header title="DISCOVER" />
 
@@ -64,7 +70,7 @@ export default function DiscoverEvents() {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#98BA7B',
+    //backgroundColor: '#98BA7B',
     paddingTop: 85,
     gap: 15,
   },
@@ -75,11 +81,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 15,
     paddingHorizontal: 30,
+    backgroundColor: 'transparent',
   },
   searchRow: {
     flexDirection: "row",
     gap: 10,
     width: '100%',
+    backgroundColor: 'transparent',
   },
   eventContainer: {
     flex: 1,
