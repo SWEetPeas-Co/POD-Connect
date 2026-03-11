@@ -1,18 +1,21 @@
 // This document styles the bottom nav bar.
 
-import { Tabs } from 'expo-router'; // Tabs -  component from Expo Router that creates a bottom tab navigation bar.
+import { Tabs, usePathname } from 'expo-router'; // Tabs -  component from Expo Router that creates a bottom tab navigation bar.
 import React from 'react'; // React - required to use React components.
 
 import { HapticTab } from '@/components/haptic-tab'; // adds vibrations, should be fine to leave (but its optional)
 //import { IconSymbol } from '@/components/ui/icon-symbol'; // imports your icon component used inside the tabs. (will not use for simplicity)
 import { Colors } from '@/constants/theme'; // imports color scheme
 import { useColorScheme } from '@/hooks/use-color-scheme'; // returns light or dark
-import { Heart, Send } from "lucide-react-native";
+import { Heart, Send, CircleUserRound } from "lucide-react-native";
 
 // This creates the bottom navigation bar.
 export default function TabLayout() {
   const colorScheme = useColorScheme(); // returns light or dark
   const theme = Colors[colorScheme ?? 'light'];
+
+  const pathname = usePathname();
+  const isDiscover = pathname.startsWith('/discover');
 
   return (
     <Tabs
@@ -52,7 +55,27 @@ export default function TabLayout() {
           title: 'Discover',
           //tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />, // old system
           //tabBarIcon: ({ color }) => (<Send size={28} color={color} />),
-          tabBarIcon: ({ focused }) => ( <Send size={28} color={ focused ? theme.tabIconSelected : theme.tabIconDefault } /> ),
+          //tabBarIcon: ({ focused }) => ( <Send size={28} color={ focused ? theme.tabIconSelected : theme.tabIconDefault } /> ),
+          tabBarIcon: () => (
+            <Send size={28} color={isDiscover ? theme.tabIconSelected : theme.tabIconDefault} />
+          ),
+          tabBarItemStyle: {backgroundColor: isDiscover ? theme.footerBackgroundSelected : theme.footerBackgroundDefault,}
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          //tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />, // old system
+          //tabBarIcon: ({ color }) => (<Send size={28} color={color} />),
+          tabBarIcon: ({ focused }) => ( <CircleUserRound size={28} color={ focused ? theme.tabIconSelected : theme.tabIconDefault } /> ),
+        }}
+      />
+      <Tabs.Screen
+        name="discover/discover-events"
+        options={{
+          title: 'TRASH',
+          tabBarItemStyle: { display: "none" },
         }}
       />
     </Tabs>

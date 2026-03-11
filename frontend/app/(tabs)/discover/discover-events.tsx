@@ -5,6 +5,7 @@ import { events } from "@/data/events";
 import { useState, useContext } from "react";
 import RsvpContext from "@/src/lib/rsvpContext/rsvpContext";
 import { useFavorites } from '@/src/lib/favoritesContext/favoritesContext';
+import { parseEventTime } from '@/utils/parse-event-time';
 
 import DiscoverEventCard from "@/components/events/discover-event-card";
 import Header from "@/components/header";
@@ -17,9 +18,11 @@ export default function DiscoverEvents() {
   const { rsvpIds, toggleRSVP } = useContext(RsvpContext);
   const { favoriteIds, toggleFavorite } = useFavorites();
 
-  const filteredEvents = events.filter((event) =>
-    event.title.toLowerCase().includes(search.toLowerCase()) // search logic
-  );
+  type Event = typeof events[number];
+
+  const filteredEvents: Event[] = events
+    .filter((event) => event.title.toLowerCase().includes(search.toLowerCase()) ) // search logic
+    .sort((a: Event, b: Event) => parseEventTime(a.time).getTime() - parseEventTime(b.time).getTime());
 
   return (
     <ThemedView style={styles.mainContainer}>

@@ -10,17 +10,19 @@ import Header from "@/components/header";
 import SearchBar from "@/components/ui/search-bar";
 import { ThemedView } from "@/components/themed-view";
 import { clubs } from "@/data/clubs";
+import { parseEventTime } from '@/utils/parse-event-time';
 
 export default function MyEvents() {
   const [search, setSearch] = useState("");
 const { rsvpIds, toggleRSVP } = useContext(RsvpContext);
 
   // only show search and if rsvp'd
-  const filteredEvents = events
-    .filter((event) => rsvpIds.includes(event.id))
-    .filter((event) =>
-      event.title.toLowerCase().includes(search.toLowerCase()) // only show if searched
-  );
+  type Event = typeof events[number];
+  
+    const filteredEvents: Event[] = events
+      .filter((event) => rsvpIds.includes(event.id))
+      .filter((event) => event.title.toLowerCase().includes(search.toLowerCase())) // only show if searched
+      .sort((a: Event, b: Event) => parseEventTime(a.time).getTime() - parseEventTime(b.time).getTime());
 
   return (
     <ThemedView style={styles.mainContainer}>

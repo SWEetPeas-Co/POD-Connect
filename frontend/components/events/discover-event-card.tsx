@@ -1,13 +1,14 @@
 // This component is discvoer-event-card, right now it is a copy paste of event-card
 
-import { StyleSheet } from 'react-native';
+import { useState, useRef } from "react";
+import { StyleSheet, TouchableOpacity, LayoutAnimation, Platform, UIManager, Animated } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import RSVPButton from '../ui/rsvp-button';
 import StarButton from '../ui/star-button';
 
 import { clubs } from '@/data/clubs';
-import { Clock, Users, MapPin } from "lucide-react-native";
+import { Clock, Users, MapPin, ChevronDown } from "lucide-react-native";
 
 type EventCardProps = {
   id: number;
@@ -21,6 +22,11 @@ type EventCardProps = {
   time: string;
   description: string;
   headcount: number;
+}
+
+if (Platform.OS === 'android') {
+  UIManager.setLayoutAnimationEnabledExperimental &&
+    UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
 export default function EventCard({
@@ -37,6 +43,22 @@ export default function EventCard({
   headcount,
 }: EventCardProps) {
     const club = clubs.find(c => c.id === clubId);
+
+    const [expanded, setExpanded] = useState(false);
+  const rotation = useRef(new Animated.Value(0)).current;
+
+  const toggleExpand = () => {
+    // Animate the chevron
+    Animated.timing(rotation, {
+      toValue: expanded ? 0 : 1, // rotate back if collapsing
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+
+    // Animate the layout for expanding/collapsing
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setExpanded(!expanded);
+  };
 
   return (
     <ThemedView style={styles.card}>
@@ -76,9 +98,19 @@ export default function EventCard({
         </ThemedView>
       </ThemedView>
 
-      <ThemedView style={styles.bottom}>
-        <ThemedText type='eventDescription'>{description}</ThemedText>
-      </ThemedView>
+      {expanded && (
+              <ThemedView style={styles.bottom}>
+                <ThemedText type='eventDescription'>{description}</ThemedText>
+              </ThemedView>
+            )}
+      
+            <ThemedView style={styles.expand}>
+              <TouchableOpacity onPress={toggleExpand} hitSlop={10}>
+                <Animated.View style={{ transform: [{rotate: rotation.interpolate({inputRange: [0, 1], outputRange: ['0deg', '180deg'], }),},],}}> {/*rotates half turn*/}
+                  <ChevronDown size={24} color="#4A7E61" />
+                </Animated.View>
+              </TouchableOpacity>
+            </ThemedView>
 
     </ThemedView>
   );
@@ -170,6 +202,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'center',
     paddingHorizontal: 10,
+    paddingTop: 5,
+  },
+
+  expand: {
+    position: 'absolute',
+    bottom: 5,
+    right: 10,
+    backgroundColor: "#E6E1C3",
   },
 
 });
