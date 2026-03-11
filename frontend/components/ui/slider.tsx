@@ -14,7 +14,7 @@ export default function Slider() {
     <ThemedView style={styles.sliderContainer}>
       <Pressable
         style={[styles.side, eventsActive && styles.active]}
-        onPress={() => router.push("/discover-clubs")}
+        onPress={() => router.push("/discover/discover-clubs")}
       >
         <ThemedText type="sliderDefault">
           Clubs
@@ -23,7 +23,7 @@ export default function Slider() {
 
       <Pressable
         style={[styles.side, !eventsActive && styles.active]}
-        onPress={() => router.push("/discover-events")}
+        onPress={() => router.push("/discover/discover-events")}
       >
         <ThemedText type="sliderDefault">
           Events
