@@ -18,16 +18,16 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
       }}>
       <Tabs.Screen
-        name="discover-clubs"
+        name="my-events"
         options={{
-          title: 'Discover',
+          title: 'My Events',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="my-events"
+        name="discover-clubs"
         options={{
-          title: 'My Events',
+          title: 'Discover',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
         }}
       />

@@ -13,7 +13,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   useEffect(() => {
     if (userLoggedIn) {
-      router.replace("/(tabs)");
+      router.replace("/(tabs)/my-events");
     }
   }, [userLoggedIn]);
   async function handleEmailLogin(e: React.FormEvent<HTMLFormElement>) {

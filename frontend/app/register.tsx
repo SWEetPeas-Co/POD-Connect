@@ -14,7 +14,7 @@ export default function RegisterPage() {
   // Redirect if already logged in
   useEffect(() => {
     if (userLoggedIn) {
-      router.replace("/(tabs)");
+      router.replace("/(tabs)/my-events");
     }
   }, [userLoggedIn]);
 
