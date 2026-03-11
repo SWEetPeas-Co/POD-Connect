@@ -1,3 +1,5 @@
+// PART OF TEMPLATE, WILL NOT USE FOR NOW
+
 import Animated from 'react-native-reanimated';
 
 export function HelloWave() {

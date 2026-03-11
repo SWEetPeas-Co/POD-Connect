@@ -1,3 +1,5 @@
+// PART OF TEMPLATE, WILL NOT USE FOR SIMPLICITY SAKE, WILL USE LUCIDE ICONS INSTEAD
+
 // Fallback for using MaterialIcons on Android and web.
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -13,6 +15,7 @@ type IconSymbolName = keyof typeof MAPPING;
  * - see Material Icons in the [Icons Directory](https://icons.expo.fyi).
  * - see SF Symbols in the [SF Symbols](https://developer.apple.com/sf-symbols/) app.
  */
+// iPhone -> Android
 const MAPPING = {
   'house.fill': 'home',
   'paperplane.fill': 'send',

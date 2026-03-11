@@ -1,3 +1,5 @@
+// This component styles the tag button
+
 import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';

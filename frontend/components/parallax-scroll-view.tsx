@@ -1,3 +1,5 @@
+// PART OF TEMPLATE, WILL NOT USE FOR NOW
+
 import type { PropsWithChildren, ReactElement } from 'react';
 import { StyleSheet } from 'react-native';
 import Animated, {

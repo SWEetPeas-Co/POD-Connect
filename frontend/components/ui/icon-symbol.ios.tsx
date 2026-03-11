@@ -1,3 +1,5 @@
+// PART OF TEMPLATE, WILL NOT USE FOR SIMPLICITY SAKE, WILL USE LUCIDE ICONS INSTEAD
+
 import { SymbolView, SymbolViewProps, SymbolWeight } from 'expo-symbols';
 import { StyleProp, ViewStyle } from 'react-native';
 

@@ -1,3 +1,5 @@
+// This component makes the card for discover-club
+
 import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
@@ -5,17 +7,22 @@ import Tag from '../ui/tag';
 import { Users } from "lucide-react-native";
 import StarButton from '../ui/star-button';
 
-type DiscoverCardProps = {
+type DiscoverClubCardProps = {
+  id: number
   title: string
   tags: string[]
   headcount: number
+  active: boolean
+  onToggle: () => void
 }
 
-export default function DiscoverEventCard({
+export default function DiscoverClubCard({
   title,
   tags,
   headcount,
-}: DiscoverCardProps) {
+  active,
+  onToggle
+}: DiscoverClubCardProps) {
 
   return (
     <ThemedView style={styles.card}>
@@ -38,7 +45,7 @@ export default function DiscoverEventCard({
           <ThemedView style={styles.iconRow}>
             <Users size={14} color="#4A7E61" />
             <ThemedText type='eventSubtitle'> {headcount}  </ThemedText>
-            <StarButton active={false} onPress={() => {}} />
+            <StarButton active={active} onPress={onToggle} />
           </ThemedView>
         </ThemedView>
 

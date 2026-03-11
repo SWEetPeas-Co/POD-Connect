@@ -1,3 +1,5 @@
+// This component styles the header on top of each tab
+
 import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
