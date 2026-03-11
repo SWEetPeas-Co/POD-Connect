@@ -32,6 +32,23 @@ const yellow = '#CCB423';
  *  </Text>
  * </View>
  */
+
+// to dynamically make colors change:
+/**
+ * Add to top:
+ * import { Colors } from '@/constants/theme';
+ * import { useColorScheme } from '@/hooks/use-color-scheme';
+ * 
+ * Add to top of const:
+ * const colorScheme = useColorScheme();
+ * const theme = Colors[colorScheme ?? 'light'];
+ * 
+ * In any ThemeView that has hard coded hex, comment and add inline:
+ * <ThemedView style={[styles.mainContainer, { backgroundColor: theme.background } ]}>
+ */
+
+
+
 export const Colors = {
   light: {
     // Page
@@ -60,10 +77,17 @@ export const Colors = {
     searchBarText: lightGreen,
     searchBarBackground: white,
 
-    filterButtonBackgroundDefault: mediumGreen,
-    filterButtonBackgroundSelected: darkGreen,
+    filterButtonBackgroundDefault: beige,
+    filterButtonBackgroundSelected: darkBeige,
+    filterButtonIconDefault: mediumGreen,
+    filterButtonIconSelected: darkGreen,
     filterTagBackgroundDefault: darkBeige,
     filterTagBackgroundSelected: lightPink,
+
+    rsvpButtonBackgroundDefault: lightGreen,
+    rsvpButtonBackgroundSelected: darkGreen,
+    rsvpButtonTextDefault: white,
+    rsvpButtonTextSelected: white,
 
     // Event Cards
     eventCardText: darkGreen,
@@ -82,7 +106,7 @@ export const Colors = {
   dark: {
     // Page
     background: lightGreen,
-    
+
     // Header
     headerText: white,
     headerBackground: mediumGreen,
@@ -105,6 +129,18 @@ export const Colors = {
 
     searchBarText: lightGreen,
     searchBarBackground: white,
+
+    filterButtonBackgroundDefault: beige,
+    filterButtonBackgroundSelected: darkBeige,
+    filterButtonIconDefault: mediumGreen,
+    filterButtonIconSelected: darkGreen,
+    filterTagBackgroundDefault: darkBeige,
+    filterTagBackgroundSelected: lightPink,
+
+    rsvpButtonBackgroundDefault: lightGreen,
+    rsvpButtonBackgroundSelected: darkGreen,
+    rsvpButtonTextDefault: white,
+    rsvpButtonTextSelected: white,
 
     // Event Cards
     eventCardText: darkGreen,

@@ -2,6 +2,8 @@
 
 import { Pressable } from "react-native";
 import { Star } from "lucide-react-native";
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 
 type FilterButtonProps = {
   onPress: () => void;
@@ -10,13 +12,15 @@ type FilterButtonProps = {
 }
 
 export default function StarButton({ active, onPress, style }: FilterButtonProps) {
+  const colorScheme = useColorScheme();
+  const theme = Colors[colorScheme ?? 'light'];
 
   return (
     <Pressable onPress={onPress} style={style}>
       <Star
         size={20}
-        color={active ? "#CCB423" : "#D4CEAB"}
-        fill={active ? "#CCB423" : "none"}
+        color={active ? theme.eventCardStarSelected : theme.eventCardStarDeselected}
+        fill={active ? theme.eventCardStarSelected : "none"}
       />
     </Pressable>
   );

@@ -4,13 +4,18 @@ import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+
 type HeaderProps = {
   title: string
 }
 
 export default function Header({ title }: HeaderProps) {
+  const colorScheme = useColorScheme();
+  const theme = Colors[colorScheme ?? 'light'];
   return (
-    <ThemedView style={styles.headerContainer}>
+    <ThemedView style={[styles.headerContainer, { backgroundColor: theme.headerBackground, shadowColor: theme.headerDropShadow, shadowRadius: 2, shadowOffset: { width: 0, height: 5 }, } ]}>
       <ThemedText type='header'>
         {title}
       </ThemedText>
@@ -26,9 +31,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 65,
 
-    backgroundColor: '#569170',
+    //backgroundColor: '#569170',
 
-    shadowColor: '#4A7E61',
+    //shadowColor: '#4A7E61',
     shadowRadius: 2,
     shadowOffset: { width: 0, height: 5 },
 

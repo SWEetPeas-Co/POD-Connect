@@ -12,9 +12,15 @@ import { ThemedView } from "@/components/themed-view";
 import { clubs } from "@/data/clubs";
 import { parseEventTime } from '@/utils/parse-event-time';
 
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+
 export default function MyEvents() {
+  const colorScheme = useColorScheme();
+  const theme = Colors[colorScheme ?? 'light'];
+  
   const [search, setSearch] = useState("");
-const { rsvpIds, toggleRSVP } = useContext(RsvpContext);
+  const { rsvpIds, toggleRSVP } = useContext(RsvpContext);
 
   // only show search and if rsvp'd
   type Event = typeof events[number];
@@ -25,7 +31,7 @@ const { rsvpIds, toggleRSVP } = useContext(RsvpContext);
       .sort((a: Event, b: Event) => parseEventTime(a.time).getTime() - parseEventTime(b.time).getTime());
 
   return (
-    <ThemedView style={styles.mainContainer}>
+    <ThemedView style={[styles.mainContainer, { backgroundColor: theme.background } ]}>
 
       <Header title="MY EVENTS" />
 
@@ -65,7 +71,7 @@ const { rsvpIds, toggleRSVP } = useContext(RsvpContext);
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#98BA7B',
+    //backgroundColor: '#98BA7B',
     paddingTop: 85,
     gap: 15,
   },
@@ -75,11 +81,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 15,
     paddingHorizontal: 30,
+    backgroundColor: 'transparent',
   },
   searchRow: {
     flexDirection: "row",
     gap: 10,
     width: '100%',
+    backgroundColor: 'transparent',
   },
   eventContainer: {
     flex: 1,

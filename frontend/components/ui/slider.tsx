@@ -5,7 +5,12 @@ import { useRouter, usePathname } from "expo-router";
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+
 export default function Slider() {
+  const colorScheme = useColorScheme();
+  const theme = Colors[colorScheme ?? 'light'];
 
   const router = useRouter();
   const pathname = usePathname();
@@ -13,9 +18,9 @@ export default function Slider() {
   const eventsActive = pathname.includes("discover-events");
 
   return (
-    <ThemedView style={styles.sliderContainer}>
+    <ThemedView style={[styles.sliderContainer, {backgroundColor: theme.sliderBackgroundDefault} ]}>
       <Pressable
-        style={[styles.side, eventsActive && styles.active]}
+        style={[styles.side, eventsActive && {backgroundColor: theme.sliderBackgroundSelected}]}
         onPress={() => router.push("/discover-clubs")}
       >
         <ThemedText type="sliderDefault">
@@ -24,7 +29,7 @@ export default function Slider() {
       </Pressable>
 
       <Pressable
-        style={[styles.side, !eventsActive && styles.active]}
+        style={[styles.side, !eventsActive && {backgroundColor: theme.sliderBackgroundSelected}]}
         onPress={() => router.push("/discover/discover-events")}
       >
         <ThemedText type="sliderDefault">
@@ -41,7 +46,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 35,
     width: '100%',
-    backgroundColor: '#D4CEAB',
+    //backgroundColor: '#D4CEAB',
     borderRadius: 20,
     overflow: "hidden",
   },
@@ -52,7 +57,7 @@ const styles = StyleSheet.create({
   },
 
   active: {
-    backgroundColor: "#E6E1C3",
+    //backgroundColor: "#E6E1C3",
   },
 
 });
