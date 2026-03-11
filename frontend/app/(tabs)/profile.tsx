@@ -1,7 +1,7 @@
 // This document outlines the third tab for profile
 
 import { StyleSheet, ScrollView } from "react-native";
-import { useState, useContext } from "react";
+// import { useState, useContext } from "react";
 
 import Header from "@/components/header";
 import { ThemedView } from "@/components/themed-view";
@@ -19,8 +19,8 @@ export default function MyEvents() {
 
       <Header title="PROFILE" />
 
-      <ThemedView style={styles.searchContainer}>
-        <ThemedText>Profile here</ThemedText>
+      <ThemedView style={styles.tabContainer}>
+        <ThemedText>Profile Here</ThemedText>
       </ThemedView>
 
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
@@ -38,18 +38,13 @@ const styles = StyleSheet.create({
     paddingTop: 85,
     gap: 15,
   },
-  searchContainer: {
+  tabContainer: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 15,
     paddingHorizontal: 30,
     backgroundColor: 'transparent',
-  },
-  searchRow: {
-    flexDirection: "row",
-    gap: 10,
-    width: '100%',
   },
   eventContainer: {
     flex: 1,

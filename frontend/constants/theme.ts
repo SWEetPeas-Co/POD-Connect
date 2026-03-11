@@ -19,6 +19,17 @@ const white = '#FFFFFF';
 const black = '#000000';
 const yellow = '#CCB423';
 
+// dark mode
+const mediumGreenDM = '#249556';
+const lightGreenDM = '#98BA7B';
+const darkGreenDM = '#4A7E61';
+const beigeDM = '#35342B';
+const darkBeigeDM = '#D4CEAB';
+const lightPinkDM = '#EFD7DD';
+const whiteDM = '#FFFFFF';
+const blackDM = '#000000';
+const yellowDM = '#CCB423';
+
 // Defines the colors in light and dark mode
 /**
  * Define:
@@ -105,54 +116,54 @@ export const Colors = {
 
   dark: {
     // Page
-    background: lightGreen,
+    background: blackDM,
 
     // Header
-    headerText: white,
-    headerBackground: mediumGreen,
-    headerDropShadow: darkGreen,
+    headerText: whiteDM,
+    headerBackground: mediumGreenDM,
+    headerDropShadow: darkGreenDM,
 
     // Nav Bar (bottom)
-    footerBackgroundDefault: mediumGreen,
-    footerBackgroundSelected: darkGreen,
-    tabIconDefault: beige,
-    tabIconSelected: darkBeige,
+    footerBackgroundDefault: mediumGreenDM,
+    footerBackgroundSelected: darkGreenDM,
+    tabIconDefault: beigeDM,
+    tabIconSelected: darkBeigeDM,
 
     // Buttons
-    sliderTextDefault: mediumGreen,
-    sliderTextSelected: darkGreen,
-    sliderBackgroundDefault: beige,
-    sliderBackgroundSelected: darkBeige,
+    sliderTextDefault: mediumGreenDM,
+    sliderTextSelected: darkGreenDM,
+    sliderBackgroundDefault: beigeDM,
+    sliderBackgroundSelected: darkBeigeDM,
 
-    sortButtonText: lightGreen,
-    sortButtonBackground: mediumGreen,
+    sortButtonText: lightGreenDM,
+    sortButtonBackground: mediumGreenDM,
 
-    searchBarText: lightGreen,
-    searchBarBackground: white,
+    searchBarText: lightGreenDM,
+    searchBarBackground: whiteDM,
 
-    filterButtonBackgroundDefault: beige,
-    filterButtonBackgroundSelected: darkBeige,
-    filterButtonIconDefault: mediumGreen,
-    filterButtonIconSelected: darkGreen,
-    filterTagBackgroundDefault: darkBeige,
-    filterTagBackgroundSelected: lightPink,
+    filterButtonBackgroundDefault: beigeDM,
+    filterButtonBackgroundSelected: darkBeigeDM,
+    filterButtonIconDefault: mediumGreenDM,
+    filterButtonIconSelected: darkGreenDM,
+    filterTagBackgroundDefault: darkBeigeDM,
+    filterTagBackgroundSelected: lightPinkDM,
 
-    rsvpButtonBackgroundDefault: lightGreen,
-    rsvpButtonBackgroundSelected: darkGreen,
-    rsvpButtonTextDefault: white,
-    rsvpButtonTextSelected: white,
+    rsvpButtonBackgroundDefault: lightGreenDM,
+    rsvpButtonBackgroundSelected: darkGreenDM,
+    rsvpButtonTextDefault: whiteDM,
+    rsvpButtonTextSelected: whiteDM,
 
     // Event Cards
-    eventCardText: darkGreen,
-    eventCardDescriptionText: black,
-    eventCardBackground: beige,
-    eventCardDropShadow: mediumGreen,
-    eventCardIcon: darkGreen,
-    eventCardStarDeselected: darkBeige,
-    eventCardStarSelected: yellow,
+    eventCardText: darkGreenDM,
+    eventCardDescriptionText: blackDM,
+    eventCardBackground: beigeDM,
+    eventCardDropShadow: mediumGreenDM,
+    eventCardIcon: darkGreenDM,
+    eventCardStarDeselected: darkBeigeDM,
+    eventCardStarSelected: yellowDM,
 
-    eventCardTagText: white,
-    eventCardTagBackground: lightGreen,
+    eventCardTagText: whiteDM,
+    eventCardTagBackground: lightGreenDM,
 
   },
 };
