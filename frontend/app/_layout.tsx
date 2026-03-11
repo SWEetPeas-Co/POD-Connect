@@ -11,6 +11,8 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 import { AuthProvider } from '@/src/lib/authContext';
+import { RsvpProvider } from '@/src/lib/rsvpContext/rsvpContext';
+import { FavoritesProvider } from '@/src/lib/favoritesContext/favoritesContext';
 import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 
 export const unstable_settings = {
@@ -32,6 +34,8 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
+    <RsvpProvider>
+    <FavoritesProvider>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -39,6 +43,8 @@ export default function RootLayout() {
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
+    </FavoritesProvider>
+    </RsvpProvider>
     </AuthProvider>
   );
 }

@@ -1,18 +1,24 @@
+// This is a subtab not in navbar, but accessed through slider in discover-clubs
+
 import { StyleSheet, ScrollView } from "react-native";
 import { events } from "@/data/events";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import RsvpContext from "@/src/lib/rsvpContext/rsvpContext";
+import { useFavorites } from '@/src/lib/favoritesContext/favoritesContext';
 
-//import DiscoverEventCard from "@/components/events/event-card-discover";
+import DiscoverEventCard from "@/components/events/discover-event-card";
 import Header from "@/components/header";
 import Slider from "@/components/ui/slider";
 import SearchBar from "@/components/ui/search-bar";
 import { ThemedView } from "@/components/themed-view";
-import EventCard from "@/components/events/event-card";
 
 export default function DiscoverEvents() {
   const [search, setSearch] = useState("");
+  const { rsvpIds, toggleRSVP } = useContext(RsvpContext);
+  const { favoriteIds, toggleFavorite } = useFavorites();
+
   const filteredEvents = events.filter((event) =>
-    event.title.toLowerCase().includes(search.toLowerCase())
+    event.title.toLowerCase().includes(search.toLowerCase()) // search logic
   );
 
   return (
@@ -30,10 +36,15 @@ export default function DiscoverEvents() {
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
 
         {filteredEvents.map((event) => (
-          <EventCard
+          <DiscoverEventCard
             key={event.id}
+            id={event.id}
+            clubId={event.clubId}
+            rsvped={rsvpIds.includes(event.id)}
+            onToggleRSVP={toggleRSVP}
+            favoriteIds={favoriteIds}
+            onToggleFavorite={toggleFavorite}
             title={event.title}
-            club={event.club}
             location={event.location}
             time={event.time}
             description={event.description}

@@ -4,8 +4,9 @@
 import { StyleSheet, ScrollView, Pressable } from "react-native";
 import { clubs } from "@/data/clubs";
 import { useState } from "react";
+import { useFavorites } from '@/src/lib/favoritesContext/favoritesContext';
 
-import DiscoverEventCard from "@/components/events/event-card-discover";
+import DiscoverClubCard from "@/components/events/discover-club-card";
 import Header from "@/components/header";
 import Slider from "@/components/ui/slider";
 import SearchBar from "@/components/ui/search-bar";
@@ -18,6 +19,7 @@ export default function DiscoverClubs() {
     const [search, setSearch] = useState(""); // creates a state variable called search, search = what user types, setSearch = func that updates it, "" = initial value
     const [showFilters, setShowFilters] = useState(false); // controls whether to show tag filter, showFilters = bool, setShowFilters = func that changes state, false = default
     const [selectedTags, setSelectedTags] = useState<string[]>([]); // stores tags selected by user in an array, [] = defualt no filter
+    const { favoriteIds, toggleFavorite } = useFavorites();
 
     function toggleFilters() { // clicking button shows/unshows filters
         setShowFilters(!showFilters);
@@ -83,11 +85,14 @@ export default function DiscoverClubs() {
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
 
         {filteredClubs.map((club) => (
-            <DiscoverEventCard
+            <DiscoverClubCard
                 key={club.id}
+                id={club.id}
                 title={club.club}
                 tags={club.tags}
                 headcount={club.headcount}
+                active={favoriteIds.includes(club.id)}
+                onToggle={() => toggleFavorite(club.id)}
             />
         ))}
 

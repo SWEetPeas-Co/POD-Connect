@@ -1,3 +1,5 @@
+// This component styles the search bar
+
 import { StyleSheet, TextInput } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 
@@ -16,8 +18,9 @@ export default function SearchBar({
   return (
     <ThemedView style={styles.searchBarContainer}>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { color: '#569170' }]}
         placeholder={placeholder}
+        placeholderTextColor="#98BA7B"
         value={value}
         onChangeText={onChangeText}
       />

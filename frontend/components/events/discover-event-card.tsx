@@ -1,35 +1,42 @@
-// This component
+// This component is discvoer-event-card, right now it is a copy paste of event-card
 
 import { StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import RSVPButton from '../ui/rsvp-button';
+import StarButton from '../ui/star-button';
 
+import { clubs } from '@/data/clubs';
 import { Clock, Users, MapPin } from "lucide-react-native";
 
 type EventCardProps = {
-  id: number
-  rsvped: boolean
-  onToggleRSVP: (id: number) => void
-  title: string
-  club: string
-  location: string
-  time: string
-  description: string
-  headcount: number
+  id: number;
+  clubId: number;
+  rsvped: boolean;
+  onToggleRSVP: (id: number) => void;
+  favoriteIds: number[];
+  onToggleFavorite: (id: number) => void;
+  title: string;
+  location: string;
+  time: string;
+  description: string;
+  headcount: number;
 }
 
 export default function EventCard({
   id,
+  clubId,
   rsvped,
   onToggleRSVP,
+  favoriteIds,
+  onToggleFavorite,
   title,
-  club,
   location,
   time,
   description,
   headcount,
 }: EventCardProps) {
+    const club = clubs.find(c => c.id === clubId);
 
   return (
     <ThemedView style={styles.card}>
@@ -40,7 +47,10 @@ export default function EventCard({
 
         <ThemedView style={styles.text}>
           <ThemedText type='eventTitle'>{title}</ThemedText>
-          <ThemedText type='eventSubtitle'>{club}</ThemedText>
+          <ThemedView style={styles.subtitle}>
+            <ThemedText type='eventSubtitle'>{club?.club}</ThemedText>
+            <StarButton active={favoriteIds.includes(clubId)} onPress={() => onToggleFavorite(clubId)} style={{ marginTop: -2 }} />
+          </ThemedView>
         </ThemedView>
 
         <ThemedView style={styles.rsvp}>
@@ -110,6 +120,13 @@ const styles = StyleSheet.create({
     height: 60,
     alignItems: 'flex-start',
     backgroundColor: '#E6E1C3',
+  },
+
+  subtitle: {
+    flexDirection: 'row',
+    alignContent: 'flex-start',
+    gap: 6,
+    backgroundColor: '#E6E1C3', 
   },
 
   rsvp: {

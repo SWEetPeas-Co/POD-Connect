@@ -2,17 +2,24 @@
 
 import { StyleSheet, ScrollView } from "react-native";
 import { events } from "@/data/events";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import RsvpContext from "@/src/lib/rsvpContext/rsvpContext";
 
 import EventCard from "@/components/events/event-card";
 import Header from "@/components/header";
 import SearchBar from "@/components/ui/search-bar";
 import { ThemedView } from "@/components/themed-view";
+import { clubs } from "@/data/clubs";
 
 export default function MyEvents() {
   const [search, setSearch] = useState("");
-  const filteredEvents = events.filter((event) =>
-    event.title.toLowerCase().includes(search.toLowerCase()) // only show if searched
+const { rsvpIds, toggleRSVP } = useContext(RsvpContext);
+
+  // only show search and if rsvp'd
+  const filteredEvents = events
+    .filter((event) => rsvpIds.includes(event.id))
+    .filter((event) =>
+      event.title.toLowerCase().includes(search.toLowerCase()) // only show if searched
   );
 
   return (
@@ -28,17 +35,24 @@ export default function MyEvents() {
 
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
 
-        {filteredEvents.map((event) => (
+        {filteredEvents.map((event) => {
+        const club = clubs.find(c => c.id === event.clubId);
+
+        return (
           <EventCard
             key={event.id}
+            id={event.id}
+            rsvped={rsvpIds.includes(event.id)}
+            onToggleRSVP={toggleRSVP}
             title={event.title}
-            club={event.club}
+            club={club?.club ?? "Unknown Club"} // <-- use the club name here
             location={event.location}
             time={event.time}
             description={event.description}
             headcount={event.headcount}
           />
-        ))}
+        );
+      })}
 
       </ScrollView>
 

@@ -1,18 +1,20 @@
+// This component controls style of RSVP Button
+// Logic is in discover-events and my-events
+// src/context is where it connects
+
 import { StyleSheet, Pressable } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
-import { useState } from "react";
 
-export default function RSVPButton() {
-  const [rsvped, setRsvped] = useState(false);
+type RSVPButtonProps = {
+  rsvped: boolean
+  onPress: () => void
+}
 
-  function toggleRSVP() {
-    setRsvped(!rsvped);
-  }
-
+export default function RSVPButton({ rsvped, onPress }: RSVPButtonProps) {
   return (
     <Pressable
       style={[styles.button, rsvped && styles.buttonActive]}
-      onPress={toggleRSVP}
+      onPress={onPress}
     >
       <ThemedText type='eventSubtitle'>
         {rsvped ? "unRSVP" : "RSVP"}

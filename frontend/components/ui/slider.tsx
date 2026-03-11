@@ -1,3 +1,5 @@
+// This component styles the slider
+
 import { StyleSheet, Pressable } from 'react-native';
 import { useRouter, usePathname } from "expo-router";
 import { ThemedView } from '@/components/themed-view';
