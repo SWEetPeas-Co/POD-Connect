@@ -30,6 +30,17 @@ const whiteDM = '#F2F2F2';
 const blackDM = '#0F0F0F';
 const yellowDM = '#E3C85A';
 
+// colorblind mode (For future use)
+const mediumGreenCBM = '#3A7CA5';   // blue primary
+const lightGreenCBM = '#A6D3E8';    // light blue highlight
+const darkGreenCBM = '#2C5F7A';     // dark blue accent
+const beigeCBM = '#F2F2F2';         // light neutral background
+const darkBeigeCBM = '#D1D1D1';     // card background
+const lightPinkCBM = '#CC79A7';     // purple/pink accent (colorblind safe)
+const whiteCBM = '#FFFFFF';
+const blackCBM = '#1A1A1A';
+const yellowCBM = '#E69F00';        // orange highlight (very colorblind safe)
+
 // Defines the colors in light and dark mode
 /**
  * Define:
@@ -164,6 +175,59 @@ export const Colors = {
 
     eventCardTagText: whiteDM,
     eventCardTagBackground: lightGreenDM,
+
+  },
+
+  colorblind: {
+    // Page
+    background: blackCBM,
+
+    // Header
+    headerText: whiteCBM,
+    headerBackground: mediumGreenCBM,
+    headerDropShadow: darkGreenCBM,
+
+    // Nav Bar (bottom)
+    footerBackgroundDefault: mediumGreenCBM,
+    footerBackgroundSelected: darkGreenCBM,
+    tabIconDefault: beigeCBM,
+    tabIconSelected: darkBeigeCBM,
+
+    // Buttons
+    sliderTextDefault: mediumGreenCBM,
+    sliderTextSelected: darkGreenCBM,
+    sliderBackgroundDefault: beigeCBM,
+    sliderBackgroundSelected: darkBeigeCBM,
+
+    sortButtonText: lightGreenCBM,
+    sortButtonBackground: mediumGreenCBM,
+
+    searchBarText: lightGreenCBM,
+    searchBarBackground: whiteCBM,
+
+    filterButtonBackgroundDefault: beigeCBM,
+    filterButtonBackgroundSelected: darkBeigeCBM,
+    filterButtonIconDefault: mediumGreenCBM,
+    filterButtonIconSelected: darkGreenCBM,
+    filterTagBackgroundDefault: darkBeigeCBM,
+    filterTagBackgroundSelected: lightPinkCBM,
+
+    rsvpButtonBackgroundDefault: lightGreenCBM,
+    rsvpButtonBackgroundSelected: darkGreenCBM,
+    rsvpButtonTextDefault: whiteCBM,
+    rsvpButtonTextSelected: whiteCBM,
+
+    // Event Cards
+    eventCardText: darkGreenCBM,
+    eventCardDescriptionText: blackCBM,
+    eventCardBackground: beigeCBM,
+    eventCardDropShadow: mediumGreenCBM,
+    eventCardIcon: darkGreenCBM,
+    eventCardStarDeselected: darkBeigeCBM,
+    eventCardStarSelected: yellowCBM,
+
+    eventCardTagText: whiteCBM,
+    eventCardTagBackground: lightGreenCBM,
 
   },
 };

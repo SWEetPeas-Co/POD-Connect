@@ -12,7 +12,7 @@ export function useColorScheme() {
   }, []);
 
   //const colorScheme = useRNColorScheme(); // determined based on device 
-  const colorScheme = 'light'; // changes light/dark mode
+  const colorScheme = 'light'; // changes light/dark/colorblind mode
 
   if (hasHydrated) {
     return colorScheme;
