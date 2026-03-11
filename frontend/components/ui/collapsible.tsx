@@ -1,3 +1,5 @@
+// PART OF TEMPLATE, WILL NOT USE FOR NOW
+
 import { PropsWithChildren, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 

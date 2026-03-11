@@ -1,3 +1,7 @@
+// THIS IS A TEMPLATE OF A POP UP SCREEN
+// Simple modal screen example that demonstrates how Expo Router
+// presents a modal and allows navigation back to the main screen.
+
 import { Link } from 'expo-router';
 import { StyleSheet } from 'react-native';
 

@@ -1,3 +1,8 @@
+// Sets up the app’s global providers (authentication, theme, and fonts)
+// and defines the root navigation stack, which loads the tab navigator
+// as the main screen and allows additional screens like modals on top of it
+// Do not usually touch.
+
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';

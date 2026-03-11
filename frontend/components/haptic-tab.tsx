@@ -1,3 +1,6 @@
+// This document was part of the template
+// This implements an optional haptic feature only on iPhone
+
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { PlatformPressable } from '@react-navigation/elements';
 import * as Haptics from 'expo-haptics';

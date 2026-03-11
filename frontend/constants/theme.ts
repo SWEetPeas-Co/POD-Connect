@@ -60,6 +60,11 @@ export const Colors = {
     searchBarText: lightGreen,
     searchBarBackground: white,
 
+    filterButtonBackgroundDefault: mediumGreen,
+    filterButtonBackgroundSelected: darkGreen,
+    filterTagBackgroundDefault: darkBeige,
+    filterTagBackgroundSelected: lightPink,
+
     // Event Cards
     eventCardText: darkGreen,
     eventCardDescriptionText: black,

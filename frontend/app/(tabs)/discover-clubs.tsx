@@ -1,3 +1,6 @@
+// This document outlines the second tab: the Discover Clubs tab
+// Has a slider, but should be the default tab
+
 import { StyleSheet, ScrollView, Pressable } from "react-native";
 import { clubs } from "@/data/clubs";
 import { useState } from "react";
@@ -10,35 +13,39 @@ import FilterButton from "@/components/ui/filter-button";
 import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
 
+// Defines a React component called DiscoverClubs, other files can import it
 export default function DiscoverClubs() {
-    const [search, setSearch] = useState("");
-    const [showFilters, setShowFilters] = useState(false);
-    const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [search, setSearch] = useState(""); // creates a state variable called search, search = what user types, setSearch = func that updates it, "" = initial value
+    const [showFilters, setShowFilters] = useState(false); // controls whether to show tag filter, showFilters = bool, setShowFilters = func that changes state, false = default
+    const [selectedTags, setSelectedTags] = useState<string[]>([]); // stores tags selected by user in an array, [] = defualt no filter
 
-    function toggleFilters() {
+    function toggleFilters() { // clicking button shows/unshows filters
         setShowFilters(!showFilters);
     }
 
-    function toggleTag(tag: string) {
-        if (selectedTags.includes(tag)) {
-            setSelectedTags(selectedTags.filter((t) => t !== tag));
+    // tag selection logic
+    function toggleTag(tag: string) { // func recieves tag name
+        if (selectedTags.includes(tag)) { // checks if the tag exists in the array.
+            setSelectedTags(selectedTags.filter((t) => t !== tag)); // if so, remove it
         } else {
-            setSelectedTags([...selectedTags, tag]);
+            setSelectedTags([...selectedTags, tag]); // if not, add it
         }
     }
 
+    // creates a unique list of all tags used by clubs
     const allTags = Array.from(
-        new Set(clubs.flatMap((club) => club.tags))
+        new Set(clubs.flatMap((club) => club.tags)) // flatMap makes a signle array, Set removes dupes
     );
 
-    const filteredClubs = clubs
+    // filtering logic
+    const filteredClubs = clubs // start with all clubs
         .filter((club) =>
-            club.club.toLowerCase().includes(search.toLowerCase())
+            club.club.toLowerCase().includes(search.toLowerCase()) // search logic
         )
         .filter((club) =>
-            selectedTags.length === 0
+            selectedTags.length === 0 // no tags selected
                 ? true
-                : club.tags.some((tag) => selectedTags.includes(tag))
+                : club.tags.some((tag) => selectedTags.includes(tag)) // If no tags selected → show everything, Else → only show clubs matching selected tags
         );
 
   return (
@@ -48,22 +55,24 @@ export default function DiscoverClubs() {
 
       <ThemedView style={styles.searchContainer}>
         <Slider />
+
         <ThemedView style={styles.searchRow}>
             <SearchBar value={search} onChangeText={setSearch} />
-            <FilterButton onPress={toggleFilters} />
+            <FilterButton onPress={toggleFilters} active={showFilters} /> {/* pressing button toggles if visible */}
         </ThemedView>
+
         {showFilters && (
           <ThemedView style={styles.filterContainer}>
-            {allTags.map((tag) => {
-              const active = selectedTags.includes(tag);
+            {allTags.map((tag) => { {/* looks through all tags and creates buttons */}
+              const active = selectedTags.includes(tag); {/* check which are active */}
 
               return (
                 <Pressable
                   key={tag}
                   style={[styles.tag, active && styles.tagActive]}
                   onPress={() => toggleTag(tag)}
-                >
-                  <ThemedText type="eventTag">{tag}</ThemedText>
+                > {/* if active, apply tagActive style */}
+                  <ThemedText type="eventTag">{tag}</ThemedText> {/* creates a button */}
                 </Pressable>
               );
             })}
@@ -114,14 +123,14 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   tag: {
-    backgroundColor: "#E6E1C3",
+    backgroundColor: "#D4CEAB",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
   },
 
   tagActive: {
-    backgroundColor: "#98BA7B",
+    backgroundColor: "#EFD7DD",
   },
   eventContainer: {
     flex: 1,

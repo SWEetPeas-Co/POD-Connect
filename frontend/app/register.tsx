@@ -1,3 +1,7 @@
+// Registration page that allows new users to create an account with email and password
+// and redirects authenticated users to the main app tabs.
+// TODO: Needs to be styled later
+
 import React, { useState, useContext, useEffect } from "react";
 import { useRouter, Link } from "expo-router";
 import AuthContext from "../src/lib/authContext/index";

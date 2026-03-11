@@ -38,7 +38,7 @@ export default function DiscoverEventCard({
           <ThemedView style={styles.iconRow}>
             <Users size={14} color="#4A7E61" />
             <ThemedText type='eventSubtitle'> {headcount}  </ThemedText>
-            <StarButton active={false} onPress={() => {}} />
+            <StarButton active={true} onPress={() => {}} />
           </ThemedView>
         </ThemedView>
 

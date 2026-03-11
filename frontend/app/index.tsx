@@ -1,3 +1,8 @@
+// Login page component that allows users to sign in with email and password,
+// handles authentication errors,
+// and redirects authenticated users to the main app tabs.
+// TODO: Needs to be styled later
+
 import React, {useState, useEffect} from "react";
 import {doSignInWithEmailAndPassword} from "../src/lib/auth";
 import { useContext } from "react";
