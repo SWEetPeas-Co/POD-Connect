@@ -78,10 +78,7 @@ export default function LoginPage() {
   }
 */
 
-  // if user logged in already (idk if this ever gets used)
-  if (userLoggedIn) {
-    return <p>You are already logged in!</p>;
-  }
+  
 
   // start frontending
   return (
