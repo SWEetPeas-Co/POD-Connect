@@ -119,6 +119,13 @@ export default function LoginPage() {
           Sign up
         </Link>
       </ThemedText>
+      <ThemedText  type='eventSubtitle' style={styles.signupText}>
+        Forgot your password?{" "}
+        <Link href="/reset-password" style={styles.signupLink}>
+          Reset here
+        </Link>
+      </ThemedText>
+
     </ThemedView>
   );
 }
