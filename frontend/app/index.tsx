@@ -37,7 +37,7 @@ export default function LoginPage() {
     try {
       const user= await doSignInWithEmailAndPassword(email, password);
       if(!user.emailVerified){
-        router.replace("/verify-email" as any);
+        router.replace("/verify-email");
         return;
       }
     } catch (err) {

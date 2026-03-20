@@ -37,6 +37,5 @@ export async function resetPasswordIfExists(email) {
 
 
 export const doSendEmailVerification=()=>{
-    return sendEmailVerification(auth.currentUser,{
-    });
+    return sendEmailVerification(auth.currentUser);
 };

@@ -38,7 +38,7 @@ export default function RegisterPage() {
     try {
       await doCreateUserWithEmailAndPassword(email, password);
       await doSendEmailVerification();
-      router.replace("/verify-email" as any);
+      router.replace("/verify-email");
 
       // AuthContext will update automatically
     } catch (err) {
