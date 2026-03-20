@@ -5,8 +5,9 @@ export const doCreateUserWithEmailAndPassword=async (EmailAuthCredential,passwor
     return createUserWithEmailAndPassword(auth, EmailAuthCredential, password);
     
 };
-export const doSignInWithEmailAndPassword=(email,password)=>{
-    return signInWithEmailAndPassword(auth, email, password);
+export const doSignInWithEmailAndPassword=async(email,password)=>{
+    const cred= await signInWithEmailAndPassword(auth, email, password);
+    return cred.user;
 };
 
 export const doSignOut=()=>{
@@ -34,10 +35,8 @@ export async function resetPasswordIfExists(email) {
   await sendPasswordResetEmail(auth, email);
 }
 
-/** 
+
 export const doSendEmailVerification=()=>{
     return sendEmailVerification(auth.currentUser,{
-        url: $
     });
 };
-*/
