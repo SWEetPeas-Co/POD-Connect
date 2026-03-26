@@ -12,7 +12,7 @@ app.use(express.json());
 app.use('/', eventRoutes);
 app.use('/', clubRoutes);
 
-app.listen(PORT, () => {
-    connect.connectToServer();
+app.listen(PORT, async () => {
+    await connect.connectToServer();
     console.log(`Server is running on port ${PORT}`);
 });
