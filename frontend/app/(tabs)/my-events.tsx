@@ -1,37 +1,70 @@
 // This document outlines the first tab for RSVP'd events
 
 import { StyleSheet, ScrollView } from "react-native";
-import { events } from "@/data/events";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import RsvpContext from "@/src/lib/rsvpContext/rsvpContext";
+import { getEvents, getClubs } from '@/src/lib/api';
 
 import EventCard from "@/components/events/event-card";
 import Header from "@/components/header";
 import SearchBar from "@/components/ui/search-bar";
 import { ThemedView } from "@/components/themed-view";
-import { clubs } from "@/data/clubs";
 import { parseEventTime } from '@/utils/parse-event-time';
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+
+type Event = {
+  id: number;
+  title: string;
+  clubId: number;
+  location: string;
+  time: string;
+  description: string;
+  tags: string[];
+  headcount: number;
+}
+
+type Club = {
+  id: number;
+  club: string;
+  tags: string[];
+  headcount: number;
+  description: string;
+}
 
 export default function MyEvents() {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme ?? 'light'];
   
   const [search, setSearch] = useState("");
+  const [events, setEvents] = useState<Event[]>([]);
+  const [clubs, setClubs] = useState<Club[]>([]);
   const { rsvpIds, toggleRSVP } = useContext(RsvpContext);
 
-  // only show search and if rsvp'd
-  type Event = typeof events[number];
-  
-    const filteredEvents: Event[] = events
-      .filter((event) => rsvpIds.includes(event.id))
-      .filter((event) => event.title.toLowerCase().includes(search.toLowerCase())) // only show if searched
-      .sort((a: Event, b: Event) => parseEventTime(a.time).getTime() - parseEventTime(b.time).getTime());
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [eventsData, clubsData] = await Promise.all([
+          getEvents(),
+          getClubs(),
+        ]);
+        setEvents(eventsData);
+        setClubs(clubsData);
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const filteredEvents = events
+    .filter((event) => rsvpIds.includes(event.id))
+    .filter((event) => event.title.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => parseEventTime(a.time).getTime() - parseEventTime(b.time).getTime());
 
   return (
-    <ThemedView style={[styles.mainContainer, { backgroundColor: theme.background } ]}>
+    <ThemedView style={[styles.mainContainer, { backgroundColor: theme.background }]}>
 
       <Header title="MY EVENTS" />
 
@@ -42,26 +75,23 @@ export default function MyEvents() {
       </ThemedView>
 
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
-
         {filteredEvents.map((event) => {
-        const club = clubs.find(c => c.id === event.clubId);
-
-        return (
-          <EventCard
-            key={event.id}
-            id={event.id}
-            rsvped={rsvpIds.includes(event.id)}
-            onToggleRSVP={toggleRSVP}
-            title={event.title}
-            club={club?.club ?? "Unknown Club"}
-            location={event.location}
-            time={event.time}
-            description={event.description}
-            headcount={event.headcount + (rsvpIds.includes(event.id) ? 1 : 0)}
-          />
-        );
-      })}
-
+          const club = clubs.find(c => c.id === event.clubId);
+          return (
+            <EventCard
+              key={event.id}
+              id={event.id}
+              rsvped={rsvpIds.includes(event.id)}
+              onToggleRSVP={toggleRSVP}
+              title={event.title}
+              club={club?.club ?? "Unknown Club"}
+              location={event.location}
+              time={event.time}
+              description={event.description}
+              headcount={event.headcount + (rsvpIds.includes(event.id) ? 1 : 0)}
+            />
+          );
+        })}
       </ScrollView>
 
     </ThemedView>
@@ -71,7 +101,6 @@ export default function MyEvents() {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    //backgroundColor: '#98BA7B',
     paddingTop: 85,
     gap: 15,
   },

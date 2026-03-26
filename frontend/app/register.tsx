@@ -5,7 +5,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useRouter, Link } from "expo-router";
 import AuthContext from "../src/lib/authContext/index";
-import { doCreateUserWithEmailAndPassword } from "../src/lib/auth";
+import { doCreateUserWithEmailAndPassword, doSendEmailVerification } from "../src/lib/auth";
 import { StyleSheet, TextInput, Pressable } from "react-native";
 import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
@@ -37,6 +37,9 @@ export default function RegisterPage() {
 
     try {
       await doCreateUserWithEmailAndPassword(email, password);
+      await doSendEmailVerification();
+      router.replace("/verify-email");
+
       // AuthContext will update automatically
     } catch (err) {
       if (err instanceof Error) setError(err.message);

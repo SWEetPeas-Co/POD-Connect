@@ -35,7 +35,11 @@ export default function LoginPage() {
     setError("");
 
     try {
-      await doSignInWithEmailAndPassword(email, password);
+      const user= await doSignInWithEmailAndPassword(email, password);
+      if(!user.emailVerified){
+        router.replace("/verify-email");
+        return;
+      }
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -78,10 +82,7 @@ export default function LoginPage() {
   }
 */
 
-  // if user logged in already (idk if this ever gets used)
-  if (userLoggedIn) {
-    return <p>You are already logged in!</p>;
-  }
+  
 
   // start frontending
   return (
@@ -122,6 +123,13 @@ export default function LoginPage() {
           Sign up
         </Link>
       </ThemedText>
+      <ThemedText  type='eventSubtitle' style={styles.signupText}>
+        Forgot your password?{" "}
+        <Link href="/reset-password" style={styles.signupLink}>
+          Reset here
+        </Link>
+      </ThemedText>
+
     </ThemedView>
   );
 }
