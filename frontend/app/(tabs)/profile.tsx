@@ -1,12 +1,7 @@
 // This document outlines the third tab for profile
 
-<<<<<<< HEAD
-import { StyleSheet, ScrollView } from "react-native";
-// import { useState, useContext } from "react";
-=======
 import { StyleSheet, ScrollView, Pressable } from "react-native";
 import { useState, useContext } from "react";
->>>>>>> main
 
 import Header from "@/components/header";
 import { ThemedView } from "@/components/themed-view";
