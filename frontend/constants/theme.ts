@@ -111,6 +111,9 @@ export const Colors = {
     rsvpButtonTextDefault: white,
     rsvpButtonTextSelected: white,
 
+    logOutButtonBackgroundDefault: darkGreen,
+    logOutButtonTextDefult: white,
+
     // Event Cards
     eventCardText: darkGreen,
     eventCardDescriptionText: black,
@@ -164,6 +167,9 @@ export const Colors = {
     rsvpButtonTextDefault: whiteDM,
     rsvpButtonTextSelected: whiteDM,
 
+    logOutButtonBackgroundDefault: darkGreenDM,
+    logOutButtonTextDefult: whiteDM,
+
     // Event Cards
     eventCardText: darkGreenDM,
     eventCardDescriptionText: blackDM,
@@ -216,6 +222,9 @@ export const Colors = {
     rsvpButtonBackgroundSelected: darkGreenCBM,
     rsvpButtonTextDefault: whiteCBM,
     rsvpButtonTextSelected: whiteCBM,
+
+    logOutButtonBackgroundDefault: darkGreenCBM,
+    logOutButtonTextDefult: whiteCBM,
 
     // Event Cards
     eventCardText: darkGreenCBM,

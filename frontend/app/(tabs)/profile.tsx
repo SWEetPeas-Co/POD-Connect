@@ -37,8 +37,8 @@ export default function MyEvents() {
 
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
         <ThemedText>Scroll area here</ThemedText>
-        <Pressable style={styles.button} onPress={doSignOut}>
-            <ThemedText type='eventSubtitle' style={styles.buttonText}>Log Out</ThemedText>
+        <Pressable style={[styles.button, { backgroundColor: theme.logOutButtonBackgroundDefault } ]} onPress={doSignOut}>
+            <ThemedText type='eventSubtitle' style={[styles.buttonText, { color: theme.logOutButtonTextDefult } ]}>Log Out</ThemedText>
         </Pressable>
       </ScrollView>
 
@@ -49,7 +49,6 @@ export default function MyEvents() {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#98BA7B',
     paddingTop: 85,
     gap: 15,
   },
@@ -72,12 +71,10 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   button: {
-    backgroundColor: "#4A7E61",
     padding: 14,
     borderRadius: 10,
     alignItems: "center",
   },
    buttonText: {
-    color: "#fff",
   },
 });
