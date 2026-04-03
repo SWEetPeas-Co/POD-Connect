@@ -23,6 +23,7 @@ type Club = {
   tags: string[];
   headcount: number;
   description: string;
+  image: string;
 }
 
 export default function DiscoverClubs() {
