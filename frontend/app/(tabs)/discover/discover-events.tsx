@@ -33,6 +33,7 @@ type Club = {
   tags: string[];
   headcount: number;
   description: string;
+  image: string;
 }
 
 export default function DiscoverEvents() {
@@ -95,7 +96,7 @@ export default function DiscoverEvents() {
               time={event.time}
               description={event.description}
               headcount={event.headcount + (rsvpIds.includes(event.id) ? 1 : 0)}
-              image={club.image}
+              image={club?.image ?? "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"}
             />
           );
         })}

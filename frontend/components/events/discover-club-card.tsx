@@ -27,6 +27,7 @@ export default function DiscoverClubCard({
   title,
   tags,
   headcount,
+  image,
   active,
   onToggle
 }: DiscoverClubCardProps) {

@@ -40,6 +40,7 @@ export default function EventCard({
   time,
   description,
   headcount,
+  image,
 }: EventCardProps) {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme ?? 'light'];

@@ -15,7 +15,7 @@ type EventCardProps = {
   id: number;
   clubId: number;
   club: string;
-  image: string
+  image: string;
   rsvped: boolean;
   onToggleRSVP: (id: number) => void;
   favoriteIds: number[];
@@ -45,6 +45,7 @@ export default function EventCard({
   time,
   description,
   headcount,
+  image,
 }: EventCardProps) {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme ?? 'light'];
