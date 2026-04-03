@@ -7,15 +7,19 @@ import { useColorScheme as useRNColorScheme } from 'react-native';
 export function useColorScheme() {
   const [hasHydrated, setHasHydrated] = useState(false);
 
+  //const colorScheme = useRNColorScheme();
+
   useEffect(() => {
     setHasHydrated(true);
   }, []);
 
-  const colorScheme = 'light';
+  const colorScheme = 'light'; // this is whee=re it changes mode
 
-  if (hasHydrated) {
-    return colorScheme;
-  }
+  //if (hasHydrated) {
+    //return colorScheme;
+  //}
 
-  return 'light';
+  //return 'light';
+
+  return hasHydrated ? colorScheme ?? 'light' : 'light';
 }
