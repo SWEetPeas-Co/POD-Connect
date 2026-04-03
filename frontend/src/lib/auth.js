@@ -1,10 +1,23 @@
 import { createUserWithEmailAndPassword, GoogleAuthProvider, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword, fetchSignInMethodsForEmail } from "firebase/auth";
 import { auth } from "./firebase";
 
-export const doCreateUserWithEmailAndPassword=async (EmailAuthCredential,password)=>{
-    return createUserWithEmailAndPassword(auth, EmailAuthCredential, password);
-    
+export const doCreateUserWithEmailAndPassword = async (email, password) => {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    const user = cred.user;
+
+    await fetch(`${process.env.EXPO_PUBLIC_API_URL}/users`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            firebaseUid: user.uid,
+            email: user.email,
+            createdAt: new Date(),
+        }),
+    });
+
+    return cred;
 };
+
 export const doSignInWithEmailAndPassword=async(email,password)=>{
     const cred= await signInWithEmailAndPassword(auth, email, password);
     return cred.user;
