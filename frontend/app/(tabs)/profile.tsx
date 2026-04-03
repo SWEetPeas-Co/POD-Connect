@@ -11,6 +11,8 @@ import { auth } from "../../src/lib/firebase";
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
+import ColorModeSwitcher from "@/components/ui/color-switch-button";
+
 export default function MyEvents() {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme ?? 'light'];
@@ -24,7 +26,9 @@ export default function MyEvents() {
     }
   };
 
-
+  const handleModeChange = (newMode: 'light' | 'dark' | 'colorblind') => {
+    console.log("Color mode changed to:", newMode);
+  };
 
   return (
     <ThemedView style={[styles.mainContainer, { backgroundColor: theme.background } ]}>
@@ -37,6 +41,7 @@ export default function MyEvents() {
 
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
         <ThemedText>Scroll area here</ThemedText>
+
         <Pressable style={[styles.button, { backgroundColor: theme.logOutButtonBackgroundDefault } ]} onPress={doSignOut}>
             <ThemedText type='eventSubtitle' style={[styles.buttonText, { color: theme.logOutButtonTextDefult } ]}>Log Out</ThemedText>
         </Pressable>
