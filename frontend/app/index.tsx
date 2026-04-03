@@ -7,11 +7,16 @@ import React, {useState, useEffect, useContext} from "react";
 import {doSignInWithEmailAndPassword} from "../src/lib/auth"; // custom function that actually performs login.
 import AuthContext from "../src/lib/authContext/index";
 import {useRouter, Link} from "expo-router";
-import { StyleSheet, TextInput, Pressable } from "react-native";
+import { StyleSheet } from "react-native";
+import PrimaryButton from "@/components/ui/primary-button";
 import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import ErrorMessage from "@/components/ui/error-msg";
+import AuthInput from "@/components/auth/auth-input";
+import AuthLayout from "@/components/auth/auth-container";
+import { authStyles } from "@/components/auth/auth-form";
 
 // LoginPage component
 export default function LoginPage() {
@@ -87,106 +92,46 @@ export default function LoginPage() {
   // start frontending
   return (
 
-    <ThemedView style={[styles.loginContainer, { backgroundColor: theme.background } ]}>
-      <ThemedText type='header' style={styles.title}>LOGIN</ThemedText>
+    <AuthLayout title="LOGIN">
+      <ErrorMessage message={error} />
 
-      {error ? <ThemedText style={styles.error}>{error}</ThemedText> : null}
-
-      <ThemedView style={styles.form}>
-        <TextInput
-          style={[styles.input, { color: '#569170' }]}
+      <ThemedView style={authStyles.form}>
+        <AuthInput
           placeholder="Email"
-          placeholderTextColor="#98BA7B"
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
         />
 
-        <TextInput
-          style={[styles.input, { color: '#569170' }]}
+        <AuthInput
           placeholder="Password"
-          placeholderTextColor="#98BA7B"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
         />
 
-        <Pressable style={styles.button} onPress={handleEmailLogin}>
-          <ThemedText type='eventSubtitle' style={styles.buttonText}>SIGN IN</ThemedText>
-        </Pressable>
+        <PrimaryButton title="SIGN IN" onPress={handleEmailLogin} />
+
       </ThemedView>
 
-      <ThemedText  type='eventSubtitle' style={styles.signupText}>
+      <ThemedText  type='eventSubtitle' style={authStyles.textSpacing}>
         Don’t have an account?{" "}
-        <Link href="/register" style={styles.signupLink}>
+        <Link href="/register" style={authStyles.link}>
           Sign up
         </Link>
       </ThemedText>
-      <ThemedText  type='eventSubtitle' style={styles.signupText}>
+      <ThemedText  type='eventSubtitle' style={authStyles.textSpacing}>
         Forgot your password?{" "}
-        <Link href="/reset-password" style={styles.signupLink}>
+        <Link href="/reset-password" style={authStyles.link}>
           Reset here
         </Link>
       </ThemedText>
 
-    </ThemedView>
+    </AuthLayout>
   );
 }
 
-const styles = StyleSheet.create({
-  loginContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignContent: 'center',
-    paddingHorizontal: 24,
-    gap: 16,
-  },
-
-  title: {
-    width: '100%',
-    fontSize: 28,
-    fontWeight: "500",
-    justifyContent: "center",
-    alignContent: 'center',
-  },
-
-  error: {
-    color: '#d73d3d',
-  },
-
-  form: {
-    gap: 15,
-    backgroundColor: 'transparent',
-  },
-
-  input: {
-    borderWidth: 3,
-    borderColor: '#D4CEAB',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 12,
-  },
-
-  button: {
-    backgroundColor: "#4A7E61",
-    padding: 14,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-
-  buttonText: {
-    color: "#fff",
-  },
-
-  signupText: {
-    marginTop: 13,
-  },
-
-  signupLink: {
-    color: '#0d311d',
-  },
-});
 
 //     <div className="login-container">
 //       <h2>Login</h2>

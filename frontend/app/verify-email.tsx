@@ -6,6 +6,10 @@ import { useRouter, Link } from "expo-router";
 import { doSendEmailVerification } from "@/src/lib/auth";
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import PrimaryButton from "@/components/ui/primary-button";
+import ErrorMessage from "@/components/ui/error-msg";
+import AuthLayout from "@/components/auth/auth-container";
+import { authStyles } from "@/components/auth/auth-form";
 
 export default function VerifyEmail(){
     const [message, setMessage] = useState("");
@@ -23,72 +27,31 @@ export default function VerifyEmail(){
         }
     }
     return (
-        <ThemedView style={[styles.loginContainer, { backgroundColor: theme.background } ]}>
-            <ThemedText type='header' style={styles.title}>Verify Your Email</ThemedText>
+          <AuthLayout title="Verify Your Email">
+
+            <ErrorMessage message={error} />
                 
-                {error ? <ThemedText style={styles.error}>{error}</ThemedText> : null}
-                
-                      <ThemedView style={styles.form}>
-                        <ThemedText type='eventTitle' style={styles.signupText}>
-                            We sent a verification link to your email.  
-                            Please verify your account before logging in.
-                        </ThemedText>
-                        <Pressable style={styles.button} onPress={handleResend}>
-                                  <ThemedText type='eventSubtitle' style={styles.buttonText}>RESEND EMAIL </ThemedText>
-                        </Pressable>
-                        {message ? <ThemedText>{message}</ThemedText> : null}
-                        <ThemedText  type='eventSubtitle' style={styles.signupText}>
-                            <Link href="/" style={styles.signupLink}>
-                                Back to Login
-                            </Link>
-                        </ThemedText>
-                        </ThemedView>
-                </ThemedView> 
+            <ThemedView style={authStyles.form}>
+              
+              <ThemedText type='eventTitle' style={authStyles.textSpacing}>
+                We sent a verification link to your email.  
+                Please verify your account before logging in.
+              </ThemedText>
+                      
+              <PrimaryButton title="RESEND EMAIL" onPress={handleResend} />
+                    
+              {message ? <ThemedText>{message}</ThemedText> : null}
+                    
+              <ThemedText  type='eventSubtitle' style={authStyles.textSpacing}>
+                <Link href="/" style={authStyles.link}>
+                  Back to Login
+                </Link>
+              </ThemedText>
+
+            </ThemedView>
+
+          </AuthLayout> 
 
     );
 
 }
-const styles = StyleSheet.create({
-  loginContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignContent: 'center',
-    paddingHorizontal: 24,
-    gap: 16,
-  },
-
-  title: {
-    width: '100%',
-    fontSize: 28,
-    fontWeight: "500",
-    justifyContent: "center",
-    alignContent: 'center',
-  },
-
-  error: {
-    color: '#d73d3d',
-  },
-  form: {
-    gap: 15,
-    backgroundColor: 'transparent',
-  },
-
-  
-    button: {
-    backgroundColor: "#4A7E61",
-    padding: 14,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-
-  buttonText: {
-    color: "#fff",
-  },
-  signupText: {
-    marginTop: 13,
-  },
-
-  signupLink: {
-    color: '#0d311d',
-  },
-})

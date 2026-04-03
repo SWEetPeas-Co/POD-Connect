@@ -24,7 +24,6 @@ export default function Tag({ label }: TagProps) {
 
 const styles = StyleSheet.create({
   tag: {
-    //backgroundColor: '#98BA7B',
     borderRadius: 40,
     paddingHorizontal: 10,
     paddingVertical: 4,
