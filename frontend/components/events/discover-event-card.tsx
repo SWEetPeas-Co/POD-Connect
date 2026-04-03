@@ -6,6 +6,7 @@ import RSVPButton from '../ui/rsvp-button';
 import StarButton from '../ui/star-button';
 
 import { Clock, Users, MapPin, ChevronDown } from "lucide-react-native";
+import { Image } from "react-native";
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -14,6 +15,7 @@ type EventCardProps = {
   id: number;
   clubId: number;
   club: string;
+  image: string
   rsvped: boolean;
   onToggleRSVP: (id: number) => void;
   favoriteIds: number[];
@@ -66,7 +68,7 @@ export default function EventCard({
 
       <ThemedView style={styles.top}>
 
-        <ThemedView style={[styles.image, {backgroundColor: theme.searchBarBackground}]} />
+        <Image source={{ uri: image }} style={styles.image} />
 
         <ThemedView style={styles.text}>
           <ThemedText type='eventTitle'>{title}</ThemedText>

@@ -7,6 +7,7 @@ import { ThemedText } from '@/components/themed-text';
 import RSVPButton from '../ui/rsvp-button';
 
 import { Clock, Users, MapPin, ChevronDown } from "lucide-react-native";
+import { Image } from "react-native";
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -21,6 +22,7 @@ type EventCardProps = {
   time: string
   description: string
   headcount: number
+  image: string
 }
 
 if (Platform.OS === 'android') {
@@ -63,7 +65,7 @@ export default function EventCard({
 
       <ThemedView style={styles.top}>
 
-        <ThemedView style={[styles.image, {backgroundColor: theme.searchBarBackground}]} />
+        <Image source={{ uri: image }} style={styles.image} />
 
         <ThemedView style={styles.text}>
           <ThemedText type='eventTitle'>{title}</ThemedText>

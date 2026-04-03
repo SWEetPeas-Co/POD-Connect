@@ -95,6 +95,7 @@ export default function DiscoverEvents() {
               time={event.time}
               description={event.description}
               headcount={event.headcount + (rsvpIds.includes(event.id) ? 1 : 0)}
+              image={club.image}
             />
           );
         })}

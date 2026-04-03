@@ -85,6 +85,7 @@ export default function MyEvents() {
               onToggleRSVP={toggleRSVP}
               title={event.title}
               club={club?.club ?? "Unknown Club"}
+              image={club.image}
               location={event.location}
               time={event.time}
               description={event.description}
