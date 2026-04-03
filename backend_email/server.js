@@ -3,7 +3,7 @@ import cors from "cors";
 import nodemailer from "nodemailer";
 import admin from "firebase-admin";
 
-import serviceAccount from "./serviceAccountKey.json" assert { type: "json" };
+const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -32,7 +32,7 @@ app.post("/sendVerification", async (req, res) => {
     }
 
     const actionCodeSettings = {
-      url: "https://your-domain.com/verify-email",
+      url: "https://YOUR-VERIFY-PAGE-URL.com/verify-email",
       handleCodeInApp: false,
     };
 
