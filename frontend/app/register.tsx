@@ -6,11 +6,16 @@ import React, { useState, useContext, useEffect } from "react";
 import { useRouter, Link } from "expo-router";
 import AuthContext from "../src/lib/authContext/index";
 import { doCreateUserWithEmailAndPassword, doSendEmailVerification } from "../src/lib/auth";
-import { StyleSheet, TextInput, Pressable } from "react-native";
+import { StyleSheet } from "react-native";
+import PrimaryButton from "@/components/ui/primary-button";
 import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import ErrorMessage from "@/components/ui/error-msg";
+import AuthInput from "@/components/auth/auth-input";
+import AuthLayout from "@/components/auth/auth-container";
+import { authStyles } from "@/components/auth/auth-form";
 
 // This creates a register component
 export default function RegisterPage() {
@@ -62,100 +67,40 @@ export default function RegisterPage() {
 
   return (
 
-    <ThemedView style={[styles.container, { backgroundColor: theme.background } ]}>
-      <ThemedText type='header' style={styles.title}>Create an Account</ThemedText>
+    <AuthLayout title="Create an Account">
 
-      {error ? <ThemedText style={styles.error}>{error}</ThemedText> : null}
+      <ErrorMessage message={error} />
 
-      <ThemedView style={styles.form}>
-        <TextInput
-          style={[styles.input, { color: '#569170' }]}
+      <ThemedView style={authStyles.form}>
+        <AuthInput
           placeholder="Email"
-          placeholderTextColor="#98BA7B"
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
         />
 
-        <TextInput
-          style={[styles.input, { color: '#569170' }]}
+        <AuthInput
           placeholder="Password (6+ characters)"
-          placeholderTextColor="#98BA7B"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
         />
 
-        <Pressable style={styles.button} onPress={handleRegister}>
-          <ThemedText type='eventSubtitle' style={styles.buttonText}>SIGN UP</ThemedText>
-        </Pressable>
+        <PrimaryButton title="SIGN UP" onPress={handleRegister} />
+
       </ThemedView>
 
-      <ThemedText type='eventSubtitle' style={styles.footer}>
+      <ThemedText type='eventSubtitle' style={authStyles.textSpacing}>
         Already have an account?{" "}
-        <Link href="/" style={styles.link}>
+        <Link href="/" style={authStyles.link}>
           Log in
         </Link>
       </ThemedText>
-    </ThemedView>
+    </AuthLayout>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignContent: 'center',
-    paddingHorizontal: 24,
-    gap: 16,
-  },
-
-  title: {
-    width: '100%',
-    fontSize: 28,
-    fontWeight: "500",
-    justifyContent: "center",
-    alignContent: 'center',
-  },
-
-  error: {
-    color: '#d73d3d',
-  },
-
-  form: {
-    gap: 15,
-    backgroundColor: 'transparent',
-  },
-
-  input: {
-    borderWidth: 3,
-    borderColor: '#D4CEAB',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 12,
-  },
-
-  button: {
-    backgroundColor: "#4A7E61",
-    padding: 14,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-
-  buttonText: {
-    color: "#fff",
-    fontWeight: "600",
-  },
-  
-  footer: {
-    marginTop: 13,
-  },
-
-  link: {
-    color: '#0d311d',
-  },
-});
 //     <ThemedView style={styles.container}>
 //       <ThemedText style={styles.title}>Create an Account</ThemedText>
 
