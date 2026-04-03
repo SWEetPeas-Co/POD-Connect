@@ -31,6 +31,7 @@ type Club = {
   tags: string[];
   headcount: number;
   description: string;
+  image: string;
 }
 
 export default function MyEvents() {
@@ -85,6 +86,7 @@ export default function MyEvents() {
               onToggleRSVP={toggleRSVP}
               title={event.title}
               club={club?.club ?? "Unknown Club"}
+              image={club?.image ?? "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"}
               location={event.location}
               time={event.time}
               description={event.description}

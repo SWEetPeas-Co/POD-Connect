@@ -7,6 +7,9 @@ import Tag from '../ui/tag';
 import { Users } from "lucide-react-native";
 import StarButton from '../ui/star-button';
 
+import { Image } from "react-native";
+// <ThemedView style={[styles.image, {backgroundColor: theme.searchBarBackground}]} />
+
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
@@ -15,6 +18,7 @@ type DiscoverClubCardProps = {
   title: string
   tags: string[]
   headcount: number
+  image: string
   active: boolean
   onToggle: () => void
 }
@@ -23,6 +27,7 @@ export default function DiscoverClubCard({
   title,
   tags,
   headcount,
+  image,
   active,
   onToggle
 }: DiscoverClubCardProps) {
@@ -34,7 +39,7 @@ export default function DiscoverClubCard({
 
       <ThemedView style={styles.top}>
 
-        <ThemedView style={[styles.image, {backgroundColor: theme.searchBarBackground}]} />
+        <Image source={{ uri: image }} style={styles.image} />
 
         <ThemedView style={styles.text}>
           <ThemedText type='eventTitle'>{title}</ThemedText>
