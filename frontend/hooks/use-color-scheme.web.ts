@@ -11,7 +11,7 @@ export function useColorScheme() {
     setHasHydrated(true);
   }, []);
 
-  const colorScheme = 'colorblind';
+  const colorScheme = 'light';
 
   if (hasHydrated) {
     return colorScheme;
