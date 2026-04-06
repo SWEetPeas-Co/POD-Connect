@@ -50,6 +50,7 @@ export default function RootLayout() {
         <Stack.Screen name="reset-passsword" options={{headerShown: false}}/>
         <Stack.Screen name="verify-email" options={{headerShown: false}}/>
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+        <Stack.Screen name="create-club-modal" options={{ presentation: 'modal', title: 'Modal', headerShown: false, }} />
       </Stack>
       <StatusBar style="auto" />
       </AuthGate>
@@ -71,3 +72,4 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 
   return children;
 }
+// <Stack.Screen name="create-club-modal" options={{ presentation: 'modal', title: 'Modal', headerShown: false, }} />

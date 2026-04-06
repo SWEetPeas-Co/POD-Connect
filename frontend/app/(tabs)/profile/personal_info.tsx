@@ -35,7 +35,32 @@ export default function PersonalInfo() {
 
             <ThemedText type="eventTitle">Personal Info</ThemedText>
             <ThemedText> For personal info settings like passwords </ThemedText>
+
+            <ThemedView style={styles.info}>
+              <ThemedView style={styles.leftInfo}>
+                <ThemedText type="eventTitle">Name:</ThemedText>
+                <ThemedText type="eventTitle">Email:</ThemedText>
+                <ThemedText type="eventTitle">Username:</ThemedText>
+                <ThemedText type="eventTitle">Password:</ThemedText>
+                <ThemedText type="eventTitle">School ID:</ThemedText>
+              </ThemedView>
+              <ThemedView style={styles.rightInfo}>
+                <ThemedText type="eventTitle">Name</ThemedText>
+                <ThemedText type="eventTitle">Email</ThemedText>
+                <ThemedText type="eventTitle">Username</ThemedText>
+                <ThemedText type="eventTitle">Password</ThemedText>
+                <ThemedText type="eventTitle">School ID</ThemedText>
+              </ThemedView>
+
+            </ThemedView>
         
+        </ThemedView>
+        <ThemedView style={[styles.infoContainer, {backgroundColor: theme.eventCardBackground, shadowColor: theme.eventCardDropShadow, shadowRadius: 1,shadowOffset: { width: 3, height: 4 },},]}>
+            <ThemedText type="eventTitle">Edit Personal Info</ThemedText>
+        </ThemedView>
+        <ThemedView style={[ styles.dashedLine, { borderColor: theme.eventCardDropShadow, backgroundColor: 'transparent' } ]} />
+        <ThemedView style={[styles.infoContainer, {backgroundColor: theme.eventCardBackground, shadowColor: theme.eventCardDropShadow, shadowRadius: 1,shadowOffset: { width: 3, height: 4 },},]}>
+            <ThemedText type="eventTitle">Delete Account</ThemedText>
         </ThemedView>
       </ScrollView>
 
@@ -63,7 +88,7 @@ const styles = StyleSheet.create({
   },
   eventContent: {
     alignItems: 'center',
-    gap: 15,
+    gap: 30,
     paddingHorizontal: 50,
     paddingBottom: 100,
   },
@@ -81,5 +106,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
     alignSelf: "flex-start",
+  },
+  info: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  leftInfo: {
+    alignItems: "flex-end",
+    minWidth: '10%',
+    gap: 10,
+  },
+  rightInfo: {
+    paddingLeft: 30,
+    flex: 1,
+    gap: 10,
+  },
+  dashedLine: {
+    width: '100%',
+    borderBottomWidth: 4,
+    borderStyle: 'dashed',
+    margin: 15,
   },
 });
