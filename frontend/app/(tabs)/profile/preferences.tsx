@@ -38,6 +38,21 @@ export default function Preferences() {
 
             <ThemedText type="eventTitle">Preferences</ThemedText>
             <ThemedText> Change theme mode and other display settings. </ThemedText>
+
+            <ThemedView style={styles.options}>
+              <ThemedView style={styles.option}>
+                <ThemedText type="eventTitle">Light/Dark Mode:</ThemedText>
+              </ThemedView>
+              <ThemedView style={styles.option}>
+                <ThemedText type="eventTitle">Accessibility:</ThemedText>
+              </ThemedView>
+              <ThemedView style={styles.option}>
+                <ThemedText type="eventTitle">Colorblindness:</ThemedText>
+              </ThemedView>
+              <ThemedView style={styles.option}>
+                <ThemedText type="eventTitle">SFX:</ThemedText>
+              </ThemedView>
+            </ThemedView>
         
         </ThemedView>
       </ScrollView>
@@ -85,4 +100,15 @@ const styles = StyleSheet.create({
     gap: 8,
     alignSelf: "flex-start",
   },
+  options: {
+    marginVertical: 20,
+    paddingHorizontal: 50,
+    gap: 25,
+  },
+  option: {
+    backgroundColor: 'transparent',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  }
 });

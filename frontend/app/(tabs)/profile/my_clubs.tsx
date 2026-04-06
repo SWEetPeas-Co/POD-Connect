@@ -9,8 +9,7 @@ import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-
-import ColorModeSwitcher from "@/components/ui/color-switch-button";
+import ProfileButton from "@/components/profile/profile-button";
 
 export default function MyClubs() {
   const colorScheme = useColorScheme();
@@ -37,6 +36,9 @@ export default function MyClubs() {
             <ThemedText> List of created clubs. </ThemedText>
         
         </ThemedView>
+        <Pressable onPress={() => router.push("/create-club-modal")}>
+          <ThemedText>TMODAL EXAMPLE TEST</ThemedText>
+        </Pressable>
       </ScrollView>
 
     </ThemedView>
