@@ -78,6 +78,34 @@ export default function TabLayout() {
           tabBarItemStyle: { display: "none" },
         }}
       />
+      <Tabs.Screen
+        name="profile/preferences"
+        options={{
+          title: 'TRASH',
+          tabBarItemStyle: { display: "none" },
+        }}
+      />
+      <Tabs.Screen
+        name="profile/fav_clubs"
+        options={{
+          title: 'TRASH',
+          tabBarItemStyle: { display: "none" },
+        }}
+      />
+      <Tabs.Screen
+        name="profile/my_clubs"
+        options={{
+          title: 'TRASH',
+          tabBarItemStyle: { display: "none" },
+        }}
+      />
+      <Tabs.Screen
+        name="profile/personal_info"
+        options={{
+          title: 'TRASH',
+          tabBarItemStyle: { display: "none" },
+        }}
+      />
     </Tabs>
   );
 }

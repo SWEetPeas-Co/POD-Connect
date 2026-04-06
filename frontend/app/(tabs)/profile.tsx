@@ -10,6 +10,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../src/lib/firebase";
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import ProfileButton from "@/components/profile/profile-button";
 
 import ColorModeSwitcher from "@/components/ui/color-switch-button";
 
@@ -26,24 +27,22 @@ export default function MyEvents() {
     }
   };
 
-  const handleModeChange = (newMode: 'light' | 'dark' | 'colorblind') => {
-    console.log("Color mode changed to:", newMode);
-  };
-
   return (
     <ThemedView style={[styles.mainContainer, { backgroundColor: theme.background } ]}>
 
       <Header title="PROFILE" />
 
       <ThemedView style={styles.tabContainer}>
-        <ThemedText>Profile Here</ThemedText>
+        <ProfileButton option="PREFERENCES" href="/profile/preferences" />
+        <ProfileButton option="FAV CLUBS" href="/profile/fav_clubs" />
+        <ProfileButton option="MY CLUBS" href="/profile/my_clubs" />
+        <ProfileButton option="PERSONAL INFO" href="/profile/personal_info" />
       </ThemedView>
 
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
-        <ThemedText>Scroll area here</ThemedText>
-
+        <ThemedView style={[ styles.dashedLine, { borderColor: theme.eventCardDropShadow, backgroundColor: 'transparent' } ]} />
         <Pressable style={[styles.button, { backgroundColor: theme.logOutButtonBackgroundDefault } ]} onPress={doSignOut}>
-            <ThemedText type='eventSubtitle' style={[styles.buttonText, { color: theme.logOutButtonTextDefult } ]}>Log Out</ThemedText>
+            <ThemedText type='eventSubtitle' style={{ color: theme.logOutButtonTextDefult }}>Log Out</ThemedText>
         </Pressable>
       </ScrollView>
 
@@ -54,14 +53,14 @@ export default function MyEvents() {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    paddingTop: 85,
-    gap: 15,
+    paddingTop: 100,
+    gap: 75,
   },
   tabContainer: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 15,
+    gap: 30,
     paddingHorizontal: 30,
     backgroundColor: 'transparent',
   },
@@ -80,6 +79,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
   },
-   buttonText: {
+  dashedLine: {
+    width: '100%',
+    borderBottomWidth: 4,
+    borderStyle: 'dashed',
+    marginBottom: 50,
   },
 });
