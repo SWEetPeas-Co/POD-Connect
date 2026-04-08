@@ -35,7 +35,9 @@ clubRoutes.route('/clubs').post(async (request, response) => {
         tags: request.body.tags,
         headcount: request.body.headcount,
         description: request.body.description,
-        image: request.body.image
+        image: request.body.image,
+        admins: request.body.admin || [],
+        members: request.body.members || []
     }
     let data = await db.collection('clubs').insertOne(mongoObject);
     response.json(data);
@@ -51,7 +53,9 @@ clubRoutes.route('/clubs/:id').put(async (request, response) => {
             tags: request.body.tags,
             headcount: request.body.headcount,
             description: request.body.description,
-            image: request.body.image
+            image: request.body.image, 
+            admins: request.body.admin || [],
+            members: request.body.members || []
         }
     }
     let data = await db.collection('clubs').updateOne({_id: new ObjectId(request.params.id)}, mongoObject);
