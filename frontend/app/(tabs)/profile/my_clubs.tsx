@@ -10,11 +10,14 @@ import { ThemedText } from "@/components/themed-text";
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import ProfileButton from "@/components/profile/profile-button";
+import { useState } from "react";
+import CreateClubModal from "@/app/create-club-modal";
 
 export default function MyClubs() {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme ?? 'light'];
   const router = useRouter();
+  const [isVisible, setIsVisible] = useState(false);
 
 
   return (
@@ -36,11 +39,11 @@ export default function MyClubs() {
             <ThemedText> List of created clubs. </ThemedText>
         
         </ThemedView>
-        <Pressable onPress={() => router.push("/create-club-modal")}>
+        <Pressable onPress={() => setIsVisible(true)}>
           <ThemedText>TMODAL EXAMPLE TEST</ThemedText>
         </Pressable>
       </ScrollView>
-
+      <CreateClubModal visible={isVisible} onClose={() => setIsVisible(false)} />
     </ThemedView>
   );
 }

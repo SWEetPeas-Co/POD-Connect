@@ -1,11 +1,15 @@
-import { useState } from 'react';
-import { StyleSheet, TextInput, Pressable } from 'react-native';
-import { router } from 'expo-router';
+import { useState } from "react";
+import { Modal, StyleSheet, TextInput, Pressable, View } from "react-native";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-
-export default function CreateEventModal() {
+export default function CreateEventModal({
+  visible,
+  onClose
+}: {
+  visible: boolean;
+  onClose: () => void;
+}) {
   const [eventName, setEventName] = useState('');
   const [description, setDescription] = useState('');
 
@@ -14,10 +18,11 @@ export default function CreateEventModal() {
     console.log("Event Created:", { eventName, description });
     
     // Close the modal and go back
-    router.back();
+    onClose();
   };
 
   return (
+    <Modal visible={visible} animationType="slide" transparent>
     <ThemedView style={styles.container}>
       <ThemedText type="header" style={styles.title}>Create New Event</ThemedText>
       
@@ -45,10 +50,11 @@ export default function CreateEventModal() {
         <ThemedText style={styles.buttonText}>Create Event</ThemedText>
       </Pressable>
 
-      <Pressable style={styles.cancelLink} onPress={() => router.back()}>
+      <Pressable style={styles.cancelLink} onPress={onClose}>
         <ThemedText style={{ color: '#ff4444' }}>Cancel</ThemedText>
       </Pressable>
     </ThemedView>
+    </Modal>
   );
 }
 
