@@ -1,7 +1,0 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-
-# dependencies
-node_modules/
-# local env files
-.env*.local
-.backend_email/pod-connect-395ee-firebase-adminsdk-fbsvc-d1b5427d21.json
