@@ -28,6 +28,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [name, setName] = useState("");
 
   // Redirect if already logged in
   useEffect(() => {
@@ -41,7 +42,7 @@ export default function RegisterPage() {
     setError("");
 
     try {
-      await doCreateUserWithEmailAndPassword(email, password);
+      await doCreateUserWithEmailAndPassword(email, password, name);
       await doSendEmailVerification();
       router.replace("/verify-email");
 
@@ -72,6 +73,12 @@ export default function RegisterPage() {
       <ErrorMessage message={error} />
 
       <ThemedView style={authStyles.form}>
+        <AuthInput
+          placeholder="Name"
+          value={name}
+          onChangeText={setName}
+        />
+
         <AuthInput
           placeholder="Email"
           value={email}

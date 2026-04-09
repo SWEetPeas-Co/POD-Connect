@@ -38,6 +38,7 @@ userRoutes.route('/users').post(async (request, response) => {
         firebaseUid: request.body.firebaseUid,
         email: request.body.email,
         createdAt: request.body.createdAt,
+        name: request.body.name
     };
 
     let data = await db.collection('users').insertOne(mongoObject);
@@ -50,6 +51,7 @@ userRoutes.route('/users/:firebaseUid').put(async (request, response) => {
     let mongoObject = {
         $set: {
             email: request.body.email,
+            name: request.body.name
         }
     };
     let data = await db.collection('users').updateOne(

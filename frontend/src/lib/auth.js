@@ -1,7 +1,7 @@
 import { createUserWithEmailAndPassword, GoogleAuthProvider, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword, fetchSignInMethodsForEmail } from "firebase/auth";
 import { auth } from "./firebase";
 
-export const doCreateUserWithEmailAndPassword = async (email, password) => {
+export const doCreateUserWithEmailAndPassword = async (email, password, name) => {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     const user = cred.user;
 
@@ -12,6 +12,7 @@ export const doCreateUserWithEmailAndPassword = async (email, password) => {
             firebaseUid: user.uid,
             email: user.email,
             createdAt: new Date(),
+            name: name
         }),
     });
 
