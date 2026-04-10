@@ -238,7 +238,6 @@ titleRow: {
   headcountButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
   },
   leadersRow: {
     flexDirection: 'row',
