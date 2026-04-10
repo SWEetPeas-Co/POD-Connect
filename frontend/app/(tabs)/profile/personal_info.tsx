@@ -97,7 +97,9 @@ export default function PersonalInfo() {
                 <Camera size={14} color={theme.eventCardText} />
               </Pressable>
             </ThemedView>
-            <ThemedText type="eventSubtitle">Edit photo</ThemedText>
+            <Pressable onPress={handlePickImage}>
+              <ThemedText type="eventTitle">Edit Photo</ThemedText>
+            </Pressable>
           </ThemedView>
 
           <ThemedText type="eventTitle">Personal Info</ThemedText>
@@ -106,6 +108,7 @@ export default function PersonalInfo() {
             <ThemedView style={styles.leftInfo}>
               <ThemedText type="eventTitle">Name:</ThemedText>
               <ThemedText type="eventTitle">Email:</ThemedText>
+              <ThemedText type="eventTitle">Username:</ThemedText>
               <ThemedText type="eventTitle">Password:</ThemedText>
             </ThemedView>
 
@@ -113,7 +116,8 @@ export default function PersonalInfo() {
             <ThemedView style={styles.rightInfo}>
               <ThemedText type="eventTitle">{personalInfo?.name || 'Not provided'}</ThemedText>
               <ThemedText type="eventTitle">{email}</ThemedText>
-              <ThemedText type="eventTitle">********</ThemedText>
+              <ThemedText type="eventTitle">Username</ThemedText>
+              <ThemedText type="eventTitle">Password</ThemedText>
             </ThemedView>
           </ThemedView>
 
