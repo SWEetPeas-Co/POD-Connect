@@ -1,5 +1,3 @@
-// // This is for personal info
-
 // This is for personal info
 
 import { StyleSheet, ScrollView, Pressable, Image } from "react-native";
@@ -83,14 +81,14 @@ export default function PersonalInfo() {
               <ThemedText type="eventTitle">Email:</ThemedText>
               <ThemedText type="eventTitle">Username:</ThemedText>
               <ThemedText type="eventTitle">Password:</ThemedText>
-              <ThemedText type="eventTitle">School ID:</ThemedText>
             </ThemedView>
+
+            {/* This section has the user's personal information from firebase, replace */}
             <ThemedView style={styles.rightInfo}>
               <ThemedText type="eventTitle">Name</ThemedText>
               <ThemedText type="eventTitle">Email</ThemedText>
               <ThemedText type="eventTitle">Username</ThemedText>
               <ThemedText type="eventTitle">Password</ThemedText>
-              <ThemedText type="eventTitle">School ID</ThemedText>
             </ThemedView>
           </ThemedView>
 
