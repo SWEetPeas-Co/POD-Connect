@@ -6,14 +6,18 @@ import { ThemedText } from '@/components/themed-text';
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeContext } from '@/src/lib/themeContext/theme-context';
 
 type HeaderProps = {
   title: string
 }
 
 export default function Header({ title }: HeaderProps) {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
+  
   return (
     <ThemedView style={[styles.headerContainer, { backgroundColor: theme.headerBackground, shadowColor: theme.headerDropShadow, shadowRadius: 2, shadowOffset: { width: 0, height: 5 }, } ]}>
       <ThemedText type='header'>

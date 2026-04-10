@@ -11,10 +11,14 @@ import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 import ColorModeSwitcher from "@/components/ui/color-switch-button";
+import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 export default function PersonalInfo() {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
+  
   const router = useRouter();
 
 

@@ -7,6 +7,7 @@ import { ThemedText } from '@/components/themed-text';
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeContext } from '@/src/lib/themeContext/theme-context';
 
 type RSVPButtonProps = {
   rsvped: boolean
@@ -14,8 +15,10 @@ type RSVPButtonProps = {
 }
 
 export default function RSVPButton({ rsvped, onPress }: RSVPButtonProps) {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
 
   return (
     <Pressable

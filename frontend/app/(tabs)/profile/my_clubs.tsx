@@ -12,10 +12,13 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import ProfileButton from "@/components/profile/profile-button";
 import { useState } from "react";
 import CreateClubModal from "@/app/create-club-modal";
+import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 export default function MyClubs() {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
 

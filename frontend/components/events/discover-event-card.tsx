@@ -10,6 +10,7 @@ import { Image } from "react-native";
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 type EventCardProps = {
   id: number;
@@ -47,8 +48,10 @@ export default function EventCard({
   headcount,
   image,
 }: EventCardProps) {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
 
   const [expanded, setExpanded] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;

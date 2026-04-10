@@ -15,6 +15,7 @@ import { ThemedView } from "@/components/themed-view";
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 type Event = {
   id: number;
@@ -37,8 +38,10 @@ type Club = {
 }
 
 export default function DiscoverEvents() {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  // const colorScheme = useColorScheme();
+  // const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
 
   const [search, setSearch] = useState("");
   const [events, setEvents] = useState<Event[]>([]);
