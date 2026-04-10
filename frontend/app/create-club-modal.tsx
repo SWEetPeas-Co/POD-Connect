@@ -1,179 +1,222 @@
-import { useState } from "react";
-import { Modal, StyleSheet, TextInput, Pressable, View } from "react-native";
+import { useState, useEffect } from "react";
+import { Modal, StyleSheet, TextInput, Pressable, ScrollView } from "react-native";
+import { X } from "lucide-react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { Colors } from '@/constants/theme';
+import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
-export default function CreateEventModal({
+type Club = {
+  id: number;
+  club: string;
+  tags: string[];
+  headcount: number;
+  description: string;
+  image: string;
+};
+
+export default function CreateClubModal({
   visible,
-  onClose
+  onClose,
+  club = null,
 }: {
   visible: boolean;
   onClose: () => void;
+  club?: Club | null;
 }) {
-  const [eventName, setEventName] = useState('');
-  const [description, setDescription] = useState('');
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
 
-  const handleCreate = () => {
-    // Logic to save the event would go here
-    console.log("Event Created:", { eventName, description });
-    
-    // Close the modal and go back
+  const isEditing = club !== null;
+
+  const [clubName, setClubName] = useState('');
+  const [description, setDescription] = useState('');
+  const [tagInput, setTagInput] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+
+  // Pre-fill when editing
+  useEffect(() => {
+    if (club) {
+      setClubName(club.club);
+      setDescription(club.description);
+      setTags(club.tags);
+    } else {
+      setClubName('');
+      setDescription('');
+      setTags([]);
+      setTagInput('');
+    }
+  }, [club, visible]);
+
+  const handleAddTag = () => {
+    const trimmed = tagInput.trim();
+    if (trimmed && !tags.includes(trimmed)) {
+      setTags(prev => [...prev, trimmed]);
+    }
+    setTagInput('');
+  };
+
+  const handleRemoveTag = (tag: string) => {
+    setTags(prev => prev.filter(t => t !== tag));
+  };
+
+  const handleSubmit = () => {
+    if (!clubName.trim()) return;
+    console.log(isEditing ? "Updating club:" : "Creating club:", { clubName, description, tags });
+    // TODO: call API here
     onClose();
   };
 
   return (
     <Modal visible={visible} animationType="slide" transparent>
-    <ThemedView style={styles.container}>
-      <ThemedText type="header" style={styles.title}>Create New Event</ThemedText>
-      
-      <ThemedText style={styles.label}>Event Name</ThemedText>
-      <TextInput
-        style={styles.input}
-        placeholder="e.g. Chess Club Weekly"
-        placeholderTextColor="#888"
-        value={eventName}
-        onChangeText={setEventName}
-      />
+      <ThemedView style={styles.overlay}>
+        <ThemedView style={[styles.card, { backgroundColor: theme.eventCardBackground }]}>
 
-      <ThemedText style={styles.label}>Description</ThemedText>
-      <TextInput
-        style={[styles.input, styles.textArea]}
-        placeholder="What's happening?"
-        placeholderTextColor="#888"
-        multiline
-        numberOfLines={4}
-        value={description}
-        onChangeText={setDescription}
-      />
+          <ThemedView style={styles.cardHeader}>
+            <ThemedText type="eventTitle">{isEditing ? 'Edit Club' : 'Create Club'}</ThemedText>
+            <Pressable onPress={onClose}>
+              <X size={20} color={theme.eventCardText} />
+            </Pressable>
+          </ThemedView>
 
-      <Pressable style={styles.button} onPress={handleCreate}>
-        <ThemedText style={styles.buttonText}>Create Event</ThemedText>
-      </Pressable>
+          <ScrollView showsVerticalScrollIndicator={false}>
 
-      <Pressable style={styles.cancelLink} onPress={onClose}>
-        <ThemedText style={{ color: '#ff4444' }}>Cancel</ThemedText>
-      </Pressable>
-    </ThemedView>
+            <ThemedText style={styles.label}>Club Name</ThemedText>
+            <TextInput
+              style={[styles.input, { color: theme.eventCardText, borderColor: theme.eventCardDropShadow }]}
+              placeholder="e.g. Chess Club"
+              placeholderTextColor={theme.eventCardDropShadow}
+              value={clubName}
+              onChangeText={setClubName}
+            />
+
+            <ThemedText style={styles.label}>Description</ThemedText>
+            <TextInput
+              style={[styles.input, styles.textArea, { color: theme.eventCardText, borderColor: theme.eventCardDropShadow }]}
+              placeholder="What is this club about?"
+              placeholderTextColor={theme.eventCardDropShadow}
+              multiline
+              numberOfLines={4}
+              value={description}
+              onChangeText={setDescription}
+            />
+
+            <ThemedText style={styles.label}>Tags</ThemedText>
+            <ThemedView style={styles.tagInputRow}>
+              <TextInput
+                style={[styles.input, styles.tagInput, { color: theme.eventCardText, borderColor: theme.eventCardDropShadow }]}
+                placeholder="Add a tag"
+                placeholderTextColor={theme.eventCardDropShadow}
+                value={tagInput}
+                onChangeText={setTagInput}
+                onSubmitEditing={handleAddTag}
+                returnKeyType="done"
+              />
+              <Pressable
+                style={[styles.addTagButton, { backgroundColor: theme.eventCardDropShadow }]}
+                onPress={handleAddTag}
+              >
+                <ThemedText style={{ color: theme.background }}>Add</ThemedText>
+              </Pressable>
+            </ThemedView>
+
+            <ThemedView style={styles.tagsRow}>
+              {tags.map((tag, i) => (
+                <Pressable
+                  key={i}
+                  style={[styles.tag, { borderColor: theme.eventCardDropShadow }]}
+                  onPress={() => handleRemoveTag(tag)}
+                >
+                  <ThemedText style={styles.tagText}>{tag}  ✕</ThemedText>
+                </Pressable>
+              ))}
+            </ThemedView>
+
+            <Pressable
+              style={[styles.submitButton, { backgroundColor: theme.eventCardDropShadow }]}
+              onPress={handleSubmit}
+            >
+              <ThemedText style={{ color: theme.background, fontWeight: '600' }}>
+                {isEditing ? 'Save Changes' : 'Create Club'}
+              </ThemedText>
+            </Pressable>
+
+          </ScrollView>
+        </ThemedView>
+      </ThemedView>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  overlay: {
     flex: 1,
-    padding: 24,
-    justifyContent: 'flex-start',
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'flex-end',
   },
-  title: {
-    fontSize: 24,
+  card: {
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    padding: 24,
+    maxHeight: '85%',
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 20,
-    fontWeight: 'bold',
+    backgroundColor: 'transparent',
   },
   label: {
-    fontSize: 16,
-    marginBottom: 8,
-    marginTop: 12,
+    fontSize: 14,
+    marginBottom: 6,
+    marginTop: 14,
   },
   input: {
-    backgroundColor: '#f0f0f0',
-    borderRadius: 8,
+    borderWidth: 1,
+    borderRadius: 10,
     padding: 12,
-    fontSize: 16,
-    color: '#000',
+    fontSize: 15,
   },
   textArea: {
     height: 100,
     textAlignVertical: 'top',
   },
-  button: {
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
+  tagInputRow: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+  },
+  tagInput: {
+    flex: 1,
+  },
+  addTagButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 10,
+  },
+  tagsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 10,
+    backgroundColor: 'transparent',
+  },
+  tag: {
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+  },
+  tagText: {
+    fontSize: 13,
+  },
+  submitButton: {
+    borderRadius: 12,
     padding: 16,
     alignItems: 'center',
     marginTop: 24,
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  cancelLink: {
-    marginTop: 20,
-    alignItems: 'center',
+    marginBottom: 8,
   },
 });
-
-// import { StyleSheet, Pressable, TextInput } from "react-native";
-// import { useRouter } from "expo-router";
-// import { useState } from "react";
-
-// import { ThemedView } from "@/components/themed-view";
-// import { ThemedText } from "@/components/themed-text";
-
-// export default function CreateClubModal() {
-//   const router = useRouter();
-
-//   const [clubName, setClubName] = useState("");
-
-//   function handleCreateClub() {
-//     console.log("Creating club:", clubName);
-
-//     router.back(); // closes modal
-//   }
-
-//   return (
-//   <ThemedView style={styles.overlay}>
-//     <ThemedView style={styles.modalCard}>
-//       <ThemedText type="header">Create Club</ThemedText>
-
-//       <TextInput
-//         placeholder="Club Name"
-//         value={clubName}
-//         onChangeText={setClubName}
-//         style={styles.input}
-//       />
-
-//       <Pressable style={styles.button} onPress={handleCreateClub}>
-//         <ThemedText>Create</ThemedText>
-//       </Pressable>
-
-//       <Pressable onPress={() => router.back()}>
-//         <ThemedText>Cancel</ThemedText>
-//       </Pressable>
-//     </ThemedView>
-//   </ThemedView>
-// );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 25,
-//     justifyContent: "center",
-//     gap: 20,
-//   },
-//   input: {
-//     borderWidth: 1,
-//     padding: 10,
-//     borderRadius: 10,
-//   },
-//   button: {
-//     padding: 12,
-//     borderRadius: 10,
-//     alignItems: "center",
-//   },
-//   overlay: {
-//   flex: 1,
-//   backgroundColor: "rgba(0,0,0,0.4)",
-//   justifyContent: "center",
-//   alignItems: "center",
-// },
-
-// modalCard: {
-//   width: "85%",
-//   padding: 25,
-//   borderRadius: 20,
-//   backgroundColor: "white",
-//   gap: 15,
-// },
-// });
