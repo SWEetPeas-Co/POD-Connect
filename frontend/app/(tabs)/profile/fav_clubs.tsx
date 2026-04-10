@@ -79,6 +79,7 @@ export default function FavClubs() {
               tags={club.tags}
               headcount={club.headcount}
               image={club.image}
+              description={club.description}
               active={favoriteIds.includes(club.id)}
               onToggle={() => toggleFavorite(club.id)}
             />

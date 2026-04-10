@@ -119,6 +119,7 @@ export default function DiscoverClubs() {
                 tags={club.tags}
                 headcount={club.headcount + (favoriteIds.includes(club.id) ? 1 : 0)}
                 image={club.image}
+                description={club.description}
                 active={favoriteIds.includes(club.id)}
                 onToggle={() => toggleFavorite(club.id)}
             />
