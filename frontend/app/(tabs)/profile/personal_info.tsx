@@ -1,7 +1,7 @@
 // This is for personal info
 
 import { StyleSheet, ScrollView, Pressable, Image } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { ArrowLeft, Camera } from "lucide-react-native";
 import * as ImagePicker from 'expo-image-picker';
@@ -12,13 +12,24 @@ import { ThemedText } from "@/components/themed-text";
 import { Colors } from '@/constants/theme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
+import { auth } from '../../../src/lib/firebase';
+
+type UserProfile = {
+  firebaseUid: string;
+  email: string;
+  createdAt: string;
+  name: string;
+};
+
+
 export default function PersonalInfo() {
   const { mode } = useThemeContext();
   const theme = Colors[mode];
   const router = useRouter();
-
+  const user = auth.currentUser;
+  const email = user?.email || "No email";
   const [profileImage, setProfileImage] = useState<string | null>(null);
-
+  const [personalInfo, setPersonalInfo] = useState<UserProfile | null>(null);
   const handlePickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
@@ -37,6 +48,22 @@ export default function PersonalInfo() {
       setProfileImage(result.assets[0].uri);
     }
   };
+
+  const fetchUserProfile = async () => {
+    if (!user) return null;
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/${user.uid}`);
+    const data = await response.json();
+    return data as UserProfile;
+  };
+  //this fetchs the user's personal info from the backend
+  useEffect(() => {
+  if (user) {
+    fetchUserProfile().then(setPersonalInfo);
+  }
+  }, [user]);
+
+
+
 
   return (
     <ThemedView style={[styles.mainContainer, { backgroundColor: theme.background }]}>
@@ -85,8 +112,8 @@ export default function PersonalInfo() {
 
             {/* This section has the user's personal information from firebase, replace */}
             <ThemedView style={styles.rightInfo}>
-              <ThemedText type="eventTitle">Name</ThemedText>
-              <ThemedText type="eventTitle">Email</ThemedText>
+              <ThemedText type="eventTitle">{personalInfo?.name || 'Not provided'}</ThemedText>
+              <ThemedText type="eventTitle">{email}</ThemedText>
               <ThemedText type="eventTitle">Username</ThemedText>
               <ThemedText type="eventTitle">Password</ThemedText>
             </ThemedView>
