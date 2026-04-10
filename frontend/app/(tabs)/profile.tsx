@@ -13,10 +13,13 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import ProfileButton from "@/components/profile/profile-button";
 
 import ColorModeSwitcher from "@/components/ui/color-switch-button";
+import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 export default function MyEvents() {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
   const doSignOut = async () => {
     try {
       await signOut(auth);

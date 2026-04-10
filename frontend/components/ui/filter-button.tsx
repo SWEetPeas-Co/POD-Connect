@@ -5,6 +5,7 @@ import { SlidersHorizontal } from "lucide-react-native";
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 type FilterButtonProps = {
   onPress: () => void
@@ -12,8 +13,11 @@ type FilterButtonProps = {
 }
 
 export default function FilterButton({ onPress, active }: FilterButtonProps) {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
+  
   return (
     <Pressable style={[styles.button, {backgroundColor: theme.filterButtonBackgroundDefault }, active && {backgroundColor: theme.filterButtonBackgroundSelected }]} onPress={onPress}>
       <SlidersHorizontal size={18} color={active ? theme.filterButtonIconDefault : theme.filterButtonIconSelected} />

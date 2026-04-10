@@ -1,119 +1,101 @@
+// this component is a toggle button for light/dark mode and colorblind mode, using animated values for smooth transitions. It uses the theme context to get and set the current modes, and updates the UI accordingly. The button shows a sun/moon icon for light/dark mode and an eye/eye-off icon for colorblind mode, with appropriate accessibility labels.
 
-import React, { useState } from 'react';
-import { View, Pressable, Text, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Pressable, StyleSheet, Animated } from 'react-native';
+import { Sun, Moon, Eye, EyeOff } from 'lucide-react-native';
 import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeContext } from '@/src/lib/themeContext/theme-context';
 
 type ColorModeSwitcherProps = {
-  onModeChange?: (mode: 'light' | 'dark' | 'colorblind') => void;
+  show?: 'ld' | 'cb' | 'both';
 };
 
-// <ColorModeSwitcher onModeChange={handleModeChange} />
+export default function ColorModeSwitcher({ show = 'both' }: ColorModeSwitcherProps) {
+  const { mode, ldMode, setLdMode, colorblindOn, setColorblindOn, setMode } = useThemeContext();
+  const theme = Colors[mode];
 
-export default function ColorModeSwitcher({ onModeChange }: ColorModeSwitcherProps) {
-  const systemColorScheme = useColorScheme();
-  const [mode, setMode] = useState<'light' | 'dark' | 'colorblind'>(systemColorScheme ?? 'light');
+  const ldAnim = useRef(new Animated.Value(ldMode === 'dark' ? 1 : 0)).current;
+  const cbAnim = useRef(new Animated.Value(colorblindOn ? 1 : 0)).current;
 
-  React.useEffect(() => {
-    if (systemColorScheme && mode !== 'colorblind') {
-      setMode(systemColorScheme);
-    }
-  }, [systemColorScheme]);
-
-  const toggleLightDark = () => {
-    const newMode = mode === 'light' ? 'dark' : 'light';
-    setMode(newMode);
-    onModeChange?.(newMode);
+  const toggleLD = () => {
+    const newLd = ldMode === 'light' ? 'dark' : 'light';
+    setLdMode(newLd);
+    Animated.timing(ldAnim, {
+      toValue: newLd === 'dark' ? 1 : 0,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+    if (!colorblindOn) setMode(newLd);
   };
 
-  const enableColorblind = () => {
-    setMode('colorblind');
-    onModeChange?.('colorblind');
+  const toggleColorblind = () => {
+    const newCb = !colorblindOn;
+    setColorblindOn(newCb);
+    Animated.timing(cbAnim, {
+      toValue: newCb ? 1 : 0,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+    setMode(newCb ? 'colorblind' : ldMode);
   };
 
-  const theme = Colors[mode] || Colors.light;
+  const ldThumbPos = ldAnim.interpolate({ inputRange: [0, 1], outputRange: [2, 22] });
+  const cbThumbPos = cbAnim.interpolate({ inputRange: [0, 1], outputRange: [2, 22] });
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.label, { color: theme.headerText }]}>
-        Current Mode: {mode.toUpperCase()}
-      </Text>
+    <View style={styles.row}>
+      {(show === 'ld' || show === 'both') && (
+        <View style={styles.toggleGroup}>
+          <Sun size={16} color={theme.headerText} />
+          <Pressable
+            onPress={toggleLD}
+            style={[styles.track, {
+              backgroundColor: ldMode === 'dark'
+                ? theme.rsvpButtonBackgroundSelected
+                : theme.sliderBackgroundDefault,
+            }]}
+            accessibilityRole="switch"
+            accessibilityState={{ checked: ldMode === 'dark' }}
+            accessibilityLabel="Toggle light and dark mode"
+          >
+            <Animated.View style={[styles.thumb, {
+              backgroundColor: theme.headerBackground,
+              transform: [{ translateX: ldThumbPos }],
+            }]} />
+          </Pressable>
+          <Moon size={16} color={theme.headerText} />
+        </View>
+      )}
 
-      <View style={styles.buttons}>
-        <Pressable 
-          style={[styles.button, { backgroundColor: theme.sliderBackgroundDefault }]} 
-          onPress={toggleLightDark}
-        >
-          <Text style={{ color: theme.sliderTextDefault }}>Toggle Light/Dark</Text>
-        </Pressable>
-
-        <Pressable 
-          style={[styles.button, { backgroundColor: theme.sliderBackgroundSelected }]} 
-          onPress={enableColorblind}
-        >
-          <Text style={{ color: theme.sliderTextSelected }}>Enable Colorblind</Text>
-        </Pressable>
-      </View>
+      {(show === 'cb' || show === 'both') && (
+        <View style={styles.toggleGroup}>
+          <Eye size={16} color={theme.headerText} />
+          <Pressable
+            onPress={toggleColorblind}
+            style={[styles.track, {
+              backgroundColor: colorblindOn
+                ? theme.rsvpButtonBackgroundSelected
+                : theme.sliderBackgroundDefault,
+            }]}
+            accessibilityRole="switch"
+            accessibilityState={{ checked: colorblindOn }}
+            accessibilityLabel="Toggle colorblind mode"
+          >
+            <Animated.View style={[styles.thumb, {
+              backgroundColor: theme.headerBackground,
+              transform: [{ translateX: cbThumbPos }],
+            }]} />
+          </Pressable>
+          <EyeOff size={16} color={theme.headerText} />
+        </View>
+      )}
     </View>
   );
 }
-  // Toggle between light and dark, but ignore colorblind mode
-//   const toggleLightDark = () => {
-//     setMode(prev => {
-//       let newMode: 'light' | 'dark' | 'colorblind';
-//       if (prev === 'light') newMode = 'dark';
-//       else if (prev === 'dark') newMode = 'light';
-//       else newMode = 'light'; // if colorblind, switch back to light
-//       onModeChange?.(newMode);
-//       return newMode;
-//     });
-//   };
-
-//   // Enable colorblind mode regardless of current light/dark mode
-//   const enableColorblind = () => {
-//     setMode('colorblind');
-//     onModeChange?.('colorblind');
-//   };
-
-//   // Determine theme colors for UI
-//   const theme = Colors[mode === 'colorblind' ? 'colorblind' : mode];
-
-//   return (
-//     <View style={[styles.container, { backgroundColor: theme.background }]}>
-//       <Text style={[styles.label, { color: theme.headerText }]}>Current Mode: {mode.toUpperCase()}</Text>
-
-//       <View style={styles.buttons}>
-//         <Pressable style={[styles.button, { backgroundColor: theme.sliderBackgroundDefault }]} onPress={toggleLightDark}>
-//           <Text style={{ color: theme.sliderTextDefault }}>Toggle Light/Dark</Text>
-//         </Pressable>
-
-//         <Pressable style={[styles.button, { backgroundColor: theme.sliderBackgroundSelected }]} onPress={enableColorblind}>
-//           <Text style={{ color: theme.sliderTextSelected }}>Enable Colorblind</Text>
-//         </Pressable>
-//       </View>
-//     </View>
-//   );
-// }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    gap: 10,
-  },
-  label: {
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  buttons: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  button: {
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
+  row: { flexDirection: 'row', gap: 20, alignItems: 'center', justifyContent: 'center', padding: 12 },
+  toggleGroup: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  track: { width: 46, height: 26, borderRadius: 13, justifyContent: 'center' },
+  thumb: { width: 22, height: 22, borderRadius: 11 },
 });

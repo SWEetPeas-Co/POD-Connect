@@ -6,14 +6,17 @@ import { ThemedText } from '@/components/themed-text';
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeContext } from '@/src/lib/themeContext/theme-context';
 
 type TagProps = {
   label: string
 }
 
 export default function Tag({ label }: TagProps) {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
 
   return (
     <ThemedView style={[styles.tag, { backgroundColor: theme.eventCardTagBackground } ]}>

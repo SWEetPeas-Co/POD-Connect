@@ -10,6 +10,7 @@ import { ArrowRight } from "lucide-react-native";
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 type ProfileButtonProps = {
   option: string
@@ -17,8 +18,11 @@ type ProfileButtonProps = {
 }
 
 export default function ProfileButton({option, href}:ProfileButtonProps) {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
+  
   const router = useRouter();
   
   return (

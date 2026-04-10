@@ -3,7 +3,7 @@
 // as the main screen and allows additional screens like modals on top of it
 // Do not usually touch.
 
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, ThemeProvider as NavThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
@@ -19,6 +19,8 @@ import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@e
 import { useContext, useEffect } from "react";
 import AuthContext from '@/src/lib/authContext';
 import { useRouter } from "expo-router";
+
+import { ThemeProvider } from '@/src/lib/themeContext/theme-context';
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -38,10 +40,11 @@ export default function RootLayout() {
   }
   
   return (
+    <ThemeProvider> 
     <AuthProvider>
     <RsvpProvider>
     <FavoritesProvider>
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <NavThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <AuthGate>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
@@ -54,10 +57,11 @@ export default function RootLayout() {
       </Stack>
       <StatusBar style="auto" />
       </AuthGate>
-    </ThemeProvider>
+    </NavThemeProvider>
     </FavoritesProvider>
     </RsvpProvider>
     </AuthProvider>
+    </ThemeProvider> 
   );
 }
 function AuthGate({ children }: { children: React.ReactNode }) {

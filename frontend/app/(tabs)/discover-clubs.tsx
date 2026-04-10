@@ -16,6 +16,7 @@ import { ThemedText } from "@/components/themed-text";
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 type Club = {
   id: number;
@@ -27,8 +28,10 @@ type Club = {
 }
 
 export default function DiscoverClubs() {
-    const colorScheme = useColorScheme();
-    const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
 
     const [search, setSearch] = useState("");
     const [showFilters, setShowFilters] = useState(false);

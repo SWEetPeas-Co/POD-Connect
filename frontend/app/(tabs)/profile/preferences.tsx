@@ -11,10 +11,15 @@ import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 import ColorModeSwitcher from "@/components/ui/color-switch-button";
+import { useThemeContext } from "@/src/lib/themeContext/theme-context";
+
 
 export default function Preferences() {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
+  
   const router = useRouter();
 
 //   const handleModeChange = (newMode: 'light' | 'dark' | 'colorblind') => {
@@ -42,15 +47,11 @@ export default function Preferences() {
             <ThemedView style={styles.options}>
               <ThemedView style={styles.option}>
                 <ThemedText type="eventTitle">Light/Dark Mode:</ThemedText>
-              </ThemedView>
-              <ThemedView style={styles.option}>
-                <ThemedText type="eventTitle">Accessibility:</ThemedText>
+                <ColorModeSwitcher show="ld" />
               </ThemedView>
               <ThemedView style={styles.option}>
                 <ThemedText type="eventTitle">Colorblindness:</ThemedText>
-              </ThemedView>
-              <ThemedView style={styles.option}>
-                <ThemedText type="eventTitle">SFX:</ThemedText>
+                <ColorModeSwitcher show="cb" />
               </ThemedView>
             </ThemedView>
         

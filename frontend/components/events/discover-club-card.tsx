@@ -12,6 +12,7 @@ import { Image } from "react-native";
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeContext } from '@/src/lib/themeContext/theme-context';
 
 type DiscoverClubCardProps = {
   id: number
@@ -31,8 +32,10 @@ export default function DiscoverClubCard({
   active,
   onToggle
 }: DiscoverClubCardProps) {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
 
   return (
     <ThemedView style={[styles.card, {shadowColor: theme.eventCardDropShadow, shadowRadius: 1,shadowOffset: { width: 3, height: 4 },}]}>

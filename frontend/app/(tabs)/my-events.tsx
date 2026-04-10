@@ -13,6 +13,7 @@ import { parseEventTime } from '@/utils/parse-event-time';
 
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 type Event = {
   id: number;
@@ -35,8 +36,11 @@ type Club = {
 }
 
 export default function MyEvents() {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
+  console.log('current mode:', mode);
   
   const [search, setSearch] = useState("");
   const [events, setEvents] = useState<Event[]>([]);

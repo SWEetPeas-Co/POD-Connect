@@ -8,11 +8,14 @@ import { HapticTab } from '@/components/haptic-tab'; // adds vibrations, should 
 import { Colors } from '@/constants/theme'; // imports color scheme
 import { useColorScheme } from '@/hooks/use-color-scheme'; // returns light or dark
 import { Heart, Send, CircleUserRound } from "lucide-react-native";
+import { useThemeContext } from '@/src/lib/themeContext/theme-context';
 
 // This creates the bottom navigation bar.
 export default function TabLayout() {
-  const colorScheme = useColorScheme(); // returns light or dark
-  const theme = Colors[colorScheme ?? 'light'];
+  //const colorScheme = useColorScheme();
+  //const theme = Colors[colorScheme ?? 'light'];
+  const { mode } = useThemeContext();
+  const theme = Colors[mode];
 
   const pathname = usePathname();
   const isDiscover = pathname.startsWith('/discover');
