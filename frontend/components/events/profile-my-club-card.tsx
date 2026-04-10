@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { StyleSheet, Pressable, Modal, FlatList, Image } from 'react-native';
+import { useState, useRef } from "react";
+import { StyleSheet, Pressable, Modal, FlatList, Image, useWindowDimensions } from 'react-native';
+import { TouchableOpacity, LayoutAnimation, Platform, UIManager, Animated } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import Tag from '../ui/tag';
-import { Users, Pencil, Plus, X } from "lucide-react-native";
+import { Users, Pencil, Plus, X, ChevronDown } from "lucide-react-native";
 import { Colors } from '@/constants/theme';
 import { useThemeContext } from '@/src/lib/themeContext/theme-context';
 
@@ -23,6 +24,7 @@ type ProfileMyClubCardProps = {
   members?: Member[];
   onEdit: () => void;
   onAddEvent: () => void;
+  description: string
 };
 
 export default function ProfileMyClubCard({
@@ -34,21 +36,46 @@ export default function ProfileMyClubCard({
   members = [],
   onEdit,
   onAddEvent,
+  description,
 }: ProfileMyClubCardProps) {
   const { mode } = useThemeContext();
   const theme = Colors[mode];
   const [membersVisible, setMembersVisible] = useState(false);
 
+  const [expanded, setExpanded] = useState(false);
+  const rotation = useRef(new Animated.Value(0)).current;
+
+  const { width } = useWindowDimensions();
+  const showLabels = width > 900;
+
+  const toggleExpand = () => {
+    Animated.timing(rotation, {
+      toValue: expanded ? 0 : 1,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setExpanded(!expanded);
+  };
+
   return (
     <>
       <ThemedView style={[styles.card, { backgroundColor: theme.eventCardBackground, shadowColor: theme.eventCardDropShadow, shadowRadius: 1, shadowOffset: { width: 3, height: 4 } }]}>
 
-        {/* Top row */}
         <ThemedView style={styles.top}>
+
           <Image source={{ uri: image }} style={styles.image} />
 
           <ThemedView style={styles.text}>
-            <ThemedText type='eventTitle'>{title}</ThemedText>
+            <ThemedView style={styles.titleRow}>
+              <ThemedText type='eventTitle'>{title}</ThemedText>
+              <Pressable style={styles.headcountButton} onPress={() => setMembersVisible(true)}>
+                <Users size={13} color={theme.eventCardIcon} />
+                <ThemedText type='eventSubtitle'> {headcount}</ThemedText>
+              </Pressable>
+            </ThemedView>
+
             <ThemedView style={styles.tags}>
               {tags.map((tag, i) => (
                 <Tag key={i} label={tag} />
@@ -56,47 +83,54 @@ export default function ProfileMyClubCard({
             </ThemedView>
           </ThemedView>
 
-          {/* Action buttons */}
           <ThemedView style={styles.actions}>
-            <Pressable
-              style={[styles.iconButton, { borderColor: theme.eventCardDropShadow }]}
-              onPress={onEdit}
-            >
-              <Pencil size={13} color={theme.eventCardIcon} />
-            </Pressable>
-            <Pressable
-              style={[styles.iconButton, { borderColor: theme.eventCardDropShadow }]}
-              onPress={onAddEvent}
-            >
-              <Plus size={13} color={theme.eventCardIcon} />
-            </Pressable>
-          </ThemedView>
-        </ThemedView>
-
-        {/* Bottom row — leaders + headcount */}
-        <ThemedView style={styles.bottom}>
-
-          {leaders.length > 0 && (
-            <ThemedView style={styles.leadersRow}>
-              <ThemedText type='eventSubtitle'>Led by: </ThemedText>
-              {leaders.map((l, i) => (
-                <ThemedText key={l.id} type='eventSubtitle'>
-                  {l.name}{i < leaders.length - 1 ? ', ' : ''}
-                </ThemedText>
-              ))}
+            <ThemedView style={styles.iconRow}>
+              <Pressable
+                style={[styles.iconButton, { borderColor: theme.eventCardDropShadow }]}
+                onPress={onEdit}
+              >
+                <Pencil size={13} color={theme.eventCardIcon} />
+                {showLabels && <ThemedText type='eventSubtitle'>Edit Club</ThemedText>}
+              </Pressable>
+              <Pressable
+                style={[styles.iconButton, { borderColor: theme.eventCardDropShadow }]}
+                onPress={onAddEvent}
+              >
+                <Plus size={13} color={theme.eventCardIcon} />
+                {showLabels && <ThemedText type='eventSubtitle'>Add Event</ThemedText>}
+              </Pressable>
             </ThemedView>
-          )}
-
-          {/* Headcount — tap to open members */}
-          <Pressable style={styles.headcountButton} onPress={() => setMembersVisible(true)}>
-            <Users size={13} color={theme.eventCardIcon} />
-            <ThemedText type='eventSubtitle'> {headcount}</ThemedText>
-          </Pressable>
+          </ThemedView>
 
         </ThemedView>
+
+        {leaders.length > 0 && (
+          <ThemedView style={styles.leadersRow}>
+            <ThemedText type='eventSubtitle'>Led by: </ThemedText>
+            {leaders.map((l, i) => (
+              <ThemedText key={l.id} type='eventSubtitle'>
+                {l.name}{i < leaders.length - 1 ? ', ' : ''}
+              </ThemedText>
+            ))}
+          </ThemedView>
+        )}
+
+        {expanded && (
+          <ThemedView style={styles.bottom}>
+            <ThemedText type="eventDescription">{description}</ThemedText>
+          </ThemedView>
+        )}
+
+        <ThemedView style={styles.expand}>
+          <TouchableOpacity onPress={toggleExpand} hitSlop={10}>
+            <Animated.View style={{ transform: [{ rotate: rotation.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '180deg'] }) }] }}>
+              <ChevronDown size={24} color={theme.eventCardIcon} />
+            </Animated.View>
+          </TouchableOpacity>
+        </ThemedView>
+
       </ThemedView>
 
-      {/* Members popup */}
       <Modal visible={membersVisible} transparent animationType="fade">
         <ThemedView style={styles.modalOverlay}>
           <ThemedView style={[styles.membersCard, { backgroundColor: theme.eventCardBackground }]}>
@@ -153,7 +187,7 @@ const styles = StyleSheet.create({
   top: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 60,
+    minHeight: 60,
     width: '100%',
   },
   image: {
@@ -162,48 +196,54 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   text: {
-    height: 60,
+    minHeight: 60,
     flex: 1,
     paddingLeft: 10,
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
-  tags: {
-    flexDirection: 'row',
-    gap: 6,
-    flexWrap: 'wrap',
-  },
+tags: {
+  flexDirection: 'row',
+  gap: 10,
+  flexWrap: 'wrap',
+  width: '100%',  // ADD THIS
+},
+
+titleRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 8,
+  flexShrink: 1,
+  width: '100%',
+},
   actions: {
-    flexDirection: 'column',
-    gap: 6,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    paddingLeft: 8,
+  },
+  iconRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
+    gap: 4,
   },
   iconButton: {
-    width: 26,
-    height: 26,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
     borderRadius: 8,
     borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  bottom: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  leadersRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    flex: 1,
-    backgroundColor: 'transparent',
+    paddingHorizontal: 6,
+    paddingVertical: 4,
   },
   headcountButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+  },
+  leadersRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    backgroundColor: 'transparent',
   },
   modalOverlay: {
     flex: 1,
@@ -250,5 +290,17 @@ const styles = StyleSheet.create({
   separator: {
     height: 0.5,
     opacity: 0.3,
+  },
+  bottom: {
+    width: '100%',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    paddingTop: 9,
+  },
+  expand: {
+    position: 'absolute',
+    bottom: 5,
+    right: 10,
   },
 });

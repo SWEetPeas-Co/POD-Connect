@@ -70,13 +70,14 @@ export default function MyClubs() {
           <ArrowLeft size={20} color={theme.eventCardText} />
           <ThemedText type="eventSubtitle">Main Menu</ThemedText>
         </Pressable>
-      </ThemedView>
-
-      <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
         <ThemedView style={[styles.infoContainer, { backgroundColor: theme.eventCardBackground, shadowColor: theme.eventCardDropShadow, shadowRadius: 1, shadowOffset: { width: 3, height: 4 } }]}>
           <ThemedText type="eventTitle">My Clubs</ThemedText>
           <ThemedText>List of created clubs.</ThemedText>
         </ThemedView>
+      </ThemedView>
+
+      <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
+        
 
         {clubs.length === 0 ? (
           <ThemedText>No clubs yet.</ThemedText>
@@ -89,6 +90,7 @@ export default function MyClubs() {
               tags={club.tags}
               headcount={club.headcount}
               image={club.image}
+              description={club.description}
               onEdit={() => handleEdit(club)}
               onAddEvent={() => handleAddEvent(club)}
             />
@@ -119,11 +121,11 @@ export default function MyClubs() {
 }
 
 const styles = StyleSheet.create({
-  mainContainer: { flex: 1, paddingTop: 85, gap: 15 },
+  mainContainer: { flex: 1, paddingTop: 85, gap: 20 },
   backContainer: { width: '100%', justifyContent: 'center', alignItems: 'center', gap: 15, paddingHorizontal: 50, backgroundColor: 'transparent' },
   eventContainer: { flex: 1, width: '100%' },
-  eventContent: { alignItems: 'center', gap: 15, paddingHorizontal: 50, paddingBottom: 100 },
-  infoContainer: { width: '100%', borderRadius: 15, padding: 20, gap: 10, shadowRadius: 1, shadowOffset: { width: 3, height: 4 } },
+  eventContent: { alignItems: 'center', gap: 15, paddingHorizontal: 16, paddingBottom: 100 },
+  infoContainer: { width: '100%', borderRadius: 15, padding: 18, shadowRadius: 1, shadowOffset: { width: 3, height: 4 } },
   backButton: { flexDirection: "row", alignItems: "center", gap: 8, alignSelf: "flex-start" },
   createButton: { width: '100%', borderRadius: 15, padding: 18, alignItems: 'center', borderWidth: 1.5, borderStyle: 'dashed' },
 });
