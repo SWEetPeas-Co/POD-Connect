@@ -118,6 +118,7 @@ export default function ProfileMyClubCard({
         {expanded && (
           <ThemedView style={styles.bottom}>
             <ThemedText type="eventDescription">{description}</ThemedText>
+            <ThemedText type="eventDescription">LEADERS GO HERE</ThemedText>
           </ThemedView>
         )}
 
@@ -238,7 +239,6 @@ titleRow: {
   headcountButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
   },
   leadersRow: {
     flexDirection: 'row',
@@ -296,7 +296,8 @@ titleRow: {
     alignItems: 'flex-start',
     justifyContent: 'center',
     paddingHorizontal: 10,
-    paddingTop: 9,
+    paddingTop: 0,
+    gap: 10,
   },
   expand: {
     position: 'absolute',
