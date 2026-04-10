@@ -106,7 +106,6 @@ export default function PersonalInfo() {
             <ThemedView style={styles.leftInfo}>
               <ThemedText type="eventTitle">Name:</ThemedText>
               <ThemedText type="eventTitle">Email:</ThemedText>
-              <ThemedText type="eventTitle">Username:</ThemedText>
               <ThemedText type="eventTitle">Password:</ThemedText>
             </ThemedView>
 
@@ -114,8 +113,7 @@ export default function PersonalInfo() {
             <ThemedView style={styles.rightInfo}>
               <ThemedText type="eventTitle">{personalInfo?.name || 'Not provided'}</ThemedText>
               <ThemedText type="eventTitle">{email}</ThemedText>
-              <ThemedText type="eventTitle">Username</ThemedText>
-              <ThemedText type="eventTitle">Password</ThemedText>
+              <ThemedText type="eventTitle">********</ThemedText>
             </ThemedView>
           </ThemedView>
 
