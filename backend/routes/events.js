@@ -9,6 +9,7 @@ eventRoutes.route('/events').get(async (request, response) => {
     let db = database.getDb();
     let data = await db.collection('events').find({}).toArray();
     if (data.length > 0) {
+        data = data.map(item => ({ ...item, _id: item._id.toString() }));
         response.json(data);
     } else {
         throw new Error("No events found");
