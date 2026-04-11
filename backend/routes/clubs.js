@@ -20,6 +20,7 @@ clubRoutes.route('/clubs/:id').get(async (request, response) => {
     let db = database.getDb();
     let data = await db.collection('clubs').findOne({_id: new ObjectId(request.params.id)});
     if (Object.keys(data).length > 0) {
+        data = data.map(item => ({ ...item, _id: item._id.toString() }));
         response.json(data);
     } else {
         throw new Error("No clubs found");
@@ -30,7 +31,6 @@ clubRoutes.route('/clubs/:id').get(async (request, response) => {
 clubRoutes.route('/clubs').post(async (request, response) => {
     let db = database.getDb();
     let mongoObject = {
-        id: request.body.id,
         club: request.body.club,
         tags: request.body.tags,
         headcount: request.body.headcount,
@@ -48,7 +48,6 @@ clubRoutes.route('/clubs/:id').put(async (request, response) => {
     let db = database.getDb();
     let mongoObject = {
         $set: {
-            id: request.body.id,
             club: request.body.club,
             tags: request.body.tags,
             headcount: request.body.headcount,
