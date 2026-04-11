@@ -16,14 +16,14 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeContext } from '@/src/lib/themeContext/theme-context';
 
 type DiscoverClubCardProps = {
-  id: number
-  title: string
-  tags: string[]
-  headcount: number
-  image: string
-  active: boolean
-  onToggle: () => void
-  description: string
+  id: string;
+  title: string;
+  tags: string[];
+  headcount: number;
+  image: string;
+  active: boolean;
+  onToggle: () => void;
+  description: string;
 }
 
 export default function DiscoverClubCard({

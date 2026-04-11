@@ -16,9 +16,9 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 type Event = {
-  id: number;
+  _id: string;
   title: string;
-  clubId: number;
+  clubId: string;
   location: string;
   time: string;
   description: string;
@@ -27,7 +27,7 @@ type Event = {
 }
 
 type Club = {
-  id: number;
+  _id: string;
   club: string;
   tags: string[];
   headcount: number;
@@ -63,8 +63,13 @@ export default function MyEvents() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    console.log("clubs:", clubs.map(c => ({ id: c._id, name: c.club })));
+    console.log("events:", events.map(e => ({ id: e._id, clubId: e.clubId })));
+}, [clubs, events]);
+
   const filteredEvents = events
-    .filter((event) => rsvpIds.includes(event.id))
+    .filter((event) => rsvpIds.includes(event._id))
     .filter((event) => event.title.toLowerCase().includes(search.toLowerCase()))
     .sort((a, b) => parseEventTime(a.time).getTime() - parseEventTime(b.time).getTime());
 
@@ -81,12 +86,12 @@ export default function MyEvents() {
 
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
         {filteredEvents.map((event) => {
-          const club = clubs.find(c => c.id === event.clubId);
+          const club = clubs.find(c => c._id === event.clubId);
           return (
             <EventCard
-              key={event.id}
-              id={event.id}
-              rsvped={rsvpIds.includes(event.id)}
+              key={event._id}
+              id={event._id}
+              rsvped={rsvpIds.includes(event._id)}
               onToggleRSVP={toggleRSVP}
               title={event.title}
               club={club?.club ?? "Unknown Club"}
@@ -94,7 +99,7 @@ export default function MyEvents() {
               location={event.location}
               time={event.time}
               description={event.description}
-              headcount={event.headcount + (rsvpIds.includes(event.id) ? 1 : 0)}
+              headcount={event.headcount + (rsvpIds.includes(event._id) ? 1 : 0)}
             />
           );
         })}

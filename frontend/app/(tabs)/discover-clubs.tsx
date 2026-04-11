@@ -19,7 +19,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 type Club = {
-  id: number;
+  _id: string;
   club: string;
   tags: string[];
   headcount: number;
@@ -113,15 +113,15 @@ export default function DiscoverClubs() {
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
         {filteredClubs.map((club) => (
             <DiscoverClubCard
-                key={club.id}
-                id={club.id}
+                key={club._id}
+                id={club._id}
                 title={club.club}
                 tags={club.tags}
-                headcount={club.headcount + (favoriteIds.includes(club.id) ? 1 : 0)}
+                headcount={club.headcount + (favoriteIds.includes(club._id) ? 1 : 0)}
                 image={club.image}
                 description={club.description}
-                active={favoriteIds.includes(club.id)}
-                onToggle={() => toggleFavorite(club.id)}
+                active={favoriteIds.includes(club._id)}
+                onToggle={() => toggleFavorite(club._id)}
             />
         ))}
       </ScrollView>

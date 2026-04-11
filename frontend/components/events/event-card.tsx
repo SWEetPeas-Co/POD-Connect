@@ -14,9 +14,9 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 type EventCardProps = {
-  id: number
+  id: string
   rsvped: boolean
-  onToggleRSVP: (id: number) => void
+  onToggleRSVP: (id: string) => void
   title: string
   club: string
   location: string
