@@ -13,14 +13,14 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 type EventCardProps = {
-  id: number;
-  clubId: number;
+  id: string;
+  clubId: string;
   club: string;
   image: string;
   rsvped: boolean;
-  onToggleRSVP: (id: number) => void;
-  favoriteIds: number[];
-  onToggleFavorite: (id: number) => void;
+  onToggleRSVP: (id: string) => void;
+  favoriteIds: string[];
+  onToggleFavorite: (id: string) => void;
   title: string;
   location: string;
   time: string;

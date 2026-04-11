@@ -18,9 +18,9 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 type Event = {
-  id: number;
+  _id: string;
   title: string;
-  clubId: number;
+  clubId: string;
   location: string;
   time: string;
   description: string;
@@ -29,7 +29,7 @@ type Event = {
 }
 
 type Club = {
-  id: number;
+  _id: string;
   club: string;
   tags: string[];
   headcount: number;
@@ -83,14 +83,14 @@ export default function DiscoverEvents() {
 
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
         {filteredEvents.map((event) => {
-          const club = clubs.find(c => c.id === event.clubId);
+          const club = clubs.find(c => c._id === event.clubId);
           return (
             <DiscoverEventCard
-              key={event.id}
-              id={event.id}
+              key={event._id}
+              id={event._id}
               clubId={event.clubId}
               club={club?.club ?? "Unknown Club"}
-              rsvped={rsvpIds.includes(event.id)}
+              rsvped={rsvpIds.includes(event._id)}
               onToggleRSVP={toggleRSVP}
               favoriteIds={favoriteIds}
               onToggleFavorite={toggleFavorite}
@@ -98,7 +98,7 @@ export default function DiscoverEvents() {
               location={event.location}
               time={event.time}
               description={event.description}
-              headcount={event.headcount + (rsvpIds.includes(event.id) ? 1 : 0)}
+              headcount={event.headcount + (rsvpIds.includes(event._id) ? 1 : 0)}
               image={club?.image ?? "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"}
             />
           );

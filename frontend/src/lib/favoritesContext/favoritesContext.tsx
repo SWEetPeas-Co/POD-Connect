@@ -2,16 +2,16 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 type FavoritesContextType = {
-  favoriteIds: number[];
-  toggleFavorite: (id: number) => void;
+  favoriteIds: string[];
+  toggleFavorite: (id: string) => void;
 }
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
-  const [favoriteIds, setFavoriteIds] = useState<number[]>([]);
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
 
-  function toggleFavorite(id: number) {
+  function toggleFavorite(id: string) {
     setFavoriteIds(prev =>
       prev.includes(id)
         ? prev.filter(favId => favId !== id)

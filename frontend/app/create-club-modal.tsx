@@ -7,7 +7,7 @@ import { Colors } from '@/constants/theme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 type Club = {
-  id: number;
+  _id: string;
   club: string;
   tags: string[];
   headcount: number;
@@ -60,11 +60,27 @@ export default function CreateClubModal({
     setTags(prev => prev.filter(t => t !== tag));
   };
 
-  const handleSubmit = () => {
-    if (!clubName.trim()) return;
-    console.log(isEditing ? "Updating club:" : "Creating club:", { clubName, description, tags });
-    // TODO: call API here
-    onClose();
+  const handleSubmit = async () => {
+      if (!clubName.trim()) return;
+      
+      try {
+          if (isEditing) {
+              await fetch(`${process.env.EXPO_PUBLIC_API_URL}/clubs/${club._id}`, {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ club: clubName, description, tags }),
+              });
+          } else {
+              await fetch(`${process.env.EXPO_PUBLIC_API_URL}/clubs`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ club: clubName, description, tags }),
+              });
+          }
+          onClose();
+      } catch (err) {
+          console.error("Failed to save club:", err);
+      }
   };
 
   return (

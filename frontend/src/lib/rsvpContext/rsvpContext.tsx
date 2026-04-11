@@ -3,8 +3,8 @@
 import React, { createContext, useState } from "react";
 
 type RsvpContextType = {
-  rsvpIds: number[]
-  toggleRSVP: (id: number) => void
+  rsvpIds: string[]
+  toggleRSVP: (id: string) => void
 }
 
 const RsvpContext = createContext<RsvpContextType>({
@@ -13,9 +13,9 @@ const RsvpContext = createContext<RsvpContextType>({
 });
 
 export function RsvpProvider({ children }: { children: React.ReactNode }) {
-  const [rsvpIds, setRsvpIds] = useState<number[]>([]);
+  const [rsvpIds, setRsvpIds] = useState<string[]>([]);
 
-  function toggleRSVP(id: number) {
+  function toggleRSVP(id: string) {
     setRsvpIds((prev) =>
       prev.includes(id)
         ? prev.filter((eventId) => eventId !== id)
