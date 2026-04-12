@@ -1,4 +1,5 @@
 import { createUserWithEmailAndPassword, GoogleAuthProvider, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, updatePassword, fetchSignInMethodsForEmail } from "firebase/auth";
+import { EmailAuthProvider, reauthenticateWithCredential, deleteUser } from "firebase/auth";
 import { auth } from "./firebase";
 
 export const doCreateUserWithEmailAndPassword = async (email, password, name) => {
@@ -53,3 +54,21 @@ export async function resetPasswordIfExists(email) {
 export const doSendEmailVerification=()=>{
     return sendEmailVerification(auth.currentUser);
 };
+
+export async function deleteAccount(password) {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error("No user logged in");
+  }
+
+  if (!user.email) {
+    throw new Error("This account has no email associated with it.");
+  }
+
+  const credential = EmailAuthProvider.credential(user.email, password);
+
+  await reauthenticateWithCredential(user, credential);
+  await deleteUser(user);
+
+  return true;
+}

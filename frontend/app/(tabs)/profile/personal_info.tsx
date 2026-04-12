@@ -1,6 +1,6 @@
 // This is for personal info
 
-import { StyleSheet, ScrollView, Pressable, Image } from "react-native";
+import { StyleSheet, ScrollView, Pressable, Image, Modal, TextInput, View } from "react-native";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { ArrowLeft, Camera } from "lucide-react-native";
@@ -12,7 +12,9 @@ import { ThemedText } from "@/components/themed-text";
 import { Colors } from '@/constants/theme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
+
 import { auth } from '../../../src/lib/firebase';
+import { deleteAccount } from "../../../src/lib/auth";
 
 type UserProfile = {
   firebaseUid: string;
@@ -30,6 +32,7 @@ export default function PersonalInfo() {
   const email = user?.email || "No email";
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [personalInfo, setPersonalInfo] = useState<UserProfile | null>(null);
+  const [deleteVisible, setDeleteVisible] = useState(false);
   const handlePickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
@@ -61,6 +64,16 @@ export default function PersonalInfo() {
     fetchUserProfile().then(setPersonalInfo);
   }
   }, [user]);
+
+ const handleDelete = async (password: string) => {
+    try {
+      await deleteAccount(password);
+      // maybe sign out or navigate
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
 
 
 
@@ -128,11 +141,18 @@ export default function PersonalInfo() {
         </ThemedView>
 
         <ThemedView style={[styles.dashedLine, { borderColor: theme.eventCardDropShadow, backgroundColor: 'transparent' }]} />
-
+        <Pressable onPress={() => setDeleteVisible(true)}>
         <ThemedView style={[styles.infoContainer, { backgroundColor: theme.eventCardBackground, shadowColor: theme.eventCardDropShadow, shadowRadius: 1, shadowOffset: { width: 3, height: 4 } }]}>
           <ThemedText type="eventTitle">Delete Account</ThemedText>
         </ThemedView>
+        </Pressable>
       </ScrollView>
+      <DeleteAccountModal
+        visible={deleteVisible}
+        onClose={() => setDeleteVisible(false)}
+        onSubmit={handleDelete}
+        theme={theme}
+      />
 
     </ThemedView>
   );
@@ -237,7 +257,97 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: 'rgba(0,0,0,0.15)',
   },
+  overlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalBox: {
+    width: "85%",
+    padding: 20,
+    borderRadius: 12,
+  },
+  closeButton: {
+    position: "absolute",
+    right: 12,
+    top: 12,
+    padding: 4,
+  },
+  input: {
+    marginTop: 20,
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 10,
+  },
+  deleteButton: {
+    marginTop: 20,
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
 });
+
+type DeleteAccountModalProps = {
+  visible: boolean;
+  onClose: () => void;
+  onSubmit: (password: string) => void;
+  theme: any; // or your theme type
+};
+
+
+function DeleteAccountModal({
+  visible,
+  onClose,
+  onSubmit,
+  theme,
+}: DeleteAccountModalProps) {
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = () => {
+    onSubmit(password);
+  };
+
+
+  return (
+    <Modal visible={visible} transparent animationType="fade">
+      <View style={styles.overlay}>
+        <ThemedView style={[styles.modalBox, { backgroundColor: theme.background }]}>
+          
+          
+
+          <ThemedText type="eventTitle">Delete Account</ThemedText>
+
+          <ThemedText style={{ marginTop: 10 }}>
+            Deleting your account will permanently remove your profile and any clubs you are the sole admin in.
+          </ThemedText>
+
+          <TextInput
+            placeholder="Re-enter your password"
+            placeholderTextColor={theme.eventCardDropShadow}
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+            style={[
+              styles.input,
+              { borderColor: theme.eventCardDropShadow, color: theme.eventCardText }
+            ]}
+          />
+
+          <Pressable style={[styles.deleteButton, { backgroundColor: theme.eventCardDropShadow }]} onPress={handleSubmit}>
+            <ThemedText style={{ color: "white" }}>Confirm Delete</ThemedText>
+          </Pressable>
+          <View style={{ width: "100%", alignItems: "center", marginTop: 10 }}>
+          <Pressable onPress={onClose} style={{ marginTop: 10 }}>
+            <ThemedText>Cancel</ThemedText>
+          </Pressable>
+          </View>
+        </ThemedView>
+      </View>
+    </Modal>
+  );
+}
+
 
 // import { StyleSheet, ScrollView, Pressable } from "react-native";
 // import { useRouter } from "expo-router";
