@@ -68,6 +68,10 @@ export async function deleteAccount(password) {
   const credential = EmailAuthProvider.credential(user.email, password);
 
   await reauthenticateWithCredential(user, credential);
+  await fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/${user.uid}`, {
+    method: "DELETE",
+  });
+
   await deleteUser(user);
 
   return true;
