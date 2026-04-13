@@ -3,6 +3,18 @@ const database = require('../connect');
 
 let userRoutes = express.Router();
 
+//testing route
+userRoutes.get("/test-db", async (req, res) => {
+  try {
+    const db = database.getDb();
+    const result = await db.command({ ping: 1 });
+    res.json({ connected: true, result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ connected: false, error: err.message });
+  }
+});
+
 // 1 - Retrieve All
 userRoutes.route('/users').get(async (request, response) => {
     let db = database.getDb();
