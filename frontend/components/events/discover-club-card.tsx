@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   top: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 60,
+    minHeight: 60,
     width: '100%',
     //backgroundColor: '#E6E1C3',
   },
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    height: 60,
+    minHeight: 60,
     flex: 1,
     paddingLeft: 10,
     justifyContent: 'space-between',
@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
   },
 
   tags: {
+    marginTop: 10,
     flexDirection: 'row',
     gap: 10,
     width: '100%',
