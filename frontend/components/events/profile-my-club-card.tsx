@@ -229,6 +229,8 @@ export default function ProfileMyClubCard({
                 renderItem={({ item }) => (
                   <EventCard
                     {...item}
+                    id={String(item.id)}
+                    clubId={String(item.clubId)}
                     onToggleRSVP={() => {}}
                     favoriteIds={[]}
                     onToggleFavorite={() => {}}
