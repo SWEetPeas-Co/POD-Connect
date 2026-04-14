@@ -73,11 +73,39 @@ userRoutes.route('/users/:firebaseUid').put(async (request, response) => {
     response.json(data);
 });
 
-// 5 - Delete One
+// 5 - Delete One User + Clean Up Clubs
 userRoutes.route('/users/:firebaseUid').delete(async (request, response) => {
     let db = database.getDb();
-    let data = await db.collection('users').deleteOne({ firebaseUid: request.params.firebaseUid });
-    response.json(data);
+    const uid = request.params.firebaseUid;
+
+    // 1. Delete the user
+    await db.collection('users').deleteOne({ firebaseUid: uid });
+
+    // 2. Find all clubs where this user is an admin
+    const clubs = await db.collection('clubs').find({ admins: uid }).toArray();
+
+    for (const club of clubs) {
+        // If user is the ONLY admin → delete the club
+        if (club.admins.length === 1) {
+            await db.collection('clubs').deleteOne({ _id: club._id });
+        } else {
+            // Otherwise remove them from admins
+            await db.collection('clubs').updateOne(
+                { _id: club._id },
+                { $pull: { admins: uid } }
+            );
+        }
+    }
+
+    // 3. Remove user from ALL members arrays
+    await db.collection('clubs').updateMany(
+        { members: uid },
+        { $pull: { members: uid } }
+    );
+
+   
+
+    response.json({ message: "User deleted and club data cleaned up." });
 });
 
 module.exports = userRoutes;
