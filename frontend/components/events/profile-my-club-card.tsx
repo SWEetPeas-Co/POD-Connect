@@ -7,11 +7,26 @@ import Tag from '../ui/tag';
 import { Users, Pencil, Plus, X, ChevronDown } from "lucide-react-native";
 import { Colors } from '@/constants/theme';
 import { useThemeContext } from '@/src/lib/themeContext/theme-context';
+import AdminTag from '../ui/admin-tag';
+import EventCard from "../events/discover-event-card";
 
 type Member = {
   id: number;
   name: string;
   avatar?: string;
+};
+
+type Event = {
+  id: number;
+  clubId: number;
+  club: string;
+  image: string;
+  rsvped: boolean;
+  title: string;
+  location: string;
+  time: string;
+  description: string;
+  headcount: number;
 };
 
 type ProfileMyClubCardProps = {
@@ -20,11 +35,12 @@ type ProfileMyClubCardProps = {
   tags: string[];
   headcount: number;
   image: string;
-  leaders?: Member[];
+  admins?: Member[];
   members?: Member[];
   onEdit: () => void;
   onAddEvent: () => void;
-  description: string
+  description: string;
+  events?: Event[];
 };
 
 export default function ProfileMyClubCard({
@@ -32,21 +48,31 @@ export default function ProfileMyClubCard({
   tags,
   headcount,
   image,
-  leaders = [],
+  admins = [],
   members = [],
   onEdit,
   onAddEvent,
   description,
+  events = [],
+  id,
 }: ProfileMyClubCardProps) {
   const { mode } = useThemeContext();
   const theme = Colors[mode];
   const [membersVisible, setMembersVisible] = useState(false);
+  const [eventsVisible, setEventsVisible] = useState(false);
+  const clubEvents = (events ?? []).filter(event => event.clubId === id);
 
   const [expanded, setExpanded] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
 
   const { width } = useWindowDimensions();
   const showLabels = width > 900;
+
+  const testAdmins: Member[] = [
+    { id: 1, name: "Alice Johnson" },
+    { id: 2, name: "Brian Lee" },
+    { id: 3, name: "Carlos Rivera" },
+  ];
 
   const toggleExpand = () => {
     Animated.timing(rotation, {
@@ -104,21 +130,28 @@ export default function ProfileMyClubCard({
 
         </ThemedView>
 
-        {leaders.length > 0 && (
-          <ThemedView style={styles.leadersRow}>
-            <ThemedText type='eventSubtitle'>Led by: </ThemedText>
-            {leaders.map((l, i) => (
-              <ThemedText key={l.id} type='eventSubtitle'>
-                {l.name}{i < leaders.length - 1 ? ', ' : ''}
-              </ThemedText>
-            ))}
-          </ThemedView>
-        )}
-
         {expanded && (
           <ThemedView style={styles.bottom}>
             <ThemedText type="eventDescription">{description}</ThemedText>
-            <ThemedText type="eventDescription">LEADERS GO HERE</ThemedText>
+            
+            {admins.length > 0 && (
+              <ThemedView style={styles.adminRow}>
+                <ThemedText type="eventDescription">Club Leaders: </ThemedText>
+
+                <ThemedView style={styles.adminTags}>
+                  {admins.map((admin) => (
+                    <AdminTag key={admin.id} label={admin.name} />
+                  ))}
+                </ThemedView>
+              </ThemedView>
+            )}
+
+            <Pressable
+              style={[styles.eventsButton, { borderColor: theme.eventCardDropShadow }]}
+              onPress={() => setEventsVisible(true)}
+            >
+              <ThemedText type="eventSubtitle">View Events</ThemedText>
+            </Pressable>
           </ThemedView>
         )}
 
@@ -131,6 +164,7 @@ export default function ProfileMyClubCard({
         </ThemedView>
 
       </ThemedView>
+
 
       <Modal visible={membersVisible} transparent animationType="fade">
         <ThemedView style={styles.modalOverlay}>
@@ -162,6 +196,45 @@ export default function ProfileMyClubCard({
                     )}
                     <ThemedText type='eventSubtitle'>{item.name}</ThemedText>
                   </ThemedView>
+                )}
+                ItemSeparatorComponent={() => (
+                  <ThemedView style={[styles.separator, { backgroundColor: theme.eventCardDropShadow }]} />
+                )}
+              />
+            )}
+
+          </ThemedView>
+        </ThemedView>
+      </Modal>
+      
+
+      <Modal visible={eventsVisible} transparent animationType="fade">
+        <ThemedView style={styles.modalOverlay}>
+          <ThemedView style={[styles.membersCard, { backgroundColor: theme.eventCardBackground }]}>
+
+            <ThemedView style={styles.membersHeader}>
+              <ThemedText type='eventTitle'>Events ({clubEvents.length})</ThemedText>
+
+              <Pressable onPress={() => setEventsVisible(false)}>
+                <X size={20} color={theme.eventCardText} />
+              </Pressable>
+            </ThemedView>
+
+            {clubEvents.length === 0 ? (
+              <ThemedText type='eventSubtitle'>No events yet.</ThemedText>
+            ) : (
+              <FlatList
+                data={clubEvents}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <EventCard
+                    {...item}
+                    id={String(item.id)}
+                    clubId={String(item.clubId)}
+                    onToggleRSVP={() => {}}
+                    favoriteIds={[]}
+                    onToggleFavorite={() => {}}
+                  />
                 )}
                 ItemSeparatorComponent={() => (
                   <ThemedView style={[styles.separator, { backgroundColor: theme.eventCardDropShadow }]} />
@@ -303,5 +376,24 @@ titleRow: {
     position: 'absolute',
     bottom: 5,
     right: 10,
+  },
+  adminRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+
+  adminTags: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  eventsButton: {
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    alignSelf: "flex-start",
   },
 });
