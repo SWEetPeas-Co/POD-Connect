@@ -23,6 +23,7 @@ type Event = {
   time: string;
   description: string;
   tags: string[];
+  attendees: string[]; // List of user IDs who have RSVP'd
   headcount: number;
 }
 
@@ -92,14 +93,14 @@ export default function MyEvents() {
               key={event._id}
               id={event._id}
               rsvped={rsvpIds.includes(event._id)}
-              onToggleRSVP={toggleRSVP}
+              onToggleRSVP={() => toggleRSVP(event._id, user.uid)}
               title={event.title}
               club={club?.club ?? "Unknown Club"}
               image={club?.image ?? "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"}
               location={event.location}
               time={event.time}
               description={event.description}
-              headcount={event.headcount + (rsvpIds.includes(event._id) ? 1 : 0)}
+              headcount={event.headcount}
             />
           );
         })}

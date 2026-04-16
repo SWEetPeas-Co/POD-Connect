@@ -37,12 +37,15 @@ eventRoutes.route('/events').post(async (request, response) => {
         location: request.body.location,
         time: request.body.time,
         description: request.body.description,
-        tags: request.body.tags,
-        headcount: request.body.headcount,
-    }
+        tags: request.body.tags || [],
+        attendees: [],          
+        headcount: 0            // headcount is automatically set to 0 when event is created
+    };
+
     let data = await db.collection('events').insertOne(mongoObject);
     response.json(data);
 });
+
 
 // 4 - Update One
 eventRoutes.route('/events/:id').put(async (request, response) => {
@@ -56,12 +59,55 @@ eventRoutes.route('/events/:id').put(async (request, response) => {
             time: request.body.time,
             description: request.body.description,
             tags: request.body.tags,
-            headcount: request.body.headcount,
         }
     }
     let data = await db.collection('events').updateOne({_id: new ObjectId(request.params.id)}, mongoObject);
     response.json(data);
 });
+// Join Event
+eventRoutes.route('/events/:id/join').post(async (req, res) => {
+    const db = database.getDb();
+    const userId = req.body.userId;
+
+    const updated = await db.collection('events').findOneAndUpdate(
+        { _id: new ObjectId(req.params.id) },
+        {
+            $addToSet: { attendees: userId },
+            $set: { updatedAt: new Date() }
+        },
+        { returnDocument: "after" }
+    );
+
+    // Recalculate headcount
+    await db.collection('events').updateOne(
+        { _id: new ObjectId(req.params.id) },
+        { $set: { headcount: updated.attendees.length } }
+    );
+
+    res.json(updated);
+});
+// Leave Event
+eventRoutes.route('/events/:id/leave').post(async (req, res) => {
+    const db = database.getDb();
+    const userId = req.body.userId;
+
+    const updated = await db.collection('events').findOneAndUpdate(
+        { _id: new ObjectId(req.params.id) },
+        {
+            $pull: { attendees: userId },
+            $set: { updatedAt: new Date() }
+        },
+        { returnDocument: "after" }
+    );
+
+    await db.collection('events').updateOne(
+        { _id: new ObjectId(req.params.id) },
+        { $set: { headcount: updated.attendees.length } }
+    );
+
+    res.json(updated);
+});
+
 
 // 5 - Delete One
 eventRoutes.route('/events/:id').delete(async (request, response) => {

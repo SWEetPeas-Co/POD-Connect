@@ -16,6 +16,7 @@ import { ThemedView } from "@/components/themed-view";
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
+import { auth } from "@/src/lib/firebase";
 
 type Event = {
   _id: string;
@@ -25,6 +26,7 @@ type Event = {
   time: string;
   description: string;
   tags: string[];
+  attendees: string[]; // List of user IDs who have RSVP'd
   headcount: number;
 }
 
@@ -42,7 +44,7 @@ export default function DiscoverEvents() {
   // const theme = Colors[colorScheme ?? 'light'];
   const { mode } = useThemeContext();
   const theme = Colors[mode];
-
+  const user = auth.currentUser;
   const [search, setSearch] = useState("");
   const [events, setEvents] = useState<Event[]>([]);
   const [clubs, setClubs] = useState<Club[]>([]);
@@ -91,14 +93,14 @@ export default function DiscoverEvents() {
               clubId={event.clubId}
               club={club?.club ?? "Unknown Club"}
               rsvped={rsvpIds.includes(event._id)}
-              onToggleRSVP={toggleRSVP}
+              onToggleRSVP={() => toggleRSVP(event._id, user?.uid ?? "")}
               favoriteIds={favoriteIds}
               onToggleFavorite={toggleFavorite}
               title={event.title}
               location={event.location}
               time={event.time}
               description={event.description}
-              headcount={event.headcount + (rsvpIds.includes(event._id) ? 1 : 0)}
+              headcount={event.headcount}
               image={club?.image ?? "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"}
             />
           );
