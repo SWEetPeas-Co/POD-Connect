@@ -1,4 +1,3 @@
-// src/lib/favoritesContext.tsx
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { auth } from '@/src/lib/firebase';
 import { getClubs } from '@/src/lib/api';
@@ -13,7 +12,7 @@ const FavoritesContext = createContext<FavoritesContextType | undefined>(undefin
 export function FavoritesProvider({ children }: { children: ReactNode }) {
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
 
-  // ⭐ Load membership state from backend on startup
+  // Load membership state on startup
   useEffect(() => {
     async function loadFavorites() {
       const user = auth.currentUser;
@@ -22,7 +21,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
       const clubs = await getClubs();
       const joined = clubs
         .filter((c: { members:string[]; }) => c.members?.includes(user.uid))
-        .map((c: { _id: string; }) => c._id);
+        .map((c: { _id: string }) => c._id);
 
       setFavoriteIds(joined);
     }
@@ -30,7 +29,6 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     loadFavorites();
   }, []);
 
-  // ⭐ Toggle membership + update backend
   async function toggleFavorite(clubId: string, userId: string) {
     const isFavorite = favoriteIds.includes(clubId);
     const endpoint = isFavorite ? "leave" : "join";
@@ -42,7 +40,6 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ userId }),
       });
 
-      // Update local state AFTER backend succeeds
       setFavoriteIds(prev =>
         isFavorite
           ? prev.filter(id => id !== clubId)
