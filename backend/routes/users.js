@@ -103,6 +103,29 @@ userRoutes.route('/users/:firebaseUid').delete(async (request, response) => {
         { $pull: { members: uid } }
     );
 
+    // 4. Remove user from all club admins arrays
+    await db.collection('clubs').updateMany(
+    { admins: uid },
+    { $pull: { admins: uid } }
+    );
+
+    // 5. 
+    await db.collection('clubs').deleteMany(
+        { admins: { $size: 0 } }
+    );
+    // 5. Remove user from all event attendees arrays
+    await db.collection('events').updateMany(
+    { attendees: uid },
+    { $pull: { attendees: uid } }
+    );
+    // 6. Recalculate headcount for all events
+    await db.collection('events').updateMany(
+    {},
+    [
+        { $set: { headcount: { $size: "$attendees" } } }
+    ]
+    );
+
    
 
     response.json({ message: "User deleted and club data cleaned up." });
