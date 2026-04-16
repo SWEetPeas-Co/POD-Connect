@@ -30,15 +30,22 @@ clubRoutes.route('/clubs/:id').get(async (request, response) => {
 // 3 - Create One Club
 clubRoutes.route('/clubs').post(async (request, response) => {
     let db = database.getDb();
+    const userId = request.body.userId; // the creator's Firebase UID
+
+    if (!userId) {
+        return response.status(400).json({ error: "userId is required to create a club" });
+    }
+
     let mongoObject = {
         club: request.body.club,
-        tags: request.body.tags,
-        headcount: request.body.headcount,
+        tags: request.body.tags || [],
         description: request.body.description,
         image: request.body.image,
-        admins: request.body.admin || [],
-        members: request.body.members || []
-    }
+        admins: [userId],     // creator becomes admin
+        members: [userId],    // creator becomes member
+        headcount: 1          // because 1 member
+    };
+
     let data = await db.collection('clubs').insertOne(mongoObject);
     response.json(data);
 });
@@ -67,5 +74,43 @@ clubRoutes.route('/clubs/:id').delete(async (request, response) => {
     let data = await db.collection('clubs').deleteOne({_id: new ObjectId(request.params.id)});
     response.json(data);
 });
+//6 - Join a Club
+clubRoutes.route('/clubs/:id/join').post(async (req, res) => {
+  const db = database.getDb();
+  const userId = req.body.userId;
+
+  const updated = await db.collection('clubs').findOneAndUpdate(
+    { _id: new ObjectId(req.params.id) },
+    { $addToSet: { members: userId } },
+    { returnDocument: "after" }
+  );
+
+  // Recalculate headcount
+  await db.collection('clubs').updateOne(
+    { _id: new ObjectId(req.params.id) },
+    { $set: { headcount: updated.members.length } }
+  );
+
+  res.json(updated);
+});
+//7 - Leave a Club
+clubRoutes.route('/clubs/:id/leave').post(async (req, res) => {
+  const db = database.getDb();
+  const userId = req.body.userId;
+
+  const updated = await db.collection('clubs').findOneAndUpdate(
+    { _id: new ObjectId(req.params.id) },
+    { $pull: { members: userId } },
+    { returnDocument: "after" }
+  );
+
+  await db.collection('clubs').updateOne(
+    { _id: new ObjectId(req.params.id) },
+    { $set: { headcount: updated.members.length } }
+  );
+
+  res.json(updated);
+});
+
 
 module.exports = clubRoutes;

@@ -16,14 +16,17 @@ import { ThemedText } from "@/components/themed-text";
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
+import { auth } from "@/src/lib/firebase";
 
 type Club = {
-  id: number;
+  id: string;
   club: string;
   tags: string[];
   headcount: number;
   description: string;
   image: string;
+  members?: string[]; // List of user IDs who are members of the club
+  admins:string[]; // List of user IDs who are admins of the club
 };
 
 export default function FavClubs() {
@@ -36,9 +39,12 @@ export default function FavClubs() {
 
   const [clubs, setClubs] = useState<Club[]>([]);
   const { favoriteIds, toggleFavorite } = useFavorites();
+  const user = auth.currentUser;
+
   const favoriteClubs = clubs.filter((club) =>
-    favoriteIds.includes(club.id)
+    club.members?.includes(user?.uid ?? "")
   );
+
 
   useEffect(() => {
     async function fetchClubs() {
@@ -74,14 +80,15 @@ export default function FavClubs() {
           favoriteClubs.map((club) => (
             <DiscoverClubCard
               key={club.id}
-              id={club.id}
               title={club.club}
               tags={club.tags}
               headcount={club.headcount}
               image={club.image}
               description={club.description}
-              active={favoriteIds.includes(club.id)}
-              onToggle={() => toggleFavorite(club.id)}
+              id={club.id}
+              active={!!club.members?.includes(user?.uid ?? "")}
+              onToggle={() => toggleFavorite(club.id, user?.uid ?? "")}
+
             />
           ))
         )}

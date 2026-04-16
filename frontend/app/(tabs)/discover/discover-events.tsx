@@ -93,9 +93,9 @@ export default function DiscoverEvents() {
               clubId={event.clubId}
               club={club?.club ?? "Unknown Club"}
               rsvped={rsvpIds.includes(event._id)}
-              onToggleRSVP={() => toggleRSVP(event._id, user?.uid ?? "")}
+              onToggleRSVP={() => toggleRSVP(event._id, auth.currentUser?.uid ?? "")}
               favoriteIds={favoriteIds}
-              onToggleFavorite={toggleFavorite}
+              onToggleFavorite={() => toggleFavorite(event.clubId, auth.currentUser?.uid ?? "")}
               title={event.title}
               location={event.location}
               time={event.time}
