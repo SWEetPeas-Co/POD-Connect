@@ -1,4 +1,6 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
+import { auth } from "@/src/lib/firebase";
+import { getEvents } from "@/src/lib/api";
 
 type RsvpContextType = {
   rsvpIds: string[];
@@ -13,6 +15,23 @@ const RsvpContext = createContext<RsvpContextType>({
 export function RsvpProvider({ children }: { children: React.ReactNode }) {
   const [rsvpIds, setRsvpIds] = useState<string[]>([]);
 
+  // ⭐ Load RSVP state from backend on startup
+  useEffect(() => {
+    async function loadRsvps() {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const events = await getEvents();
+      const attending = events
+        .filter((e: { attendees: string[]; }) => e.attendees?.includes(user.uid))
+        .map((e: { _id: string; }) => e._id);
+
+      setRsvpIds(attending);
+    }
+
+    loadRsvps();
+  }, []);
+
   async function toggleRSVP(eventId: string, userId: string) {
     const isRsvped = rsvpIds.includes(eventId);
 
@@ -25,10 +44,9 @@ export function RsvpProvider({ children }: { children: React.ReactNode }) {
         body: JSON.stringify({ userId }),
       });
 
-      // Update local state AFTER backend succeeds
-      setRsvpIds((prev) =>
+      setRsvpIds(prev =>
         isRsvped
-          ? prev.filter((id) => id !== eventId)
+          ? prev.filter(id => id !== eventId)
           : [...prev, eventId]
       );
 
