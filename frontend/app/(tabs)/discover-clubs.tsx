@@ -17,7 +17,7 @@ import { ThemedText } from "@/components/themed-text";
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
-
+import { auth } from "@/src/lib/firebase";
 type Club = {
   _id: string;
   club: string;
@@ -25,6 +25,8 @@ type Club = {
   headcount: number;
   description: string;
   image: string;
+  admins: string[]; // List of user IDs who are admins of the club
+  members: string[]; // List of user IDs who are members of the club
 }
 
 export default function DiscoverClubs() {
@@ -117,11 +119,11 @@ export default function DiscoverClubs() {
                 id={club._id}
                 title={club.club}
                 tags={club.tags}
-                headcount={club.headcount + (favoriteIds.includes(club._id) ? 1 : 0)}
+                headcount={club.headcount}
                 image={club.image}
                 description={club.description}
-                active={favoriteIds.includes(club._id)}
-                onToggle={() => toggleFavorite(club._id)}
+                active={!!favoriteIds.includes(club._id)}
+                onToggle={() => toggleFavorite(club._id, auth.currentUser?.uid ?? "")}
             />
         ))}
       </ScrollView>
