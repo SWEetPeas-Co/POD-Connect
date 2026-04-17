@@ -50,7 +50,8 @@ userRoutes.route('/users').post(async (request, response) => {
         firebaseUid: request.body.firebaseUid,
         email: request.body.email,
         createdAt: request.body.createdAt,
-        name: request.body.name
+        name: request.body.name,
+        profileImage: request.body.profileImage
     };
 
     let data = await db.collection('users').insertOne(mongoObject);
@@ -59,18 +60,23 @@ userRoutes.route('/users').post(async (request, response) => {
 
 // 4 - Update One
 userRoutes.route('/users/:firebaseUid').put(async (request, response) => {
-    let db = database.getDb();
-    let mongoObject = {
-        $set: {
-            email: request.body.email,
-            name: request.body.name
-        }
-    };
-    let data = await db.collection('users').updateOne(
-        { firebaseUid: request.params.firebaseUid },
-        mongoObject
-    );
-    response.json(data);
+    try {
+        let db = database.getDb();
+        
+        // This spreads only the fields you send in the request body
+        let updateData = { $set: request.body };
+
+        let data = await db.collection('users').updateOne(
+            { firebaseUid: request.params.firebaseUid },
+            updateData
+        );
+        
+        console.log(`Update successful for UID: ${request.params.firebaseUid}`);
+        response.json(data);
+    } catch (err) {
+        console.error("Update error:", err);
+        response.status(500).json({ error: err.message });
+    }
 });
 
 // 5 - Delete One User + Clean Up Clubs
