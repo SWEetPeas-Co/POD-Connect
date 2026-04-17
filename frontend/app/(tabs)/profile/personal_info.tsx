@@ -15,12 +15,14 @@ import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 import { auth } from '../../../src/lib/firebase';
 import { deleteAccount } from "../../../src/lib/auth";
+import { uploadProfileImage } from "@/src/lib/uploadProfileImage";
 
 type UserProfile = {
   firebaseUid: string;
   email: string;
   createdAt: string;
   name: string;
+  profileImage?: string;
 };
 
 
@@ -33,10 +35,17 @@ export default function PersonalInfo() {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [personalInfo, setPersonalInfo] = useState<UserProfile | null>(null);
   const [deleteVisible, setDeleteVisible] = useState(false);
-  const handlePickImage = async () => {
+
+  useEffect(() => {
+    if (personalInfo?.profileImage) {
+      setProfileImage(personalInfo.profileImage);
+    }
+  }, [personalInfo]);
+  
+const handlePickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Permission to access photos is required.');
+    if (status !== "granted") {
+      alert("Permission to access photos is required.");
       return;
     }
 
@@ -47,8 +56,42 @@ export default function PersonalInfo() {
       quality: 0.7,
     });
 
-    if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
+    if (result.canceled || !result.assets?.length) return;
+
+    const localUri = result.assets[0].uri;
+
+    try {
+      // 1. Upload to Firebase Storage
+      const downloadUrl = await uploadProfileImage(localUri, user!.uid);
+      if (!downloadUrl) throw new Error("Cloud upload failed");
+
+      // 2. Update MongoDB
+      // Ensure the keys here (name, email, profileImage) match your UserRoutes.js
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/${user!.uid}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: personalInfo?.name || "",
+          email: email,
+          profileImage: downloadUrl, // This key must match your backend $set logic
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`MongoDB update failed: ${errorText}`);
+      }
+
+      // 3. Update UI and Local State ONLY after DB success
+      setProfileImage(downloadUrl);
+      setPersonalInfo(prev =>
+        prev ? { ...prev, profileImage: downloadUrl } : prev
+      );
+
+    } catch (err) {
+      console.error("Upload/Update process failed:", err);
     }
   };
 
@@ -93,16 +136,17 @@ export default function PersonalInfo() {
       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
         <ThemedView style={[styles.infoContainer, { backgroundColor: theme.eventCardBackground, shadowColor: theme.eventCardDropShadow, shadowRadius: 1, shadowOffset: { width: 3, height: 4 } }]}>
 
-          {/* Profile Picture Section */}
+          {/* Profile Picture Section - FIXED LOGIC */}
           <ThemedView style={styles.profilePicSection}>
             <ThemedView style={styles.avatarWrapper}>
-              {profileImage ? (
-                <Image source={{ uri: profileImage }} style={styles.avatar} />
-              ) : (
-                <ThemedView style={[styles.avatarPlaceholder, { backgroundColor: theme.eventCardDropShadow }]}>
-                  <ThemedText style={styles.avatarInitials}>PC</ThemedText>
-                </ThemedView>
-              )}
+              <Image
+                source={
+                  profileImage
+                    ? { uri: profileImage }
+                    : require('@/assets/images/default-profile.png')
+                }
+                style={styles.avatar}
+              />
               <Pressable
                 style={[styles.cameraButton, { backgroundColor: theme.eventCardBackground }]}
                 onPress={handlePickImage}
@@ -345,142 +389,3 @@ function DeleteAccountModal({
     </Modal>
   );
 }
-
-
-// import { StyleSheet, ScrollView, Pressable } from "react-native";
-// import { useRouter } from "expo-router";
-// import { ArrowLeft } from "lucide-react-native";
-
-// import Header from "@/components/header";
-// import { ThemedView } from "@/components/themed-view";
-// import { ThemedText } from "@/components/themed-text";
-// import { Colors } from '@/constants/theme';
-// import { useColorScheme } from '@/hooks/use-color-scheme';
-
-// import ColorModeSwitcher from "@/components/ui/color-switch-button";
-// import { useThemeContext } from "@/src/lib/themeContext/theme-context";
-
-// import { Camera } from "lucide-react-native";
-// import { Image } from "react-native";
-
-// export default function PersonalInfo() {
-//   //const colorScheme = useColorScheme();
-//   //const theme = Colors[colorScheme ?? 'light'];
-//   const { mode } = useThemeContext();
-//   const theme = Colors[mode];
-  
-//   const router = useRouter();
-
-
-//   return (
-//     <ThemedView style={[styles.mainContainer, { backgroundColor: theme.background } ]}>
-        
-//         <Header title="PROFILE" />
-        
-//         <ThemedView style={styles.backContainer}>
-//             <Pressable style={styles.backButton} onPress={() => router.push('../profile')} >
-//                 <ArrowLeft size={20} color={theme.eventCardText} />
-//                 <ThemedText type="eventSubtitle">Main Menu</ThemedText>
-//             </Pressable>
-//         </ThemedView>
-
-//       <ScrollView style={styles.eventContainer} contentContainerStyle={styles.eventContent}>
-//         <ThemedView style={[styles.infoContainer, {backgroundColor: theme.eventCardBackground, shadowColor: theme.eventCardDropShadow, shadowRadius: 1,shadowOffset: { width: 3, height: 4 },},]}>
-
-      
-//             <ThemedText type="eventTitle">Personal Info</ThemedText>
-//             <ThemedText> For personal info settings like passwords </ThemedText>
-
-//             <ThemedView style={styles.info}>
-//               <ThemedView style={styles.leftInfo}>
-//                 <ThemedText type="eventTitle">Name:</ThemedText>
-//                 <ThemedText type="eventTitle">Email:</ThemedText>
-//                 <ThemedText type="eventTitle">Username:</ThemedText>
-//                 <ThemedText type="eventTitle">Password:</ThemedText>
-//                 <ThemedText type="eventTitle">School ID:</ThemedText>
-//               </ThemedView>
-//               <ThemedView style={styles.rightInfo}>
-//                 <ThemedText type="eventTitle">Name</ThemedText>
-//                 <ThemedText type="eventTitle">Email</ThemedText>
-//                 <ThemedText type="eventTitle">Username</ThemedText>
-//                 <ThemedText type="eventTitle">Password</ThemedText>
-//                 <ThemedText type="eventTitle">School ID</ThemedText>
-//               </ThemedView>
-
-//             </ThemedView>
-        
-//         </ThemedView>
-//         <ThemedView style={[styles.infoContainer, {backgroundColor: theme.eventCardBackground, shadowColor: theme.eventCardDropShadow, shadowRadius: 1,shadowOffset: { width: 3, height: 4 },},]}>
-//             <ThemedText type="eventTitle">Edit Personal Info</ThemedText>
-//         </ThemedView>
-//         <ThemedView style={[ styles.dashedLine, { borderColor: theme.eventCardDropShadow, backgroundColor: 'transparent' } ]} />
-//         <ThemedView style={[styles.infoContainer, {backgroundColor: theme.eventCardBackground, shadowColor: theme.eventCardDropShadow, shadowRadius: 1,shadowOffset: { width: 3, height: 4 },},]}>
-//             <ThemedText type="eventTitle">Delete Account</ThemedText>
-//         </ThemedView>
-//       </ScrollView>
-
-//     </ThemedView>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   mainContainer: {
-//     flex: 1,
-//     paddingTop: 85,
-//     gap: 15,
-//   },
-//   backContainer: {
-//     width: '100%',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     gap: 15,
-//     paddingHorizontal: 50,
-//     backgroundColor: 'transparent',
-//   },
-//   eventContainer: {
-//     flex: 1,
-//     width: '100%',
-//   },
-//   eventContent: {
-//     alignItems: 'center',
-//     gap: 30,
-//     paddingHorizontal: 50,
-//     paddingBottom: 100,
-//   },
-//   infoContainer: {
-//     width: '100%',
-//     borderRadius: 15,
-//     padding: 20,
-//     gap: 10,
-
-//     shadowRadius: 1,
-//     shadowOffset: { width: 3, height: 4 },
-//   },
-//   backButton: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//     gap: 8,
-//     alignSelf: "flex-start",
-//   },
-//   info: {
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     alignItems: "center",
-//   },
-//   leftInfo: {
-//     alignItems: "flex-end",
-//     minWidth: '10%',
-//     gap: 10,
-//   },
-//   rightInfo: {
-//     paddingLeft: 30,
-//     flex: 1,
-//     gap: 10,
-//   },
-//   dashedLine: {
-//     width: '100%',
-//     borderBottomWidth: 4,
-//     borderStyle: 'dashed',
-//     margin: 15,
-//   },
-// });
