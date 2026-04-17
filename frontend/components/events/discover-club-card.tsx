@@ -7,6 +7,7 @@ import { ThemedText } from '@/components/themed-text';
 import Tag from '../ui/tag';
 import { Users, ChevronDown } from "lucide-react-native";
 import StarButton from '../ui/star-button';
+import defaultClubImage from '@/assets/images/sweetpeacologo.png';
 
 import { Image } from "react-native";
 // <ThemedView style={[styles.image, {backgroundColor: theme.searchBarBackground}]} />
@@ -61,7 +62,14 @@ export default function DiscoverClubCard({
 
       <ThemedView style={styles.top}>
 
-        <Image source={{ uri: image }} style={styles.image} />
+        <Image
+          source={
+            image && image.trim() !== ''
+              ? { uri: image }
+              : defaultClubImage
+          }
+          style={styles.image}
+        />
 
         <ThemedView style={styles.text}>
           <ThemedText type='eventTitle'>{title}</ThemedText>

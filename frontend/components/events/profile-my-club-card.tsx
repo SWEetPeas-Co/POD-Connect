@@ -9,6 +9,7 @@ import { Colors } from '@/constants/theme';
 import { useThemeContext } from '@/src/lib/themeContext/theme-context';
 import AdminTag from '../ui/admin-tag';
 import EventCard from "../events/discover-event-card";
+import defaultClubImage from '@/assets/images/sweetpeacologo.png';
 
 type Member = {
   id: number;
@@ -91,7 +92,14 @@ export default function ProfileMyClubCard({
 
         <ThemedView style={styles.top}>
 
-          <Image source={{ uri: image }} style={styles.image} />
+          <Image
+            source={
+              image && image.trim() !== ''
+                ? { uri: image }
+                : defaultClubImage
+            }
+            style={styles.image}
+          />
 
           <ThemedView style={styles.text}>
             <ThemedView style={styles.titleRow}>

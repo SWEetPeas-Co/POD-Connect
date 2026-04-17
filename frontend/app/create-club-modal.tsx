@@ -108,7 +108,7 @@ export default function CreateClubModal({
           return;
         }
       } else if (!photoUri) {
-        imageUrl = '';
+        imageUrl = club?.image || '';
       } else {
         // already a remote http URL (editing, image unchanged)
         imageUrl = photoUri;
