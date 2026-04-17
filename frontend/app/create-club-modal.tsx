@@ -7,7 +7,7 @@ import { ThemedView } from "@/components/themed-view";
 import { Colors } from '@/constants/theme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 import AuthContext from '@/src/lib/authContext';
-import { uploadClubImage } from '@/src/lib/uploadImage';
+import { uploadClubImage } from '@/src/lib/uploadClubImage';
 
 type Club = {
   _id: string;

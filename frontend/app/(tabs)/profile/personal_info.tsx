@@ -15,12 +15,14 @@ import { useThemeContext } from "@/src/lib/themeContext/theme-context";
 
 import { auth } from '../../../src/lib/firebase';
 import { deleteAccount } from "../../../src/lib/auth";
+import { uploadProfileImage } from "@/src/lib/uploadProfileImage";
 
 type UserProfile = {
   firebaseUid: string;
   email: string;
   createdAt: string;
   name: string;
+  profileImage?: string;
 };
 
 
@@ -33,10 +35,17 @@ export default function PersonalInfo() {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [personalInfo, setPersonalInfo] = useState<UserProfile | null>(null);
   const [deleteVisible, setDeleteVisible] = useState(false);
-  const handlePickImage = async () => {
+
+  useEffect(() => {
+    if (personalInfo?.profileImage) {
+      setProfileImage(personalInfo.profileImage);
+    }
+  }, [personalInfo]);
+  
+const handlePickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Permission to access photos is required.');
+    if (status !== "granted") {
+      alert("Permission to access photos is required.");
       return;
     }
 
@@ -47,8 +56,42 @@ export default function PersonalInfo() {
       quality: 0.7,
     });
 
-    if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
+    if (result.canceled || !result.assets?.length) return;
+
+    const localUri = result.assets[0].uri;
+
+    try {
+      // 1. Upload to Firebase Storage
+      const downloadUrl = await uploadProfileImage(localUri, user!.uid);
+      if (!downloadUrl) throw new Error("Cloud upload failed");
+
+      // 2. Update MongoDB
+      // Ensure the keys here (name, email, profileImage) match your UserRoutes.js
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/${user!.uid}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: personalInfo?.name || "",
+          email: email,
+          profileImage: downloadUrl, // This key must match your backend $set logic
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`MongoDB update failed: ${errorText}`);
+      }
+
+      // 3. Update UI and Local State ONLY after DB success
+      setProfileImage(downloadUrl);
+      setPersonalInfo(prev =>
+        prev ? { ...prev, profileImage: downloadUrl } : prev
+      );
+
+    } catch (err) {
+      console.error("Upload/Update process failed:", err);
     }
   };
 
