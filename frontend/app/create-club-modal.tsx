@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
-import { Modal, StyleSheet, TextInput, Pressable, ScrollView } from "react-native";
-import { X } from "lucide-react-native";
+import { useState, useEffect, useContext } from "react";
+import { Modal, StyleSheet, TextInput, Pressable, ScrollView, Image, Alert, ActivityIndicator } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
+import { X, Camera, Pencil } from "lucide-react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Colors } from '@/constants/theme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
+import AuthContext from '@/src/lib/authContext';
+import { uploadClubImage } from '@/src/lib/uploadImage';
 
 type Club = {
   _id: string;
@@ -13,6 +16,8 @@ type Club = {
   headcount: number;
   description: string;
   image: string;
+  admins: string[];
+  members: string[];
 };
 
 export default function CreateClubModal({
@@ -26,6 +31,7 @@ export default function CreateClubModal({
 }) {
   const { mode } = useThemeContext();
   const theme = Colors[mode];
+  const { currentUser } = useContext(AuthContext);
 
   const isEditing = club !== null;
 
@@ -33,20 +39,44 @@ export default function CreateClubModal({
   const [description, setDescription] = useState('');
   const [tagInput, setTagInput] = useState('');
   const [tags, setTags] = useState<string[]>([]);
+  const [photoUri, setPhotoUri] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  // Pre-fill when editing
   useEffect(() => {
-    if (club) {
-      setClubName(club.club);
-      setDescription(club.description);
-      setTags(club.tags);
-    } else {
-      setClubName('');
-      setDescription('');
-      setTags([]);
-      setTagInput('');
+    if (visible) {
+      if (club) {
+        setClubName(club.club);
+        setDescription(club.description);
+        setTags(club.tags);
+        setPhotoUri(club.image || null);
+      } else {
+        setClubName('');
+        setDescription('');
+        setTags([]);
+        setTagInput('');
+        setPhotoUri(null);
+      }
     }
   }, [club, visible]);
+
+  const handlePickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission needed", "Camera roll access is required to upload photos.");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+
+    if (!result.canceled && result.assets.length > 0) {
+      setPhotoUri(result.assets[0].uri);
+    }
+  };
 
   const handleAddTag = () => {
     const trimmed = tagInput.trim();
@@ -60,27 +90,75 @@ export default function CreateClubModal({
     setTags(prev => prev.filter(t => t !== tag));
   };
 
+  const isLocalUri = (uri: string) =>
+    uri.startsWith('file://') || uri.startsWith('blob:') || uri.startsWith('content://');
+
   const handleSubmit = async () => {
-      if (!clubName.trim()) return;
-      
-      try {
-          if (isEditing) {
-              await fetch(`${process.env.EXPO_PUBLIC_API_URL}/clubs/${club._id}`, {
-                  method: "PUT",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ club: clubName, description, tags }),
-              });
-          } else {
-              await fetch(`${process.env.EXPO_PUBLIC_API_URL}/clubs`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ club: clubName, description, tags }),
-              });
-          }
-          onClose();
-      } catch (err) {
-          console.error("Failed to save club:", err);
+    if (!clubName.trim()) return;
+    setLoading(true);
+
+    try {
+      let imageUrl = club?.image || '';
+
+      if (photoUri && isLocalUri(photoUri)) {
+        imageUrl = await uploadClubImage(photoUri, clubName);
+        if (!imageUrl) {
+          Alert.alert("Error", "Failed to upload image.");
+          setLoading(false);
+          return;
+        }
+      } else if (!photoUri) {
+        imageUrl = '';
+      } else {
+        // already a remote http URL (editing, image unchanged)
+        imageUrl = photoUri;
       }
+
+      if (isEditing) {
+        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/clubs/${club._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            club: clubName,
+            description,
+            tags,
+            image: imageUrl,
+            headcount: Number(club?.headcount) || 1,
+            admins: (club?.admins || []).filter(id => id !== null),
+            members: (club?.members || []).filter(id => id !== null),
+          }),
+        });
+        if (response.ok) {
+          onClose();
+        } else {
+          const errorMsg = await response.text();
+          Alert.alert("Error", `Server rejected request: ${errorMsg}`);
+        }
+      } else {
+        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/clubs`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            club: clubName,
+            description,
+            tags,
+            image: imageUrl,
+            userId: currentUser?.uid,
+          }),
+        });
+        if (response.ok) {
+          onClose();
+        } else {
+          const errorMsg = await response.text();
+          Alert.alert("Error", `Server rejected request: ${errorMsg}`);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to save club:", err);
+      Alert.alert("Network Error", "Could not connect to server.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -90,12 +168,43 @@ export default function CreateClubModal({
 
           <ThemedView style={styles.cardHeader}>
             <ThemedText type="eventTitle">{isEditing ? 'Edit Club' : 'Create Club'}</ThemedText>
-            <Pressable onPress={onClose}>
+            <Pressable onPress={onClose} disabled={loading}>
               <X size={20} color={theme.eventCardText} />
             </Pressable>
           </ThemedView>
 
           <ScrollView showsVerticalScrollIndicator={false}>
+
+            {/* Image Picker */}
+            <ThemedView style={styles.photoRow}>
+              <Pressable onPress={handlePickImage} style={styles.thumbnailWrapper}>
+                {photoUri ? (
+                  <>
+                    <Image source={{ uri: photoUri }} style={styles.thumbnail} />
+                    <ThemedView style={[styles.editBadge, { backgroundColor: theme.eventCardDropShadow }]}>
+                      <Pencil size={11} color={theme.background} />
+                    </ThemedView>
+                  </>
+                ) : (
+                  <ThemedView style={[styles.thumbnailPlaceholder, { borderColor: theme.eventCardDropShadow }]}>
+                    <Camera size={24} color={theme.eventCardDropShadow} />
+                  </ThemedView>
+                )}
+              </Pressable>
+              <ThemedView style={styles.photoMeta}>
+                <ThemedText style={styles.photoLabel}>Club Photo</ThemedText>
+                <Pressable onPress={handlePickImage}>
+                  <ThemedText style={[styles.photoAction, { color: theme.eventCardDropShadow }]}>
+                    {photoUri ? 'Change photo' : 'Upload photo'}
+                  </ThemedText>
+                </Pressable>
+                {photoUri && (
+                  <Pressable onPress={() => setPhotoUri(null)}>
+                    <ThemedText style={styles.photoRemove}>Remove</ThemedText>
+                  </Pressable>
+                )}
+              </ThemedView>
+            </ThemedView>
 
             <ThemedText style={styles.label}>Club Name</ThemedText>
             <TextInput
@@ -149,12 +258,17 @@ export default function CreateClubModal({
             </ThemedView>
 
             <Pressable
-              style={[styles.submitButton, { backgroundColor: theme.eventCardDropShadow }]}
+              style={[styles.submitButton, { backgroundColor: theme.eventCardDropShadow, opacity: loading ? 0.7 : 1 }]}
               onPress={handleSubmit}
+              disabled={loading}
             >
-              <ThemedText style={{ color: theme.background, fontWeight: '600' }}>
-                {isEditing ? 'Save Changes' : 'Create Club'}
-              </ThemedText>
+              {loading ? (
+                <ActivityIndicator color={theme.background} />
+              ) : (
+                <ThemedText style={{ color: theme.background, fontWeight: '600' }}>
+                  {isEditing ? 'Save Changes' : 'Create Club'}
+                </ThemedText>
+              )}
             </Pressable>
 
           </ScrollView>
@@ -182,6 +296,60 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     backgroundColor: 'transparent',
+  },
+  photoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    marginBottom: 8,
+    backgroundColor: 'transparent',
+  },
+  thumbnailWrapper: {
+    width: 72,
+    height: 72,
+    borderRadius: 16,
+    position: 'relative',
+  },
+  thumbnail: {
+    width: 72,
+    height: 72,
+    borderRadius: 16,
+  },
+  thumbnailPlaceholder: {
+    width: 72,
+    height: 72,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderStyle: 'dashed',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  editBadge: {
+    position: 'absolute',
+    bottom: -4,
+    right: -4,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  photoMeta: {
+    flex: 1,
+    gap: 4,
+    backgroundColor: 'transparent',
+  },
+  photoLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  photoAction: {
+    fontSize: 13,
+  },
+  photoRemove: {
+    fontSize: 13,
+    color: '#e05c5c',
   },
   label: {
     fontSize: 14,
