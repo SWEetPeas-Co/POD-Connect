@@ -10,11 +10,13 @@ import { useThemeContext } from '@/src/lib/themeContext/theme-context';
 import AdminTag from '../ui/admin-tag';
 import EventCard from "../events/discover-event-card";
 import defaultClubImage from '@/assets/images/sweetpeacologo.png';
+import { getUsersByIds } from "@/src/lib/api";
+import defaultAvatar from '@/assets/images/default-profile.png';
 
 type Member = {
-  id: number;
+  firebaseUid: string;
   name: string;
-  avatar?: string;
+  profileImage?: string;
 };
 
 type Event = {
@@ -36,8 +38,8 @@ type ProfileMyClubCardProps = {
   tags: string[];
   headcount: number;
   image: string;
-  admins?: Member[];
-  members?: Member[];
+  admins?: string[];
+  members?: string[];
   onEdit: () => void;
   onAddEvent: () => void;
   description: string;
@@ -62,6 +64,7 @@ export default function ProfileMyClubCard({
   const [membersVisible, setMembersVisible] = useState(false);
   const [eventsVisible, setEventsVisible] = useState(false);
   const clubEvents = (events ?? []).filter(event => event.clubId === id);
+  const [fetchedMembers, setFetchedMembers] = useState<Member[]>([]);
 
   const [expanded, setExpanded] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
@@ -104,7 +107,11 @@ export default function ProfileMyClubCard({
           <ThemedView style={styles.text}>
             <ThemedView style={styles.titleRow}>
               <ThemedText type='eventTitle'>{title}</ThemedText>
-              <Pressable style={styles.headcountButton} onPress={() => setMembersVisible(true)}>
+              <Pressable style={styles.headcountButton} onPress={async () => {
+                  setMembersVisible(true);
+                  const users = await getUsersByIds(members as string[]);
+                  setFetchedMembers(users);
+                }}>
                 <Users size={13} color={theme.eventCardIcon} />
                 <ThemedText type='eventSubtitle'> {headcount}</ThemedText>
               </Pressable>
@@ -185,22 +192,18 @@ export default function ProfileMyClubCard({
               </Pressable>
             </ThemedView>
 
-            {members.length === 0 ? (
+            {fetchedMembers.length === 0 ? (
               <ThemedText type='eventSubtitle'>No members yet.</ThemedText>
             ) : (
               <FlatList
-                data={members}
-                keyExtractor={(item) => item.id.toString()}
+                data={fetchedMembers}
+                keyExtractor={(item) => item.firebaseUid}
                 renderItem={({ item }) => (
                   <ThemedView style={styles.memberRow}>
-                    {item.avatar ? (
-                      <Image source={{ uri: item.avatar }} style={styles.memberAvatar} />
+                    {item.profileImage ? (
+                      <Image source={{ uri: item.profileImage }} style={styles.memberAvatar} />
                     ) : (
-                      <ThemedView style={[styles.memberAvatarPlaceholder, { backgroundColor: theme.eventCardDropShadow }]}>
-                        <ThemedText style={styles.memberInitial}>
-                          {item.name.charAt(0).toUpperCase()}
-                        </ThemedText>
-                      </ThemedView>
+                      <Image source={defaultAvatar} style={styles.memberAvatar} />
                     )}
                     <ThemedText type='eventSubtitle'>{item.name}</ThemedText>
                   </ThemedView>
