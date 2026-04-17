@@ -14,6 +14,7 @@ import ProfileMyClubCard from "@/components/events/profile-my-club-card";
 import CreateClubModal from "@/app/create-club-modal";
 import CreateEventModal from "@/app/create-event-modal";
 import { getClubs } from '@/src/lib/api';
+import { auth } from "@/src/lib/firebase";
 
 type Club = {
   id: number;
@@ -22,6 +23,8 @@ type Club = {
   headcount: number;
   description: string;
   image: string;
+  admins: string[]; // List of user IDs who are admins of the club
+  members: string[]; // List of user IDs who are members of the club
 };
 
 export default function MyClubs() {
@@ -45,14 +48,20 @@ export default function MyClubs() {
     async function fetchClubs() {
       try {
         const data = await getClubs();
-        // TODO: filter to only clubs owned by this user once backend supports it
-        setClubs(data);
+        const user = auth.currentUser;
+
+        const owned = data.filter((club: Club) =>
+          club.admins?.includes(user?.uid ?? "")
+        );
+
+        setClubs(owned);
       } catch (err) {
         console.error("Fetch error:", err);
       }
     }
     fetchClubs();
   }, []);
+
 
   const handleEdit = (club: Club) => {
     setSelectedClub(club);
