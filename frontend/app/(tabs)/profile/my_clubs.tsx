@@ -102,6 +102,7 @@ export default function MyClubs() {
               description={club.description}
               onEdit={() => handleEdit(club)}
               onAddEvent={() => handleAddEvent(club)}
+              members={club.members}
             />
           ))
         )}
