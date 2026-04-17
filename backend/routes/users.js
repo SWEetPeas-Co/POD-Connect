@@ -26,6 +26,36 @@ userRoutes.route('/users').get(async (request, response) => {
     }
 });
 
+//for display members
+userRoutes.route('/users/by-ids').get(async (req, res) => {
+  try {
+    const db = database.getDb();
+
+    const uids = (req.query.uids || "")
+      .split(",")
+      .map(u => u.trim())
+      .filter(u => u); // removes null/empty
+
+    console.log("UIDs received:", uids); 
+
+    if (uids.length === 0) {
+      return res.json([]);
+    }
+
+    const users = await db.collection('users')
+      .find(
+        { firebaseUid: { $in: uids } },
+        { projection: { firebaseUid: 1, name: 1, profileImage: 1, _id: 0 } }
+      )
+      .toArray();
+
+    res.json(users);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // 2 - Retrieve One
 userRoutes.route('/users/:firebaseUid').get(async (request, response) => {
     let db = database.getDb();
