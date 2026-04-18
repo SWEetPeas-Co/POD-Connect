@@ -17,7 +17,7 @@ import { getClubs } from '@/src/lib/api';
 import { auth } from "@/src/lib/firebase";
 
 type Club = {
-  id: number;
+  id: string;
   club: string;
   tags: string[];
   headcount: number;
@@ -50,9 +50,9 @@ export default function MyClubs() {
         const data = await getClubs();
         const user = auth.currentUser;
 
-        const owned = data.filter((club: Club) =>
-          club.admins?.includes(user?.uid ?? "")
-        );
+        const owned = data
+        .map((club: any) => ({ ...club, id: club._id.toString() }))
+        .filter((club: Club) => club.admins?.includes(user?.uid ?? ""));
 
         setClubs(owned);
       } catch (err) {

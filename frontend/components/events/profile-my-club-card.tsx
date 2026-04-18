@@ -10,8 +10,8 @@ import { useThemeContext } from '@/src/lib/themeContext/theme-context';
 import AdminTag from '../ui/admin-tag';
 import EventCard from "../events/discover-event-card";
 import defaultClubImage from '@/assets/images/sweetpeacologo.png';
-import { getUsersByIds } from "@/src/lib/api";
 import defaultAvatar from '@/assets/images/default-profile.png';
+import { getUsersByIds, getEvents } from "@/src/lib/api";
 
 type Member = {
   firebaseUid: string;
@@ -63,8 +63,8 @@ export default function ProfileMyClubCard({
   const theme = Colors[mode];
   const [membersVisible, setMembersVisible] = useState(false);
   const [eventsVisible, setEventsVisible] = useState(false);
-  const clubEvents = (events ?? []).filter(event => event.clubId === id);
   const [fetchedMembers, setFetchedMembers] = useState<Member[]>([]);
+  const [fetchedEvents, setFetchedEvents] = useState<any[]>([]);
 
   const [expanded, setExpanded] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
@@ -163,7 +163,12 @@ export default function ProfileMyClubCard({
 
             <Pressable
               style={[styles.eventsButton, { borderColor: theme.eventCardDropShadow }]}
-              onPress={() => setEventsVisible(true)}
+              onPress={async () => {
+                const allEvents = await getEvents();
+                const clubEvents = allEvents.filter((e: any) => e.clubId === String(id));
+                setFetchedEvents(clubEvents);
+                setEventsVisible(true);
+              }}
             >
               <ThemedText type="eventSubtitle">View Events</ThemedText>
             </Pressable>
@@ -224,28 +229,30 @@ export default function ProfileMyClubCard({
           <ThemedView style={[styles.membersCard, { backgroundColor: theme.eventCardBackground }]}>
 
             <ThemedView style={styles.membersHeader}>
-              <ThemedText type='eventTitle'>Events ({clubEvents.length})</ThemedText>
+              <ThemedText type='eventTitle'>Events ({fetchedEvents.length})</ThemedText>
 
               <Pressable onPress={() => setEventsVisible(false)}>
                 <X size={20} color={theme.eventCardText} />
               </Pressable>
             </ThemedView>
 
-            {clubEvents.length === 0 ? (
+            {fetchedEvents.length === 0 ? (
               <ThemedText type='eventSubtitle'>No events yet.</ThemedText>
             ) : (
               <FlatList
-                data={clubEvents}
-                keyExtractor={(item) => item.id.toString()}
+                data={fetchedEvents}
+                keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
-                  <EventCard
-                    {...item}
-                    id={String(item.id)}
-                    clubId={String(item.clubId)}
-                    onToggleRSVP={() => {}}
-                    favoriteIds={[]}
-                    onToggleFavorite={() => {}}
-                  />
+                  <ThemedView style={[styles.memberRow, { justifyContent: 'space-between' }]}>
+                    <ThemedView style={{ flex: 1, gap: 4, backgroundColor: 'transparent' }}>
+                      <ThemedText type='eventTitle'>{item.title}</ThemedText>
+                      <ThemedText type='eventSubtitle'>{item.location}  ·  {item.time}</ThemedText>
+                    </ThemedView>
+                    <ThemedView style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: 'transparent' }}>
+                      <Users size={13} color={theme.eventCardIcon} />
+                      <ThemedText type='eventSubtitle'>{item.headcount}</ThemedText>
+                    </ThemedView>
+                  </ThemedView>
                 )}
                 ItemSeparatorComponent={() => (
                   <ThemedView style={[styles.separator, { backgroundColor: theme.eventCardDropShadow }]} />
