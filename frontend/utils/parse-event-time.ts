@@ -1,24 +1,31 @@
-// utils/parseEventTime.ts
-export function parseEventTime(timeStr: string): Date {
-  // Example input: "Fri, 09/08, 6:00 pm"
-  const [weekday, datePart, timePart] = timeStr.split(", ").map(s => s.trim()); 
-  // datePart = "09/08", timePart = "6:00 pm"
+export function parseEventTime(timeStr: string | undefined | null): Date {
+  // If missing, invalid, or not a string → return a fallback date
+  if (!timeStr || typeof timeStr !== "string" || !timeStr.includes(",")) {
+    return new Date(0); // or new Date(), or null if you prefer
+  }
 
-  const [monthStr, dayStr] = datePart.split("/"); // ["09","08"]
-  const month = parseInt(monthStr, 10) - 1; // JS months 0-indexed
-  const day = parseInt(dayStr, 10);
+  try {
+    const [weekday, datePart, timePart] = timeStr.split(", ").map(s => s.trim());
 
-  let [hoursStr, minutesStrPart] = timePart.split(":"); // ["6", "00 pm"]
-  let [minutesStr, ampm] = minutesStrPart.split(" "); // ["00","pm"]
+    if (!datePart || !timePart) return new Date(0);
 
-  let hours = parseInt(hoursStr, 10);
-  const minutes = parseInt(minutesStr, 10);
-  if (ampm.toLowerCase() === "pm" && hours !== 12) hours += 12;
-  if (ampm.toLowerCase() === "am" && hours === 12) hours = 0;
+    const [monthStr, dayStr] = datePart.split("/");
+    const month = parseInt(monthStr, 10) - 1;
+    const day = parseInt(dayStr, 10);
 
-  // Use current year
-  const now = new Date();
-  const year = now.getFullYear();
+    let [hoursStr, minutesStrPart] = timePart.split(":");
+    let [minutesStr, ampm] = minutesStrPart.split(" ");
 
-  return new Date(year, month, day, hours, minutes);
+    let hours = parseInt(hoursStr, 10);
+    const minutes = parseInt(minutesStr, 10);
+
+    if (ampm.toLowerCase() === "pm" && hours !== 12) hours += 12;
+    if (ampm.toLowerCase() === "am" && hours === 12) hours = 0;
+
+    const year = new Date().getFullYear();
+    return new Date(year, month, day, hours, minutes);
+  } catch (err) {
+    console.error("parseEventTime failed:", err);
+    return new Date(0);
+  }
 }
