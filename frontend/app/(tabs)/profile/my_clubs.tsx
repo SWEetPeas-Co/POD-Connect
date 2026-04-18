@@ -121,10 +121,15 @@ export default function MyClubs() {
         onClose={() => setIsVisible(false)}
         club={selectedClub}
       />
-      <CreateEventModal
-        visible={addEventVisible}
-        onClose={() => setAddEventVisible(false)}
-      />
+      {addEventClub && (
+        <CreateEventModal
+          visible={addEventVisible}
+          onClose={() => setAddEventVisible(false)}
+          clubId={addEventClub.id}
+          clubImage={addEventClub.image}
+        />
+      )}
+
 
     </ThemedView>
   );
