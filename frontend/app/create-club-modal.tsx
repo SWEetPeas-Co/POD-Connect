@@ -241,7 +241,7 @@ export default function CreateClubModal({
                 style={[styles.addTagButton, { backgroundColor: theme.eventCardDropShadow }]}
                 onPress={handleAddTag}
               >
-                <ThemedText style={{ color: theme.background }}>Add</ThemedText>
+                <ThemedText style={{ color: theme.logOutButtonTextDefult }}>Add</ThemedText>
               </Pressable>
             </ThemedView>
 
@@ -265,7 +265,7 @@ export default function CreateClubModal({
               {loading ? (
                 <ActivityIndicator color={theme.background} />
               ) : (
-                <ThemedText style={{ color: theme.background, fontWeight: '600' }}>
+                <ThemedText style={{ color: theme.logOutButtonTextDefult, fontWeight: '600' }}>
                   {isEditing ? 'Save Changes' : 'Create Club'}
                 </ThemedText>
               )}
