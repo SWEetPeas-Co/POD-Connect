@@ -213,7 +213,7 @@ export default function CreateEventModal({
               {loading ? (
                 <ActivityIndicator color={theme.background} />
               ) : (
-                <ThemedText style={{ color: theme.background, fontWeight: "600" }}>
+                <ThemedText style={{ color: theme.logOutButtonTextDefult, fontWeight: "600" }}>
                   {isEditing ? "Save Changes" : "Create Event"}
                 </ThemedText>
               )}
