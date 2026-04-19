@@ -71,12 +71,7 @@ export default function ProfileMyClubCard({
 
   const { width } = useWindowDimensions();
   const showLabels = width > 900;
-
-  const testAdmins: Member[] = [
-    { id: 1, name: "Alice Johnson" },
-    { id: 2, name: "Brian Lee" },
-    { id: 3, name: "Carlos Rivera" },
-  ];
+  
 
   const toggleExpand = () => {
     Animated.timing(rotation, {
