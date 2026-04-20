@@ -1,7 +1,7 @@
 // This component is the event card in my-events
 
 import { useState, useRef } from "react";
-import { StyleSheet, TouchableOpacity, LayoutAnimation, Platform, UIManager, Animated } from 'react-native';
+import { StyleSheet, TouchableOpacity, LayoutAnimation, Platform, UIManager, Animated, Pressable, useWindowDimensions } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import RSVPButton from '../ui/rsvp-button';
@@ -24,6 +24,8 @@ type EventCardProps = {
   description: string
   headcount: number
   image: string
+  isGlobalAdmin?: boolean
+  onDelete?: () => void
 }
 
 if (Platform.OS === 'android') {
@@ -42,12 +44,17 @@ export default function EventCard({
   description,
   headcount,
   image,
+  isGlobalAdmin,
+  onDelete
+
 }: EventCardProps) {
   //const colorScheme = useColorScheme();
   //const theme = Colors[colorScheme ?? 'light'];
   const { mode } = useThemeContext();
   const theme = Colors[mode];
-  
+  const { width } = useWindowDimensions();
+  const showLabels = width > 900;
+
   const [expanded, setExpanded] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
 
@@ -75,8 +82,10 @@ export default function EventCard({
           <ThemedText type='eventTitle'>{title}</ThemedText>
           <ThemedText type='eventSubtitle'>{club}</ThemedText>
         </ThemedView>
+        
 
         <ThemedView style={styles.rsvp}>
+
           <RSVPButton rsvped={rsvped} onPress={() => onToggleRSVP(id)} />
 
           <ThemedView style={styles.iconRow}>
@@ -84,6 +93,14 @@ export default function EventCard({
             <ThemedText type='eventSubtitle'> {headcount}</ThemedText>
           </ThemedView>
         </ThemedView>
+        {isGlobalAdmin && (
+                <Pressable
+                  style={[styles.iconButton, { borderColor: theme.eventCardDropShadow, paddingHorizontal: 6 }]}
+                  onPress={onDelete}
+                >
+                  {showLabels && <ThemedText type='eventSubtitle'>Delete</ThemedText>}
+                </Pressable>
+              )}
 
       </ThemedView>
 
@@ -204,6 +221,16 @@ const styles = StyleSheet.create({
     bottom: 5,
     right: 10,
     //backgroundColor: "#E6E1C3",
+  },
+  iconButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    borderRadius: 8,
+    borderWidth: 1,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    height: 28,
   },
 
 });
