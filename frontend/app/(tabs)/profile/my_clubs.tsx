@@ -139,6 +139,7 @@ export default function MyClubs() {
               onEdit={() => handleEdit(club)}
               onAddEvent={() => handleAddEvent(club)}
               members={club.members}
+              admins={club.admins} 
               onDelete={() => handleDeleteClub(club)} 
               isGlobalAdmin={isGlobalAdmin}
             />

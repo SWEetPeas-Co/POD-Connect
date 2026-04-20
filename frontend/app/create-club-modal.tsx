@@ -10,7 +10,7 @@ import AuthContext from '@/src/lib/authContext';
 import { uploadClubImage } from '@/src/lib/uploadClubImage';
 
 type Club = {
-  _id: string;
+  id: string;
   club: string;
   tags: string[];
   headcount: number;
@@ -115,7 +115,7 @@ export default function CreateClubModal({
       }
 
       if (isEditing) {
-        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/clubs/${club._id}`, {
+        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/clubs/${club.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
