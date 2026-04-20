@@ -42,8 +42,10 @@ type ProfileMyClubCardProps = {
   members?: string[];
   onEdit: () => void;
   onAddEvent: () => void;
+  onDelete?: () => void;
   description: string;
   events?: Event[];
+  isGlobalAdmin?: boolean;
 };
 
 export default function ProfileMyClubCard({
@@ -55,8 +57,10 @@ export default function ProfileMyClubCard({
   members = [],
   onEdit,
   onAddEvent,
+  onDelete,
   description,
   events = [],
+  isGlobalAdmin,
   id,
 }: ProfileMyClubCardProps) {
   const { mode } = useThemeContext();
@@ -121,6 +125,15 @@ export default function ProfileMyClubCard({
 
           <ThemedView style={styles.actions}>
             <ThemedView style={styles.iconRow}>
+              {isGlobalAdmin && (
+                <Pressable
+                  style={[styles.iconButton, { borderColor: theme.eventCardDropShadow }]}
+                  onPress={onDelete}
+                >
+                  <X size={13} color={theme.eventCardIcon}  />
+                  {showLabels && <ThemedText type='eventSubtitle'>Delete Club</ThemedText>}
+                </Pressable>
+              )}
               <Pressable
                 style={[styles.iconButton, { borderColor: theme.eventCardDropShadow }]}
                 onPress={onEdit}

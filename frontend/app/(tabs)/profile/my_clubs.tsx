@@ -38,6 +38,8 @@ export default function MyClubs() {
 
   const [addEventClub, setAddEventClub] = useState<Club | null>(null);
   const [addEventVisible, setAddEventVisible] = useState(false);
+  const [isGlobalAdmin, setIsGlobalAdmin] = useState(false);
+
 
   const handleAddEvent = (club: Club) => {
     setAddEventClub(club);
@@ -50,11 +52,34 @@ export default function MyClubs() {
         const data = await getClubs();
         const user = auth.currentUser;
 
-        const owned = data
-        .map((club: any) => ({ ...club, id: club._id.toString() }))
-        .filter((club: Club) => club.admins?.includes(user?.uid ?? ""));
+        // 1. Fetch the user document
+        const userDoc = await fetch(
+          `${process.env.EXPO_PUBLIC_API_URL}/users/${user?.uid}`
+        ).then(res => res.json());
+
+        const isGlobalAdmin = userDoc.isAdmin === true;
+        setIsGlobalAdmin(userDoc.isAdmin === true);
+
+
+        // 2. Map _id → id
+        const mapped = data.map((club: any) => ({
+          ...club,
+          id: club._id.toString()
+        }));
+
+        // 3. If global admin → show ALL clubs
+        if (isGlobalAdmin) {
+          setClubs(mapped);
+          return;
+        }
+
+        // 4. Otherwise → show only clubs where user is a club admin
+        const owned = mapped.filter((club: Club) =>
+          club.admins?.includes(user?.uid ?? "")
+        );
 
         setClubs(owned);
+
       } catch (err) {
         console.error("Fetch error:", err);
       }
@@ -62,6 +87,17 @@ export default function MyClubs() {
     fetchClubs();
   }, []);
 
+  const handleDeleteClub = async (club: Club) => {
+    try {
+      await fetch(`${process.env.EXPO_PUBLIC_API_URL}/clubs/${club.id}`, {
+        method: "DELETE",
+      });
+
+      setClubs(prev => prev.filter(c => c.id !== club.id));
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
+  };
 
   const handleEdit = (club: Club) => {
     setSelectedClub(club);
@@ -103,6 +139,8 @@ export default function MyClubs() {
               onEdit={() => handleEdit(club)}
               onAddEvent={() => handleAddEvent(club)}
               members={club.members}
+              onDelete={() => handleDeleteClub(club)} 
+              isGlobalAdmin={isGlobalAdmin}
             />
           ))
         )}

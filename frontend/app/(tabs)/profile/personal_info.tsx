@@ -23,6 +23,7 @@ type UserProfile = {
   createdAt: string;
   name: string;
   profileImage?: string;
+  isAdmin?: boolean;
 };
 
 
@@ -99,8 +100,11 @@ const handlePickImage = async () => {
     if (!user) return null;
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/users/${user.uid}`);
     const data = await response.json();
+    
     return data as UserProfile;
   };
+  const isGlobalAdmin = personalInfo?.isAdmin === true;
+
   //this fetchs the user's personal info from the backend
   useEffect(() => {
   if (user) {
@@ -160,8 +164,11 @@ const handlePickImage = async () => {
           </ThemedView>
 
           <ThemedText type="eventTitle">Personal Info</ThemedText>
-
+            {isGlobalAdmin && (
+              <ThemedText type="eventTitle">Admin</ThemedText>
+            )}
           <ThemedView style={styles.info}>
+            
             <ThemedView style={styles.leftInfo}>
               <ThemedText type="eventTitle">Name:</ThemedText>
               <ThemedText type="eventTitle">Email:</ThemedText>
