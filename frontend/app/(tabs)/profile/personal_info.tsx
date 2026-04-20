@@ -3,7 +3,7 @@
 import { StyleSheet, ScrollView, Pressable, Image, Modal, TextInput, View } from "react-native";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import { ArrowLeft, Camera } from "lucide-react-native";
+import { ArrowLeft, ArrowRight, Camera, Edit } from "lucide-react-native";
 import * as ImagePicker from 'expo-image-picker';
 
 import Header from "@/components/header";
@@ -11,7 +11,7 @@ import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
 import { Colors } from '@/constants/theme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
-
+import EditPersonalInfoModal from "@/app/edit-personal-info-modal";
 
 import { auth } from '../../../src/lib/firebase';
 import { deleteAccount } from "../../../src/lib/auth";
@@ -24,6 +24,7 @@ type UserProfile = {
   name: string;
   profileImage?: string;
   isAdmin?: boolean;
+  password: string; // Only for editing purposes, not stored in DB
 };
 
 
@@ -36,6 +37,7 @@ export default function PersonalInfo() {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [personalInfo, setPersonalInfo] = useState<UserProfile | null>(null);
   const [deleteVisible, setDeleteVisible] = useState(false);
+  const [isVisible, setVisible] = useState(false);
 
   useEffect(() => {
     if (personalInfo?.profileImage) {
@@ -185,9 +187,15 @@ const handlePickImage = async () => {
 
         </ThemedView>
 
-        <ThemedView style={[styles.infoContainer, { backgroundColor: theme.eventCardBackground, shadowColor: theme.eventCardDropShadow, shadowRadius: 1, shadowOffset: { width: 3, height: 4 } }]}>
-          <ThemedText type="eventTitle">Edit Personal Info</ThemedText>
-        </ThemedView>
+        <Pressable
+          onPress={() => setVisible(true)} // Opens the edit modal
+          style={[styles.infoContainer, { backgroundColor: theme.eventCardBackground, shadowColor: theme.eventCardDropShadow, shadowRadius: 1, shadowOffset: { width: 3, height: 4 } }]}
+        >
+          <ThemedView style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <ThemedText type="eventTitle">Edit Personal Info</ThemedText>
+            <ArrowRight size={20} color={theme.eventCardText} />
+          </ThemedView>
+        </Pressable>
 
         <ThemedView style={[styles.dashedLine, { borderColor: theme.eventCardDropShadow, backgroundColor: 'transparent' }]} />
         <Pressable onPress={() => setDeleteVisible(true)}>
@@ -196,6 +204,13 @@ const handlePickImage = async () => {
         </ThemedView>
         </Pressable>
       </ScrollView>
+
+      <EditPersonalInfoModal
+        visible={isVisible} // You can manage this state to show/hide the modal
+        onClose={() => setVisible(false)}
+        personalInfo={personalInfo}
+      />
+
       <DeleteAccountModal
         visible={deleteVisible}
         onClose={() => setDeleteVisible(false)}
