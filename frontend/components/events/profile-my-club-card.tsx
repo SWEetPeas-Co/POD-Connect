@@ -33,7 +33,7 @@ type Event = {
 };
 
 type ProfileMyClubCardProps = {
-  id: number;
+  id: string;
   title: string;
   tags: string[];
   headcount: number;
@@ -69,6 +69,7 @@ export default function ProfileMyClubCard({
   const [eventsVisible, setEventsVisible] = useState(false);
   const [fetchedMembers, setFetchedMembers] = useState<Member[]>([]);
   const [fetchedEvents, setFetchedEvents] = useState<any[]>([]);
+  const [fetchedAdmins, setFetchedAdmins] = useState<Member[]>([]);
 
   const [expanded, setExpanded] = useState(false);
   const rotation = useRef(new Animated.Value(0)).current;
@@ -83,6 +84,10 @@ export default function ProfileMyClubCard({
       duration: 200,
       useNativeDriver: true,
     }).start();
+
+    if (!expanded) {
+      getUsersByIds(admins).then(setFetchedAdmins);
+    }
 
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded(!expanded);
@@ -157,13 +162,12 @@ export default function ProfileMyClubCard({
           <ThemedView style={styles.bottom}>
             <ThemedText type="eventDescription">{description}</ThemedText>
             
-            {admins.length > 0 && (
+            {fetchedAdmins.length > 0 && (
               <ThemedView style={styles.adminRow}>
                 <ThemedText type="eventDescription">Club Leaders: </ThemedText>
-
                 <ThemedView style={styles.adminTags}>
-                  {admins.map((admin) => (
-                    <AdminTag key={admin.id} label={admin.name} />
+                  {fetchedAdmins.map((admin) => (
+                    <AdminTag key={admin.firebaseUid} label={admin.name} />
                   ))}
                 </ThemedView>
               </ThemedView>
