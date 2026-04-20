@@ -71,8 +71,15 @@ clubRoutes.route('/clubs/:id').put(async (request, response) => {
 // 5 - Delete One Club
 clubRoutes.route('/clubs/:id').delete(async (request, response) => {
     let db = database.getDb();
-    let data = await db.collection('clubs').deleteOne({_id: new ObjectId(request.params.id)});
-    response.json(data);
+    const clubId = request.params.id;
+
+    // 1. Delete the club
+    await db.collection('clubs').deleteOne({ _id: new ObjectId(clubId) });
+
+    // 2. Delete all events that belong to this club
+    await db.collection('events').deleteMany({ clubId: clubId });
+
+    response.json({ message: "Club and related events deleted." });
 });
 //6 - Join a Club
 clubRoutes.route('/clubs/:id/join').post(async (req, res) => {
