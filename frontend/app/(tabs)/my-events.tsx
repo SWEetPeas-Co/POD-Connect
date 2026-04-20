@@ -14,6 +14,7 @@ import { parseEventTime } from '@/utils/parse-event-time';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeContext } from "@/src/lib/themeContext/theme-context";
+import { auth } from "@/src/lib/firebase";
 
 type Event = {
   _id: string;
@@ -39,6 +40,10 @@ type Club = {
 export default function MyEvents() {
   //const colorScheme = useColorScheme();
   //const theme = Colors[colorScheme ?? 'light'];
+  const user = auth.currentUser;
+  const [isGlobalAdmin, setIsGlobalAdmin] = useState(false);
+
+
   const { mode } = useThemeContext();
   const theme = Colors[mode];
   console.log('current mode:', mode);
@@ -47,6 +52,19 @@ export default function MyEvents() {
   const [events, setEvents] = useState<Event[]>([]);
   const [clubs, setClubs] = useState<Club[]>([]);
   const { rsvpIds, toggleRSVP } = useContext(RsvpContext);
+
+  const handleDeleteEvent = async (eventId: string) => {
+    try {
+      await fetch(`${process.env.EXPO_PUBLIC_API_URL}/events/${eventId}`, {
+        method: "DELETE",
+      });
+
+      setEvents(prev => prev.filter(e => e._id !== eventId));
+    } catch (err) {
+      console.error("Delete event error:", err);
+    }
+  };
+
 
   useEffect(() => {
     async function fetchData() {
@@ -57,6 +75,12 @@ export default function MyEvents() {
         ]);
         setEvents(eventsData);
         setClubs(clubsData);
+        const userDoc = await fetch(
+          `${process.env.EXPO_PUBLIC_API_URL}/users/${user?.uid}`
+        ).then(res => res.json());
+
+        setIsGlobalAdmin(userDoc.isAdmin === true);
+
       } catch (err) {
         console.error("Fetch error:", err);
       }
@@ -69,10 +93,16 @@ export default function MyEvents() {
     console.log("events:", events.map(e => ({ id: e._id, clubId: e.clubId })));
 }, [clubs, events]);
 
-  const filteredEvents = events
-    .filter((event) => rsvpIds.includes(event._id))
-    .filter((event) => event.title.toLowerCase().includes(search.toLowerCase()))
+ const filteredEvents = events
+    .filter((event) => {
+      if (isGlobalAdmin) return true; // admin sees ALL events
+      return rsvpIds.includes(event._id); // normal users see only RSVP'd
+    })
+    .filter((event) =>
+      event.title.toLowerCase().includes(search.toLowerCase())
+    )
     .sort((a, b) => parseEventTime(a.time).getTime() - parseEventTime(b.time).getTime());
+
 
   return (
     <ThemedView style={[styles.mainContainer, { backgroundColor: theme.background }]}>
@@ -93,7 +123,7 @@ export default function MyEvents() {
               key={event._id}
               id={event._id}
               rsvped={rsvpIds.includes(event._id)}
-              onToggleRSVP={() => toggleRSVP(event._id, user.uid)}
+              onToggleRSVP={() => toggleRSVP(event._id, user?.uid ?? "")}
               title={event.title}
               club={club?.club ?? "Unknown Club"}
               image={club?.image ?? "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"}
@@ -101,6 +131,8 @@ export default function MyEvents() {
               time={event.time}
               description={event.description}
               headcount={event.headcount}
+              isGlobalAdmin={isGlobalAdmin}
+              onDelete={() => handleDeleteEvent(event._id)}
             />
           );
         })}
