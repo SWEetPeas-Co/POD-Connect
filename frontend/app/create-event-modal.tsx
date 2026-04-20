@@ -174,37 +174,6 @@ export default function CreateEventModal({
               onChangeText={setDescription}
             />
 
-            <ThemedText style={styles.label}>Tags</ThemedText>
-            <ThemedView style={styles.tagInputRow}>
-              <TextInput
-                style={[styles.input, styles.tagInput, { color: theme.eventCardText, borderColor: theme.eventCardDropShadow }]}
-                placeholder="Add a tag"
-                placeholderTextColor={theme.eventCardDropShadow}
-                value={tagInput}
-                onChangeText={setTagInput}
-                onSubmitEditing={handleAddTag}
-                returnKeyType="done"
-              />
-              <Pressable
-                style={[styles.addTagButton, { backgroundColor: theme.eventCardDropShadow }]}
-                onPress={handleAddTag}
-              >
-                <ThemedText style={{ color: theme.background }}>Add</ThemedText>
-              </Pressable>
-            </ThemedView>
-
-            <ThemedView style={styles.tagsRow}>
-              {tags.map((tag, i) => (
-                <Pressable
-                  key={i}
-                  style={[styles.tag, { borderColor: theme.eventCardDropShadow }]}
-                  onPress={() => handleRemoveTag(tag)}
-                >
-                  <ThemedText style={styles.tagText}>{tag} ✕</ThemedText>
-                </Pressable>
-              ))}
-            </ThemedView>
-
             <Pressable
               style={[styles.submitButton, { backgroundColor: theme.eventCardDropShadow, opacity: loading ? 0.7 : 1 }]}
               onPress={handleSubmit}
