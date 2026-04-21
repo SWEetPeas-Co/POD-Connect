@@ -70,4 +70,5 @@ By centralizing this information, the system reduces confusion and ensures that 
 ```bash
 cd frontend
 npm install
+npm install firebase
 npx expo start
